@@ -12,6 +12,7 @@ type Settings struct {
 	PostgresUser     string `koanf:"POSTGRES_USER" validate:"required"`
 	PostgresPassword string `koanf:"POSTGRES_PASSWORD" validate:"required"`
 	PostgresDb       string `koanf:"POSTGRES_DB" validate:"required"`
+	JWTSecret        string `koanf:"JWT_SECRET" validate:"required"`
 }
 
 func LoadSettings() (settings Settings, err error) {

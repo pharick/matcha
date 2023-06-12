@@ -19,12 +19,18 @@ func main() {
 		log.Fatalln(err)
 	}
 	dbConn, err := db.Connect(settings)
-	env := handlers.CreateEnv(dbConn)
+	env := handlers.CreateEnv(dbConn, settings)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	mux := goji.NewMux()
+
+	// auth
+	mux.HandleFunc(pat.Post("/register"), env.Register)
+	mux.HandleFunc(pat.Post("/login"), env.Login)
+
+	// users
 	mux.HandleFunc(pat.Get("/users/:username"), env.UserProfile)
 
 	http.ListenAndServe(":8000", mux)

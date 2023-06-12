@@ -11,7 +11,7 @@ func (env *Env) UserProfile(w http.ResponseWriter, r *http.Request) {
 	username := pat.Param(r, "username")
 	user, err := env.Users.GetOneByUsername(username)
 	if err != nil {
-		handleError(err, w)
+		handleError(w, err, 404)
 		return
 	}
 
