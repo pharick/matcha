@@ -1,0 +1,25 @@
+.leaf_front{
+    width: 80px;
+    @media ((max-width: 670px) ) {
+        width: 40px;
+    }
+    animation: leaf 7s infinite;
+}
+
+@keyframes leaf{
+    0%{
+        transform: scale(0.9, 0.9);
+    }
+    50%{
+        // transform: scale(1.0, 1.0);
+        transform: translate3d(12px, 50%, 3em);
+    }
+    100%{
+        transform: scale(0.9, 0.9);
+    }
+}
+
+.leaf_font:nth-child(1) {
+    animation-delay: 5s;
+}
+ 
