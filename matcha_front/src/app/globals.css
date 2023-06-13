@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground: #403539;
+  --bg-start: #C9E6AC;
+  --bg-end: #879973;
+  --brown: #403539;
+  /* background: linear-gradient(var(--bg-start), var(--bg-end)) fixed; */
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  /* background: linear-gradient(var(--bg-start), var(--bg-end)) fixed; */
+  margin: 10px 120px;
+  @media (max-width: 670px) {
+    margin: auto;
+  }
+  /* background-image: url("../images/leafe_down.png"); */
+}
+
+button {
+  background-color: #403539;
+  color: var(--brown);
+  font-size: 18px;
+  border: none;
+  height: 50px;
+  border-radius: 20px;
+}
+
+input {
+  background: radial-gradient(#F1EAD070, #C9E6AC50) fixed;
+  border-radius: 20px;
+  height: 50px;
+  border: none;
+  text-align: center;
+}
