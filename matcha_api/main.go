@@ -31,7 +31,7 @@ func main() {
 	mux.HandleFunc(pat.Post("/login"), env.Login)
 
 	// users
-	mux.HandleFunc(pat.Get("/users/:username"), env.UserProfile)
+	mux.HandleFunc(pat.Get("/users/:username"), env.AuthRequired(env.UserProfile))
 
 	http.ListenAndServe(":8000", mux)
 }

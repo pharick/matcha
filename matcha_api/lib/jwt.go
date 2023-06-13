@@ -1,6 +1,10 @@
 package lib
 
-import "github.com/golang-jwt/jwt/v5"
+import (
+	"fmt"
+
+	"github.com/golang-jwt/jwt/v5"
+)
 
 func GenerateJWT(username string, secret string) (s string, err error) {
 	t := jwt.NewWithClaims(
@@ -11,4 +15,24 @@ func GenerateJWT(username string, secret string) (s string, err error) {
 	)
 	s, err = t.SignedString([]byte(secret))
 	return
+}
+
+func JWTParseUsername(tokenStr string, secret string) (string, error) {
+	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
+		if method, ok := token.Method.(*jwt.SigningMethodHMAC); !ok || method != jwt.SigningMethodHS256 {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(secret), nil
+	})
+	if err != nil {
+		return "", err
+	}
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		sub := claims["sub"]
+		if s, ok := sub.(string); ok {
+			return s, nil
+		}
+		return "", fmt.Errorf("sub is not a string")
+	}
+	return "", fmt.Errorf("claims is not valid")
 }

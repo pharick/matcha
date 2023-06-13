@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"matcha_api/schemas"
 	"net/http"
 
 	"goji.io/pat"
@@ -15,5 +16,12 @@ func (env *Env) UserProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(user)
+	ret := schemas.UserReturn{
+		Id:        user.Id,
+		Username:  user.Username,
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+	}
+	json.NewEncoder(w).Encode(ret)
 }
