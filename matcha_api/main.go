@@ -26,6 +26,8 @@ func main() {
 
 	mux := goji.NewMux()
 
+	mux.Use(handlers.AllowCors)
+
 	// auth
 	mux.HandleFunc(pat.Post("/register"), env.Register)
 	mux.HandleFunc(pat.Post("/login"), env.Login)

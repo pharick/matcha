@@ -34,3 +34,11 @@ func (env *Env) AuthRequired(inner func(w http.ResponseWriter, r *http.Request))
 	}
 	return mw
 }
+
+func AllowCors(inner http.Handler) http.Handler {
+	mw := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		inner.ServeHTTP(w, r)
+	}
+	return http.HandlerFunc(mw)
+}
