@@ -14,7 +14,7 @@ import {
   FieldProps,
 } from 'formik';
 
-interface userSchema {
+interface UserSchema {
   userName: string;
   firstName: string;
   lastName: string;
@@ -25,6 +25,16 @@ interface userSchema {
 
 const validationSchema = Yup.object({
   userName: Yup.string()
+    .required("What's your name?")
+    .min(2, 'First name must be between 2 and 16 characters')
+    .max(16, 'First name must be between 2 and 16 characters')
+    .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed '),
+  firstName: Yup.string()
+    .required("What's your name?")
+    .min(2, 'First name must be between 2 and 16 characters')
+    .max(16, 'First name must be between 2 and 16 characters')
+    .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed '),
+  lastName: Yup.string()
     .required("What's your name?")
     .min(2, 'First name must be between 2 and 16 characters')
     .max(16, 'First name must be between 2 and 16 characters')
@@ -45,8 +55,29 @@ const validationSchema = Yup.object({
     .oneOf([Yup.ref('password')], 'Passwords must match.'),
 });
 
+const autorization = async (values: UserSchema) => {
+  console.log('AUTORIZATION START');
+
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify({
+      username: values.userName,
+      first_name: values.firstName,
+      last_name: values.lastName,
+      email: values.email,
+      password: values.password,
+    }),
+  };
+  const uri = 'http://127.0.0.1:8000/register';
+  const res = await fetch(uri, requestOptions).catch((error) => {
+    console.log(error);
+  });
+  const data = await res.json();
+  console.log(data);
+};
+
 const SignUp = () => {
-  const initialValues: userSchema = {
+  const initialValues: UserSchema = {
     userName: '',
     firstName: '',
     lastName: '',
@@ -54,6 +85,7 @@ const SignUp = () => {
     password: '',
     confPassword: '',
   };
+
   return (
     <>
       <Header />
@@ -61,45 +93,71 @@ const SignUp = () => {
       <Formik
         validationSchema={validationSchema}
         initialValues={initialValues}
-        onSubmit={(values, actions) => {
-          console.log({ values, actions });
-          alert(JSON.stringify(values, null, 2));
-          actions.setSubmitting(false);
-        }}
+        // onSubmit={(values, actions) => {
+        //   autorization;
+        //   console.log({ values, actions });
+        //   alert(JSON.stringify(values, null, 2));
+        //   actions.setSubmitting(false);
+        // }}
+        onSubmit={autorization}
       >
-        <Form className="absolute left-[50%] top-[50%] mx-auto flex w-[350px] -translate-x-[50%] -translate-y-[50%] flex-col [&>*]:mb-[30px]">
-          <Field
-            id="username"
-            name="userName"
-            placeholder="User Name"
-            className="block"
-          />
-          <Field
-            id="fistname"
-            name="firstName"
-            placeholder="First Name"
-            className="block"
-          />
-          <Field
-            id="lastname"
-            name="lastName"
-            placeholder="Last Name"
-            className="block"
-          />
-          <Field
-            id="email"
-            name="email"
-            placeholder="Email"
-            className="block"
-          />
-          <Field
-            id="password"
-            name="password"
-            placeholder="password"
-            className="block"
-          />
-          <Button type="submit" text="Confirm" />
-        </Form>
+        {({ errors, touched }) => (
+          <Form className="absolute left-[50%] top-[50%] mx-auto flex w-[350px] -translate-x-[50%] -translate-y-[50%] flex-col [&>*]:mb-[30px]">
+            <Field
+              id="username"
+              name="userName"
+              placeholder="User Name"
+              className="block"
+            />
+            {errors.userName && touched.userName ? (
+              <div>{errors.userName}</div>
+            ) : null}
+            <Field
+              id="fistname"
+              name="firstName"
+              placeholder="First Name"
+              className="block"
+            />
+            {errors.firstName && touched.firstName ? (
+              <div>{errors.firstName}</div>
+            ) : null}
+            <Field
+              id="lastname"
+              name="lastName"
+              placeholder="Last Name"
+              className="block"
+            />
+            {errors.lastName && touched.lastName ? (
+              <div>{errors.lastName}</div>
+            ) : null}
+            <Field
+              id="email"
+              name="email"
+              placeholder="Email"
+              className="block"
+            />
+            {errors.email && touched.email ? <div>{errors.email}</div> : null}
+            <Field
+              id="password"
+              name="password"
+              placeholder="password"
+              className="block"
+            />
+            {errors.password && touched.password ? (
+              <div>{errors.password}</div>
+            ) : null}
+            <Field
+              id="password"
+              name="confPassword"
+              placeholder="confirm password"
+              className="block"
+            />
+            {errors.confPassword && touched.confPassword ? (
+              <div>{errors.confPassword}</div>
+            ) : null}
+            <Button type="submit" text="Confirm" />
+          </Form>
+        )}
       </Formik>
       <Image
         className="w-2/2 absolute bottom-0 left-0 -z-50"

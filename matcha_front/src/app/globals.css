@@ -7,7 +7,7 @@
   --bg-start: #C9E6AC;
   --bg-end: #879973;
   --brown: #403539;
-  /* background: linear-gradient(var(--bg-start), var(--bg-end)) fixed; */
+  background: linear-gradient(var(--bg-start), var(--bg-end)) fixed;
 }
 
 body {

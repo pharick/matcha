@@ -3,12 +3,12 @@ import Matcha from '@/images/Matcha.png';
 import Cup from '@/images/cup.png';
 import LogIn from './LogIn';
 import Leafs from '@/images/leafs.png';
-// import LeafTop from '@/components/LeafTop';
+import LeafTop from '@/components/LeafTop';
 
 const Home = () => {
   return (
     <>
-      {/* <LeafTop /> */}
+      <LeafTop />
       <div className="relative mx-auto w-[350px]">
         <Image
           className="mx-auto mt-[70px]"
@@ -26,11 +26,11 @@ const Home = () => {
         />
       </div>
       <LogIn />
-      <Image
+      {/* <Image
         className="absolute left-0 right-0 top-0 -z-10 h-full w-full"
         src={Leafs}
-        alt="background leafs"
-      />
+        alt="background leafs" */}
+      {/* /> */}
     </>
   );
 };
