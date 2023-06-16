@@ -7,7 +7,10 @@
   --bg-start: #C9E6AC;
   --bg-end: #879973;
   --brown: #403539;
+  --green-radial-button: radial-gradient(#F1EAD070, #C9E6AC50);
   background: linear-gradient(var(--bg-start), var(--bg-end)) fixed;
+  font-size: 18px;
+  color: #403539;
 }
 
 body {
@@ -20,14 +23,13 @@ body {
   /* background-image: url("../images/leafe_down.png"); */
 }
 
-button {
-  background-color: #403539;
+/* button {
   color: var(--brown);
   font-size: 18px;
   border: none;
   height: 50px;
   border-radius: 20px;
-}
+} */
 
 input {
   background: radial-gradient(#F1EAD070, #C9E6AC50) fixed;

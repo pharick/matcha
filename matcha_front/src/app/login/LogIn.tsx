@@ -43,8 +43,8 @@ const autorization = async (values: MyFormValues) => {
   const res = await fetch(uri, requestOptions).catch((error) => {
     console.log(error);
   });
-  const data = await res.json();
-  console.log(data);
+  // const data = await res.json();
+  // console.log(data);
 };
 
 const LogIn = () => {

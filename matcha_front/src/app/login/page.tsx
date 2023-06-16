@@ -8,10 +8,10 @@ import LeafTop from '@/components/LeafTop';
 const Home = () => {
   return (
     <>
-      <LeafTop />
-      <div className="relative mx-auto w-[350px]">
+      {/* <LeafTop /> */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <Image
-          className="mx-auto mt-[70px]"
+          className="mx-auto"
           src={Cup}
           width={250}
           height={250}
@@ -24,13 +24,8 @@ const Home = () => {
           height={200}
           alt="logo"
         />
+        <LogIn />
       </div>
-      <LogIn />
-      {/* <Image
-        className="absolute left-0 right-0 top-0 -z-10 h-full w-full"
-        src={Leafs}
-        alt="background leafs" */}
-      {/* /> */}
     </>
   );
 };
