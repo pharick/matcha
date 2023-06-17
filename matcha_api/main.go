@@ -19,21 +19,23 @@ func main() {
 		log.Fatalln(err)
 	}
 	dbConn, err := db.Connect(settings)
-	env := handlers.CreateEnv(dbConn, settings)
 	if err != nil {
 		log.Fatalln(err)
 	}
+	env := handlers.CreateEnv(dbConn, settings)
 
 	mux := goji.NewMux()
 
+	// middleware
 	mux.Use(handlers.AllowCors)
 
 	// auth
-	mux.HandleFunc(pat.Post("/register"), env.Register)
-	mux.HandleFunc(pat.Post("/login"), env.Login)
+	mux.Handle(pat.Post("/register"), handlers.Handler{Env: env, Handle: handlers.Register})
+	mux.Handle(pat.Post("/login"), handlers.Handler{Env: env, Handle: handlers.Login})
 
 	// users
-	mux.HandleFunc(pat.Get("/users/:username"), env.AuthRequired(env.UserProfile))
+	mux.Handle(pat.Get("/users/"), handlers.Handler{Env: env, Handle: handlers.UserList})
+	mux.Handle(pat.Get("/users/:username"), handlers.Handler{Env: env, Handle: handlers.UserProfile})
 
 	http.ListenAndServe(":8000", mux)
 }

@@ -9,27 +9,21 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func (env *Env) Register(w http.ResponseWriter, r *http.Request) {
+func Register(env *Env, w http.ResponseWriter, r *http.Request) error {
 	var d schemas.RegistrationData
 	json.NewDecoder(r.Body).Decode(&d)
-
 	validate := validator.New()
 	err := validate.Struct(d)
 	if err != nil {
-		handleError(w, err, 422)
-		return
+		return HttpError{422}
 	}
-
 	_, err = env.Users.GetOneByUsername(d.Username)
 	if err == nil {
-		handleError(w, err, 409)
-		return
+		return HttpError{409}
 	}
-
 	passwordHash, err := lib.HashPassword(d.Password)
 	if err != nil {
-		handleError(w, err, 500)
-		return
+		return err
 	}
 	user, err := env.Users.Create(
 		d.Username,
@@ -39,16 +33,12 @@ func (env *Env) Register(w http.ResponseWriter, r *http.Request) {
 		d.LastName,
 	)
 	if err != nil {
-		handleError(w, err, 500)
-		return
+		return err
 	}
-
 	token, err := lib.GenerateJWT(user.Username, env.Settings.JWTSecret)
 	if err != nil {
-		handleError(w, err, 500)
-		return
+		return err
 	}
-
 	ret := schemas.RegistrationReturn{Token: token, User: schemas.UserReturn{
 		Id:        user.Id,
 		Username:  user.Username,
@@ -57,36 +47,28 @@ func (env *Env) Register(w http.ResponseWriter, r *http.Request) {
 		LastName:  user.LastName,
 	}}
 	json.NewEncoder(w).Encode(ret)
+	return nil
 }
 
-func (env *Env) Login(w http.ResponseWriter, r *http.Request) {
+func Login(env *Env, w http.ResponseWriter, r *http.Request) error {
 	var d schemas.LoginData
 	json.NewDecoder(r.Body).Decode(&d)
-
 	validate := validator.New()
 	err := validate.Struct(d)
 	if err != nil {
-		handleError(w, err, 422)
-		return
+		return HttpError{422}
 	}
-
 	user, err := env.Users.GetOneByUsername(d.Username)
 	if err != nil {
-		handleError(w, err, 401)
-		return
+		return HttpError{401}
 	}
-
 	if !lib.CheckPasswordHash(d.Password, user.PasswordHash) {
-		handleError(w, err, 401)
-		return
+		return HttpError{401}
 	}
-
 	token, err := lib.GenerateJWT(user.Username, env.Settings.JWTSecret)
 	if err != nil {
-		handleError(w, err, 500)
-		return
+		return err
 	}
-
 	ret := schemas.RegistrationReturn{Token: token, User: schemas.UserReturn{
 		Id:        user.Id,
 		Username:  user.Username,
@@ -95,4 +77,5 @@ func (env *Env) Login(w http.ResponseWriter, r *http.Request) {
 		LastName:  user.LastName,
 	}}
 	json.NewEncoder(w).Encode(ret)
+	return nil
 }

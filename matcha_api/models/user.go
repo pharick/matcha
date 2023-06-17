@@ -1,11 +1,14 @@
 package models
 
-import "database/sql"
+import (
+	"database/sql"
+)
 
 type User struct {
 	Id           int
 	Username     string
 	Email        string
+	Active       bool
 	PasswordHash string
 	FirstName    string
 	LastName     string
@@ -25,12 +28,13 @@ func (m UserModel) Create(
 	var user User
 	err := m.DB.QueryRow(
 		`INSERT INTO users(username, email, password_hash, first_name, last_name, active) 
-		VALUES($1, $2, $3, $4, $5, false) RETURNING id, username, email, password_hash, first_name, last_name`,
+		VALUES($1, $2, $3, $4, $5, false) RETURNING id, username, email, active, password_hash, first_name, last_name`,
 		username, email, passwordHash, firstName, lastName,
 	).Scan(
 		&user.Id,
 		&user.Username,
 		&user.Email,
+		&user.Active,
 		&user.PasswordHash,
 		&user.FirstName,
 		&user.LastName,
@@ -38,12 +42,38 @@ func (m UserModel) Create(
 	return user, err
 }
 
+func (m UserModel) GetAll() ([]User, error) {
+	users := make([]User, 0)
+	rows, err := m.DB.Query("SELECT id, username, email, active, password_hash, first_name, last_name FROM users")
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var user User
+		err := rows.Scan(
+			&user.Id,
+			&user.Username,
+			&user.Email,
+			&user.Active,
+			&user.PasswordHash,
+			&user.FirstName,
+			&user.LastName,
+		)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
+}
+
 func (m UserModel) GetOneById(id int) (User, error) {
 	var user User
-	err := m.DB.QueryRow("SELECT id, username, email, password_hash, first_name, last_name FROM users WHERE id = $1", id).Scan(
+	err := m.DB.QueryRow("SELECT id, username, email, active, password_hash, first_name, last_name FROM users WHERE id = $1", id).Scan(
 		&user.Id,
 		&user.Username,
 		&user.Email,
+		&user.Active,
 		&user.PasswordHash,
 		&user.FirstName,
 		&user.LastName,
@@ -53,10 +83,11 @@ func (m UserModel) GetOneById(id int) (User, error) {
 
 func (m UserModel) GetOneByUsername(username string) (User, error) {
 	var user User
-	err := m.DB.QueryRow("SELECT id, username, email, password_hash, first_name, last_name FROM users WHERE username = $1", username).Scan(
+	err := m.DB.QueryRow("SELECT id, username, email, active, password_hash, first_name, last_name FROM users WHERE username = $1", username).Scan(
 		&user.Id,
 		&user.Username,
 		&user.Email,
+		&user.Active,
 		&user.PasswordHash,
 		&user.FirstName,
 		&user.LastName,

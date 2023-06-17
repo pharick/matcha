@@ -6,33 +6,30 @@ import (
 	"strings"
 )
 
-func (env *Env) AuthRequired(inner func(w http.ResponseWriter, r *http.Request)) func(w http.ResponseWriter, r *http.Request) {
-	mw := func(w http.ResponseWriter, r *http.Request) {
+func AuthRequired(
+	inner Handler,
+) Handler {
+	mw := func(env *Env, w http.ResponseWriter, r *http.Request) error {
 		authHeader := r.Header["Authorization"]
 		if len(authHeader) != 1 {
-			handleError(w, nil, 401)
-			return
+			return HttpError{401}
 		}
 		authHeader = strings.Split(authHeader[0], " ")
 		if len(authHeader) != 2 || authHeader[0] != "Bearer" {
-			handleError(w, nil, 401)
-			return
+			return HttpError{401}
 		}
 		username, err := lib.JWTParseUsername(authHeader[1], env.Settings.JWTSecret)
 		if err != nil {
-			handleError(w, err, 401)
-			return
+			return HttpError{401}
 		}
-
 		_, err = env.Users.GetOneByUsername(username)
 		if err != nil {
-			handleError(w, err, 401)
-			return
+			return HttpError{401}
 		}
-
-		inner(w, r)
+		inner.ServeHTTP(w, r)
+		return nil
 	}
-	return mw
+	return Handler{inner.Env, mw}
 }
 
 func AllowCors(inner http.Handler) http.Handler {

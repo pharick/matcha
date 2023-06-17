@@ -8,6 +8,10 @@ type UserReturn struct {
 	LastName  string `json:"last_name"`
 }
 
+type UsersReturn struct {
+	List []UserReturn `json:"list"`
+}
+
 type RegistrationData struct {
 	Username  string `json:"username" validate:"required"`
 	Email     string `json:"email" validate:"required"`
