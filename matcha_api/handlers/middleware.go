@@ -1,35 +1,38 @@
 package handlers
 
 import (
+	"context"
 	"matcha_api/lib"
 	"net/http"
 	"strings"
 )
 
+type ContextKey string
+
 func AuthRequired(
-	inner Handler,
-) Handler {
-	mw := func(env *Env, w http.ResponseWriter, r *http.Request) error {
+	inner func(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error),
+) func(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	mw := func(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
 		authHeader := r.Header["Authorization"]
 		if len(authHeader) != 1 {
-			return HttpError{401}
+			return nil, HttpError{401}
 		}
 		authHeader = strings.Split(authHeader[0], " ")
 		if len(authHeader) != 2 || authHeader[0] != "Bearer" {
-			return HttpError{401}
+			return nil, HttpError{401}
 		}
 		username, err := lib.JWTParseUsername(authHeader[1], env.Settings.JWTSecret)
 		if err != nil {
-			return HttpError{401}
+			return nil, HttpError{401}
 		}
-		_, err = env.Users.GetOneByUsername(username)
+		user, err := env.Users.GetOneByUsername(username)
 		if err != nil {
-			return HttpError{401}
+			return nil, HttpError{401}
 		}
-		inner.ServeHTTP(w, r)
-		return nil
+		ctx := context.WithValue(r.Context(), ContextKey("User"), user)
+		return inner(env, w, r.WithContext(ctx))
 	}
-	return Handler{inner.Env, mw}
+	return mw
 }
 
 func AllowCors(inner http.Handler) http.Handler {

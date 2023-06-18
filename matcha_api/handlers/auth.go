@@ -9,21 +9,35 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func Register(env *Env, w http.ResponseWriter, r *http.Request) error {
+func Register(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	var d schemas.RegistrationData
 	json.NewDecoder(r.Body).Decode(&d)
 	validate := validator.New()
 	err := validate.Struct(d)
 	if err != nil {
-		return HttpError{422}
+		return nil, HttpError{422}
 	}
 	_, err = env.Users.GetOneByUsername(d.Username)
 	if err == nil {
-		return HttpError{409}
+		return nil, HttpError{409}
 	}
 	passwordHash, err := lib.HashPassword(d.Password)
 	if err != nil {
-		return err
+		return nil, err
+	}
+	token, err := lib.GenerateJWT(d.Username, env.Settings.JWTSecret)
+	if err != nil {
+		return nil, err
+	}
+	err = lib.SendActivationEmail(
+		env.Settings.SMTPHost,
+		env.Settings.SMTPPort,
+		env.Settings.SMTPEmail,
+		env.Settings.SMTPPassword,
+		d.Email,
+	)
+	if err != nil {
+		return nil, err
 	}
 	user, err := env.Users.Create(
 		d.Username,
@@ -33,11 +47,7 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) error {
 		d.LastName,
 	)
 	if err != nil {
-		return err
-	}
-	token, err := lib.GenerateJWT(user.Username, env.Settings.JWTSecret)
-	if err != nil {
-		return err
+		return nil, err
 	}
 	ret := schemas.RegistrationReturn{Token: token, User: schemas.UserReturn{
 		Id:        user.Id,
@@ -46,28 +56,27 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) error {
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
 	}}
-	json.NewEncoder(w).Encode(ret)
-	return nil
+	return ret, nil
 }
 
-func Login(env *Env, w http.ResponseWriter, r *http.Request) error {
+func Login(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	var d schemas.LoginData
 	json.NewDecoder(r.Body).Decode(&d)
 	validate := validator.New()
 	err := validate.Struct(d)
 	if err != nil {
-		return HttpError{422}
+		return nil, HttpError{422}
 	}
 	user, err := env.Users.GetOneByUsername(d.Username)
 	if err != nil {
-		return HttpError{401}
+		return nil, HttpError{401}
 	}
 	if !lib.CheckPasswordHash(d.Password, user.PasswordHash) {
-		return HttpError{401}
+		return nil, HttpError{401}
 	}
 	token, err := lib.GenerateJWT(user.Username, env.Settings.JWTSecret)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	ret := schemas.RegistrationReturn{Token: token, User: schemas.UserReturn{
 		Id:        user.Id,
@@ -76,6 +85,5 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) error {
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
 	}}
-	json.NewEncoder(w).Encode(ret)
-	return nil
+	return ret, nil
 }

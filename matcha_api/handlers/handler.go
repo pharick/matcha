@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -16,11 +17,11 @@ func (err HttpError) Error() string {
 
 type Handler struct {
 	Env    *Env
-	Handle func(env *Env, w http.ResponseWriter, r *http.Request) error
+	Handle func(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error)
 }
 
 func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	err := h.Handle(h.Env, w, r)
+	ret, err := h.Handle(h.Env, w, r)
 	if err != nil {
 		switch err := err.(type) {
 		case HttpError:
@@ -33,5 +34,8 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				http.StatusInternalServerError,
 			)
 		}
+	} else {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(ret)
 	}
 }

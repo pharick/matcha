@@ -13,6 +13,10 @@ type Settings struct {
 	PostgresPassword string `koanf:"POSTGRES_PASSWORD" validate:"required"`
 	PostgresDb       string `koanf:"POSTGRES_DB" validate:"required"`
 	JWTSecret        string `koanf:"JWT_SECRET" validate:"required"`
+	SMTPHost         string `koanf:"SMTP_HOST" validate:"required"`
+	SMTPPort         int    `koanf:"SMTP_PORT" validate:"required"`
+	SMTPEmail        string `koanf:"SMTP_EMAIL" validate:"required"`
+	SMTPPassword     string `koanf:"SMTP_PASSWORD" validate:"required"`
 }
 
 func LoadSettings() (settings Settings, err error) {

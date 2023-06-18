@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"database/sql"
-	"encoding/json"
 	"matcha_api/lib"
 	"matcha_api/models"
 	"matcha_api/schemas"
@@ -11,10 +10,10 @@ import (
 	"goji.io/pat"
 )
 
-func UserList(env *Env, w http.ResponseWriter, r *http.Request) error {
+func UserList(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	users, err := env.Users.GetAll()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	usersRet := lib.Map(users, func(user models.User) schemas.UserReturn {
 		return schemas.UserReturn{
@@ -28,18 +27,17 @@ func UserList(env *Env, w http.ResponseWriter, r *http.Request) error {
 	ret := schemas.UsersReturn{
 		List: usersRet,
 	}
-	json.NewEncoder(w).Encode(ret)
-	return nil
+	return ret, nil
 }
 
-func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) error {
+func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	username := pat.Param(r, "username")
 	user, err := env.Users.GetOneByUsername(username)
 	if err == sql.ErrNoRows {
-		return HttpError{404}
+		return nil, HttpError{404}
 	}
 	if err != nil {
-		return err
+		return nil, err
 	}
 	ret := schemas.UserReturn{
 		Id:        user.Id,
@@ -48,6 +46,5 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) error {
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
 	}
-	json.NewEncoder(w).Encode(ret)
-	return nil
+	return ret, nil
 }
