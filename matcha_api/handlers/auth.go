@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"matcha_api/lib"
 	"matcha_api/schemas"
 	"net/http"
@@ -15,6 +16,7 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, er
 	validate := validator.New()
 	err := validate.Struct(d)
 	if err != nil {
+		fmt.Println(err)
 		return nil, HttpError{422}
 	}
 	_, err = env.Users.GetOneByUsername(d.Username)
