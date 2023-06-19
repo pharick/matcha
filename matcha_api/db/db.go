@@ -8,7 +8,7 @@ import (
 
 func Connect(settings settings.Settings) (db *sql.DB, err error) {
 	connStr := fmt.Sprintf(
-		"host=db port=5432 user=%s password=%s dbname=%s sslmode=disable",
+		"host=localhost port=5432 user=%s password=%s dbname=%s sslmode=disable",
 		settings.PostgresUser,
 		settings.PostgresPassword,
 		settings.PostgresDb,

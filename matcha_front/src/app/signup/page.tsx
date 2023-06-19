@@ -13,6 +13,7 @@ import {
   Field,
   FieldProps,
 } from 'formik';
+import { NextPage } from 'next';
 
 interface UserSchema {
   userName: string;
@@ -76,7 +77,7 @@ const autorization = async (values: UserSchema) => {
   console.log(data);
 };
 
-const SignUp = () => {
+const SignUpPage: NextPage = () => {
   const initialValues: UserSchema = {
     userName: '',
     firstName: '',
@@ -168,4 +169,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignUpPage;

@@ -1,15 +1,17 @@
 import Image from 'next/image';
+import { NextPage } from 'next';
+
 import Matcha from '@/images/Matcha.png';
 import Cup from '@/images/cup.png';
-import LogIn from './LogIn';
-import Leafs from '@/images/leafs.png';
+import LoginForm from './LoginForm';
+import leavesImage from '@/images/leaves.png';
 import LeafTop from '@/components/LeafTop';
 
-const Home = () => {
+const LoginPage: NextPage = () => {
   return (
     <>
       {/* <LeafTop /> */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <Image
           className="mx-auto"
           src={Cup}
@@ -24,10 +26,10 @@ const Home = () => {
           height={200}
           alt="logo"
         />
-        <LogIn />
+        <LoginForm />
       </div>
     </>
   );
 };
 
-export default Home;
+export default LoginPage;
