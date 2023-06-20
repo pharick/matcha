@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"log"
 	"matcha_api/lib"
 	"net/http"
 	"strings"
@@ -23,6 +24,7 @@ func AuthRequired(
 		}
 		username, err := lib.JWTParseUsername(authHeader[1], env.Settings.JWTSecret)
 		if err != nil {
+			log.Println(err)
 			return nil, HttpError{401}
 		}
 		user, err := env.Users.GetOneByUsername(username)
