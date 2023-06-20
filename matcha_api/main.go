@@ -32,6 +32,7 @@ func main() {
 	// auth
 	mux.Handle(pat.Post("/register"), handlers.Handler{Env: env, Handle: handlers.Register})
 	mux.Handle(pat.Post("/login"), handlers.Handler{Env: env, Handle: handlers.Login})
+	mux.Handle(pat.Get("/whoami"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.WhoAmI)})
 
 	// users
 	mux.Handle(pat.Get("/users/"), handlers.Handler{Env: env, Handle: handlers.UserList})

@@ -12,7 +12,6 @@ func SendActivationEmail(
 	password string,
 	emailTo string,
 ) error {
-	fmt.Println(smtpHost, smtpPort)
 	auth := smtp.PlainAuth("", emailFrom, password, smtpHost)
 	err := smtp.SendMail(
 		fmt.Sprintf("%s:%d", smtpHost, smtpPort),

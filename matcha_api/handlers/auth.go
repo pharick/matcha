@@ -2,8 +2,9 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"matcha_api/lib"
+	"matcha_api/models"
 	"matcha_api/schemas"
 	"net/http"
 
@@ -16,7 +17,7 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, er
 	validate := validator.New()
 	err := validate.Struct(d)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return nil, HttpError{422}
 	}
 	_, err = env.Users.GetOneByUsername(d.Username)
@@ -87,5 +88,17 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
 	}}
+	return ret, nil
+}
+
+func WhoAmI(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	user := r.Context().Value(ContextKey("User")).(models.User)
+	ret := schemas.UserReturn{
+		Id:        user.Id,
+		Username:  user.Username,
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+	}
 	return ret, nil
 }
