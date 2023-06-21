@@ -1,7 +1,10 @@
 'use client';
+import { useRouter } from 'next/navigation';
 import Button from '@/components/Button';
 import Link from 'next/link';
 import * as Yup from 'yup';
+import { RegistrationResponse } from '@/app/interfaces';
+import { createContext, useContext, useState } from 'react';
 
 import {
   Formik,
@@ -19,6 +22,8 @@ interface LoginFormValues {
 }
 
 const LoginForm: FC = () => {
+  const router = useRouter();
+
   const validationSchema = Yup.object({
     username: Yup.string()
       .required("What's your name?")
@@ -44,11 +49,11 @@ const LoginForm: FC = () => {
       }),
     };
     const uri = 'http://127.0.0.1:8000/login';
-    const res = await fetch(uri, requestOptions).catch((error) => {
-      console.log(error);
-    });
-    // const data = await res.json();
-    // console.log(data);
+    const res = await fetch(uri, requestOptions);
+    if (res.ok) {
+      (await res.json()) as RegistrationResponse;
+      router.push('/profile');
+    }
   };
 
   return (
