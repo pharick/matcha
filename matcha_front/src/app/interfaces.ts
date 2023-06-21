@@ -6,11 +6,7 @@ export interface User {
   email: string;
 }
 
-export interface UserResponse {
+export interface RegistrationResponse {
   token: string;
-  id: number;
-  username: string;
-  first_name: string;
-  last_name: string;
-  email: string;
+  user: User;
 }
