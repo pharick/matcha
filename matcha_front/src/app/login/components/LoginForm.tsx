@@ -4,16 +4,8 @@ import Button from '@/components/Button';
 import Link from 'next/link';
 import * as Yup from 'yup';
 import { RegistrationResponse } from '@/app/interfaces';
-import { createContext, useContext, useState } from 'react';
 
-import {
-  Formik,
-  FormikHelpers,
-  FormikProps,
-  Form,
-  Field,
-  FieldProps,
-} from 'formik';
+import { Formik, Form, Field } from 'formik';
 import { FC } from 'react';
 
 interface LoginFormValues {
@@ -68,7 +60,7 @@ const LoginForm: FC = () => {
       onSubmit={handleAutorization}
     >
       {({ errors, touched }) => (
-        <Form className="mx-auto mt-[160px] flex w-[350px] -translate-y-[70px] flex-col [&>*]:mb-[30px]">
+        <Form className="mx-auto flex flex-col [&>*]:mb-[30px]">
           <Field
             id="username"
             name="username"

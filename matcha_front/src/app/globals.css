@@ -16,7 +16,6 @@
 body {
   color: rgb(var(--foreground-rgb));
   /* background: linear-gradient(var(--bg-start), var(--bg-end)) fixed; */
-  margin: 10px 120px;
   @media (max-width: 670px) {
     margin: auto;
   }

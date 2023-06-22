@@ -4,17 +4,16 @@ import Cup from '@/images/cup.png';
 
 const Logo = () => {
   return (
-    <>
-      <Image className="mx-auto" src={Cup} width={250} height={250} alt="cup" />
+    <div className="relative">
+      <Image className="mx-auto" src={Cup} width={250} alt="cup" />
       <Image
-        className="absolute left-[20px] top-[80px] mx-auto"
+        className="mt-[-110px]"
         src={Matcha}
         priority
         width={350}
-        height={200}
         alt="logo"
       />
-    </>
+    </div>
   );
 };
 
