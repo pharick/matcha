@@ -24,17 +24,15 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const getUser = async () => {
-      //   const userResponse = await fetch('/api/users/me');
-      //   if (userResponse.ok) {
-      //     const user = (await userResponse.json()) as User;
-      //     setUser(user);
-      setUser({
-        username: 'milya',
-        first_name: 'milya',
-        last_name: 'milyanova',
-        id: 1,
-        email: '8milia01@mail.ru',
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      const res = await fetch('http://localhost:8000/whoami', {
+        headers: { Authorization: `Bearer ${token}` },
       });
+      if (res.ok) {
+        const user = (await res.json()) as User;
+        setUser(user);
+      }
     };
     void getUser();
   }, []);

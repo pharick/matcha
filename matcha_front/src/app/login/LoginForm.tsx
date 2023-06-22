@@ -22,12 +22,11 @@ const LoginForm: FC = () => {
       .min(2, 'First name must be between 2 and 16 characters')
       .max(16, 'First name must be between 2 and 16 characters')
       .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed '),
-    password: Yup.string()
-      .required(
-        'Enter a combination of at least six numbers,letters and punctuation marks(such as ! and &).'
-      )
-      .min(6, 'Password must be atleast 6 characters.')
-      .max(36, "Password can't be more than 36 characters"),
+    password: Yup.string().required(
+      'Enter a combination of at least six numbers,letters and punctuation marks(such as ! and &).'
+    ),
+    // .min(6, 'Password must be atleast 6 characters.')
+    // .max(36, "Password can't be more than 36 characters"),
   });
 
   const initialValues: LoginFormValues = { username: '', password: '' };
@@ -43,7 +42,8 @@ const LoginForm: FC = () => {
     const uri = 'http://127.0.0.1:8000/login';
     const res = await fetch(uri, requestOptions);
     if (res.ok) {
-      (await res.json()) as RegistrationResponse;
+      const data = (await res.json()) as RegistrationResponse;
+      localStorage.setItem('token', data.token);
       router.push('/profile');
     }
   };

@@ -1,9 +1,8 @@
 'use client';
-import Image from 'next/image';
 import { NextPage } from 'next';
 import Header from '@/components/Header';
 import ProfileForm from './ProfileForm';
-import { UserContext } from '@/app/test';
+import { UserContext } from '@/components/UserProvider';
 import { useContext } from 'react';
 
 const ProfilePage: NextPage = () => {

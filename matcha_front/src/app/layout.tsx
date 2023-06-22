@@ -1,8 +1,5 @@
 import './globals.css';
-import { Inter } from 'next/font/google';
-import UserProvider from './test';
-
-const inter = Inter({ subsets: ['latin'] });
+import UserProvider from '../components/UserProvider';
 
 export const metadata = {
   title: 'Matcha',
@@ -16,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <UserProvider>{children}</UserProvider>
       </body>
     </html>

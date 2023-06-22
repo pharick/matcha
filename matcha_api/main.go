@@ -27,8 +27,14 @@ func main() {
 
 	mux := goji.NewMux()
 
-	// middleware
-	mux.Use(cors.Default().Handler)
+	// cors
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowCredentials: true,
+		AllowedHeaders:   []string{"Authorization"},
+		Debug:            true,
+	})
+	mux.Use(c.Handler)
 
 	// auth
 	mux.Handle(pat.Post("/register"), handlers.Handler{Env: env, Handle: handlers.Register})

@@ -1,7 +1,6 @@
 'use client';
-import { FC, useContext } from 'react';
+import { FC } from 'react';
 import { User } from '@/app/interfaces';
-import { UserContext } from '@/app/test';
 
 interface ProfileFormProps {
   user: User;
