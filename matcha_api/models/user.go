@@ -119,3 +119,31 @@ func (m UserModel) GetOneActiveByUsername(username string) (User, error) {
 	)
 	return user, err
 }
+
+func (m UserModel) GetOneByEmail(email string) (User, error) {
+	var user User
+	err := m.DB.QueryRow("SELECT id, username, email, active, password_hash, first_name, last_name FROM users WHERE email = $1", email).Scan(
+		&user.Id,
+		&user.Username,
+		&user.Email,
+		&user.Active,
+		&user.PasswordHash,
+		&user.FirstName,
+		&user.LastName,
+	)
+	return user, err
+}
+
+func (m UserModel) GetOneActiveByEmail(email string) (User, error) {
+	var user User
+	err := m.DB.QueryRow("SELECT id, username, email, active, password_hash, first_name, last_name FROM users WHERE email = $1 AND active = true", email).Scan(
+		&user.Id,
+		&user.Username,
+		&user.Email,
+		&user.Active,
+		&user.PasswordHash,
+		&user.FirstName,
+		&user.LastName,
+	)
+	return user, err
+}

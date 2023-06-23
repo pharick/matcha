@@ -18,11 +18,11 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, er
 	err := validate.Struct(d)
 	if err != nil {
 		log.Println(err)
-		return nil, HttpError{422}
+		return nil, HttpError{422, map[string]string{"hello": "world"}}
 	}
 	_, err = env.Users.GetOneByUsername(d.Username)
 	if err == nil {
-		return nil, HttpError{409}
+		return nil, HttpError{409, nil}
 	}
 	passwordHash, err := lib.HashPassword(d.Password)
 	if err != nil {
@@ -68,14 +68,14 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error
 	validate := validator.New()
 	err := validate.Struct(d)
 	if err != nil {
-		return nil, HttpError{422}
+		return nil, HttpError{422, nil}
 	}
 	user, err := env.Users.GetOneByUsername(d.Username)
 	if err != nil {
-		return nil, HttpError{401}
+		return nil, HttpError{401, nil}
 	}
 	if !lib.CheckPasswordHash(d.Password, user.PasswordHash) {
-		return nil, HttpError{401}
+		return nil, HttpError{401, nil}
 	}
 	token, err := lib.GenerateJWT(user.Username, env.Settings.JWTSecret)
 	if err != nil {

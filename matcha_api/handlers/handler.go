@@ -9,10 +9,18 @@ import (
 
 type HttpError struct {
 	Status int
+	Body   interface{}
 }
 
 func (err HttpError) Error() string {
 	return fmt.Sprintf("%d %s", err.Status, http.StatusText(err.Status))
+}
+
+func JSONError(w http.ResponseWriter, body interface{}, code int) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("X-Content-Type-Options", "nosniff")
+	w.WriteHeader(code)
+	json.NewEncoder(w).Encode(body)
 }
 
 type Handler struct {
@@ -25,9 +33,13 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		switch err := err.(type) {
 		case HttpError:
-			http.Error(w, err.Error(), err.Status)
+			if err.Body != nil {
+				JSONError(w, err.Body, err.Status)
+			} else {
+				http.Error(w, err.Error(), err.Status)
+			}
 		default:
-			log.Print(err)
+			log.Println(err)
 			http.Error(
 				w,
 				fmt.Sprintf("500 %s", http.StatusText(http.StatusInternalServerError)),

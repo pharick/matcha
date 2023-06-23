@@ -34,7 +34,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (interface{},
 	username := pat.Param(r, "username")
 	user, err := env.Users.GetOneByUsername(username)
 	if err == sql.ErrNoRows {
-		return nil, HttpError{404}
+		return nil, HttpError{404, nil}
 	}
 	if err != nil {
 		return nil, err
