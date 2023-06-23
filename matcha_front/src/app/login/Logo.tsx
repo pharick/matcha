@@ -5,12 +5,12 @@ import Cup from '@/images/cup.png';
 const Logo = () => {
   return (
     <div className="relative">
-      <Image className="mx-auto" src={Cup} width={250} alt="cup" />
+      <Image className="mx-auto" src={Cup} width={350} alt="cup" />
       <Image
         className="mt-[-110px]"
         src={Matcha}
         priority
-        width={350}
+        width={450}
         alt="logo"
       />
     </div>

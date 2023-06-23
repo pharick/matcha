@@ -5,8 +5,8 @@ import Cup from '@/images/cup.png';
 const Header = () => {
   return (
     <header className="flex">
-      <Image src={Matcha} width={100} height={80} priority alt="logo" />
-      <Image src={Cup} width={80} height={80} alt="cup" />
+      <Image src={Matcha} width={100} priority alt="logo" />
+      <Image src={Cup} width={80} alt="cup" />
     </header>
   );
 };

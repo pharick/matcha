@@ -79,8 +79,11 @@ const LoginForm: FC = () => {
           {errors.password && touched.password ? (
             <div>{errors.password}</div>
           ) : null}
-          <Button type="submit" text="Log In" />
-          <Link className="text-center" href="/signup">
+          <Button type="submit">Log In</Button>
+          <Link
+            className="font-semi-bold text-center text-[28px]"
+            href="/signup"
+          >
             Sign Up
           </Link>
         </Form>

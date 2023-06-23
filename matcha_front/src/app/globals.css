@@ -8,14 +8,14 @@
   --bg-end: #879973;
   --brown: #403539;
   --green-radial-button: radial-gradient(#F1EAD070, #C9E6AC50);
-  background: linear-gradient(var(--bg-start), var(--bg-end)) fixed;
+  /* background: linear-gradient(var(--bg-start), var(--bg-end)) fixed; */
   font-size: 18px;
   color: #403539;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  /* background: linear-gradient(var(--bg-start), var(--bg-end)) fixed; */
+  background: linear-gradient(var(--bg-start), var(--bg-end)) fixed;
   @media (max-width: 670px) {
     margin: auto;
   }
@@ -28,6 +28,7 @@ body {
   border: none;
   height: 50px;
   border-radius: 20px;
+  background-color: radial-gradient(#F1EAD070, #C9E6AC50);
 } */
 
 input {

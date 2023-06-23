@@ -1,14 +1,17 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 interface BtnProps {
   type: 'button' | 'submit' | 'reset' | undefined;
-  text: string;
+  children: ReactNode;
 }
 
-const Button: FC<BtnProps> = ({ type, text }) => {
+const Button: FC<BtnProps> = ({ type, children }) => {
   return (
-    <button className="rounded-[20px] bg-gradient-radial from-green-2 to-green-5" type={type}>
-      {text}
+    <button
+      className="bg-green-400 rounded-[20px] text-[28px] font-bold"
+      type={type}
+    >
+      {children}
     </button>
   );
 };

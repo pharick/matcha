@@ -12,7 +12,7 @@ module.exports = {
       'green-2': '#6F805E',
       'green-5': '#879973',
       'brown': '#403539',
-      'green-radial-button': 'radial-gradient(#F1EAD070, #C9E6AC50)',
+      'green-radial-button': 'bg-[radial-gradient(#F1EAD070, #C9E6AC50)]',
     },
     extend: {
       

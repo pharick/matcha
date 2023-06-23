@@ -8,7 +8,7 @@ interface ProfileFormProps {
 
 const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
   return (
-    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+    <div className="bg-black w-[50]">
       <h1>{user.username}</h1>
       <h1>{user.first_name}</h1>
     </div>
