@@ -11,9 +11,9 @@ import (
 type ContextKey string
 
 func AuthRequired(
-	inner func(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error),
-) func(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
-	mw := func(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	inner func(env *Env, w http.ResponseWriter, r *http.Request) (any, error),
+) func(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	mw := func(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		authHeader := r.Header["Authorization"]
 		if len(authHeader) != 1 {
 			return nil, errors.HttpError{Status: 401, Body: nil}

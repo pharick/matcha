@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func Register(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
+func Register(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	var d schemas.RegistrationData
 	err := lib.GetJSONBody(r, &d)
 	if err != nil {
@@ -41,7 +41,7 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, er
 		env.Settings.SMTPPort,
 		env.Settings.SMTPEmail,
 		env.Settings.SMTPPassword,
-		d.Email,
+		user.Email,
 		activation_token,
 	)
 	if err != nil {
@@ -61,7 +61,7 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, er
 	return ret, nil
 }
 
-func Activate(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
+func Activate(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	var d schemas.ActivationData
 	err := lib.GetJSONBody(r, &d)
 	if err != nil {
@@ -80,10 +80,33 @@ func Activate(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, er
 	if err != nil {
 		return nil, err
 	}
-	return map[string]string{}, nil
+	return nil, nil
 }
 
-func Login(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
+func SendActivationEmail(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	user := r.Context().Value(ContextKey("User")).(models.User)
+	if user.Active {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	activation_token, err := lib.GenerateActivationJWT(user.Email, env.Settings.JWTSecret)
+	if err != nil {
+		return nil, err
+	}
+	err = lib.SendActivationEmail(
+		env.Settings.SMTPHost,
+		env.Settings.SMTPPort,
+		env.Settings.SMTPEmail,
+		env.Settings.SMTPPassword,
+		user.Email,
+		activation_token,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
+}
+
+func Login(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	var d schemas.LoginData
 	err := lib.GetJSONBody(r, &d)
 	if err != nil {
@@ -110,11 +133,12 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error
 	return ret, nil
 }
 
-func WhoAmI(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
+func WhoAmI(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	user := r.Context().Value(ContextKey("User")).(models.User)
-	ret := schemas.UserReturn{
+	ret := schemas.CurrenUserReturn{
 		Id:        user.Id,
 		Username:  user.Username,
+		Active:    user.Active,
 		Email:     user.Email,
 		FirstName: user.FirstName,
 		LastName:  user.LastName,

@@ -12,7 +12,7 @@ type ValidationError struct {
 
 type HttpError struct {
 	Status int
-	Body   interface{}
+	Body   any
 }
 
 func (err HttpError) Error() string {

@@ -11,7 +11,7 @@ import (
 	"goji.io/pat"
 )
 
-func UserList(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
+func UserList(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	users, err := env.Users.GetAll()
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func UserList(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, er
 	return ret, nil
 }
 
-func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
+func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	username := pat.Param(r, "username")
 	user, err := env.Users.GetOneByUsername(username)
 	if err == sql.ErrNoRows {

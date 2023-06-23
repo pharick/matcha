@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func HttpJsonError(w http.ResponseWriter, body interface{}, code int) {
+func HttpJsonError(w http.ResponseWriter, body any, code int) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.WriteHeader(code)
@@ -18,7 +18,7 @@ func HttpJsonError(w http.ResponseWriter, body interface{}, code int) {
 
 type Handler struct {
 	Env    *Env
-	Handle func(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error)
+	Handle func(env *Env, w http.ResponseWriter, r *http.Request) (any, error)
 }
 
 func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -45,6 +45,9 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			)
 		}
 	} else {
+		if ret == nil {
+			ret = map[string]string{}
+		}
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(ret)
 	}

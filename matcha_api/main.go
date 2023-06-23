@@ -38,6 +38,7 @@ func main() {
 
 	// auth
 	mux.Handle(pat.Post("/register"), handlers.Handler{Env: env, Handle: handlers.Register})
+	mux.Handle(pat.Post("/send_activation_email"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.SendActivationEmail)})
 	mux.Handle(pat.Post("/activate"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.Activate)})
 	mux.Handle(pat.Post("/login"), handlers.Handler{Env: env, Handle: handlers.Login})
 	mux.Handle(pat.Get("/whoami"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.WhoAmI)})
