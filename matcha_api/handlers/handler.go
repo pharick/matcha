@@ -4,15 +4,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"matcha_api/errors"
+	"matcha_api/schemas"
 	"net/http"
 )
 
-type HttpError struct {
-	Status int
-}
-
-func (err HttpError) Error() string {
-	return fmt.Sprintf("%d %s", err.Status, http.StatusText(err.Status))
+func HttpJsonError(w http.ResponseWriter, body interface{}, code int) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("X-Content-Type-Options", "nosniff")
+	w.WriteHeader(code)
+	json.NewEncoder(w).Encode(body)
 }
 
 type Handler struct {
@@ -24,10 +25,19 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ret, err := h.Handle(h.Env, w, r)
 	if err != nil {
 		switch err := err.(type) {
-		case HttpError:
-			http.Error(w, err.Error(), err.Status)
+		case errors.HttpValidationError:
+			ret := schemas.ValidationErrorReturn{
+				Errors: err.Errors,
+			}
+			HttpJsonError(w, ret, err.Status)
+		case errors.HttpError:
+			if err.Body != nil {
+				HttpJsonError(w, err.Body, err.Status)
+			} else {
+				http.Error(w, err.Error(), err.Status)
+			}
 		default:
-			log.Print(err)
+			log.Println(err)
 			http.Error(
 				w,
 				fmt.Sprintf("500 %s", http.StatusText(http.StatusInternalServerError)),

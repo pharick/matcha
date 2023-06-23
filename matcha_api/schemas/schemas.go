@@ -1,5 +1,11 @@
 package schemas
 
+import "matcha_api/errors"
+
+type ValidationErrorReturn struct {
+	Errors []errors.ValidationError `json:"validation_errors"`
+}
+
 type UserReturn struct {
 	Id        int    `json:"id"`
 	Username  string `json:"username"`
@@ -14,7 +20,7 @@ type UsersReturn struct {
 
 type RegistrationData struct {
 	Username  string `json:"username" validate:"required"`
-	Email     string `json:"email" validate:"required"`
+	Email     string `json:"email" validate:"required,email"`
 	Password  string `json:"password" validate:"required"`
 	FirstName string `json:"first_name" validate:"required"`
 	LastName  string `json:"last_name" validate:"required"`

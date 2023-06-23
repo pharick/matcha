@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"matcha_api/errors"
 )
 
 type User struct {
@@ -40,6 +41,22 @@ func (m UserModel) Create(
 		&user.LastName,
 	)
 	return user, err
+}
+
+func (m UserModel) CheckConflicts(username string, email string) []errors.ValidationError {
+	errs := make([]errors.ValidationError, 0)
+	_, err := m.GetOneByUsername(username)
+	if err == nil {
+		errs = append(errs, errors.ValidationError{Field: "username", Tag: "conflict"})
+	}
+	_, err = m.GetOneByEmail(email)
+	if err == nil {
+		errs = append(errs, errors.ValidationError{Field: "email", Tag: "conflict"})
+	}
+	if len(errs) > 0 {
+		return errs
+	}
+	return nil
 }
 
 func (m UserModel) GetAll() ([]User, error) {
@@ -109,6 +126,34 @@ func (m UserModel) GetOneByUsername(username string) (User, error) {
 func (m UserModel) GetOneActiveByUsername(username string) (User, error) {
 	var user User
 	err := m.DB.QueryRow("SELECT id, username, email, active, password_hash, first_name, last_name FROM users WHERE username = $1 AND active = true", username).Scan(
+		&user.Id,
+		&user.Username,
+		&user.Email,
+		&user.Active,
+		&user.PasswordHash,
+		&user.FirstName,
+		&user.LastName,
+	)
+	return user, err
+}
+
+func (m UserModel) GetOneByEmail(email string) (User, error) {
+	var user User
+	err := m.DB.QueryRow("SELECT id, username, email, active, password_hash, first_name, last_name FROM users WHERE email = $1", email).Scan(
+		&user.Id,
+		&user.Username,
+		&user.Email,
+		&user.Active,
+		&user.PasswordHash,
+		&user.FirstName,
+		&user.LastName,
+	)
+	return user, err
+}
+
+func (m UserModel) GetOneActiveByEmail(email string) (User, error) {
+	var user User
+	err := m.DB.QueryRow("SELECT id, username, email, active, password_hash, first_name, last_name FROM users WHERE email = $1 AND active = true", email).Scan(
 		&user.Id,
 		&user.Username,
 		&user.Email,

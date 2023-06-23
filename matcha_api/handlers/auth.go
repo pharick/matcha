@@ -1,28 +1,22 @@
 package handlers
 
 import (
-	"encoding/json"
-	"log"
+	"matcha_api/errors"
 	"matcha_api/lib"
 	"matcha_api/models"
 	"matcha_api/schemas"
 	"net/http"
-
-	"github.com/go-playground/validator/v10"
 )
 
 func Register(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	var d schemas.RegistrationData
-	json.NewDecoder(r.Body).Decode(&d)
-	validate := validator.New()
-	err := validate.Struct(d)
+	err := lib.GetJSONBody(r, &d)
 	if err != nil {
-		log.Println(err)
-		return nil, HttpError{422}
+		return nil, err
 	}
-	_, err = env.Users.GetOneByUsername(d.Username)
-	if err == nil {
-		return nil, HttpError{409}
+	errs := env.Users.CheckConflicts(d.Username, d.Email)
+	if errs != nil {
+		return nil, errors.HttpValidationError{Status: 409, Errors: errs}
 	}
 	passwordHash, err := lib.HashPassword(d.Password)
 	if err != nil {
@@ -64,18 +58,16 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, er
 
 func Login(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	var d schemas.LoginData
-	json.NewDecoder(r.Body).Decode(&d)
-	validate := validator.New()
-	err := validate.Struct(d)
+	err := lib.GetJSONBody(r, &d)
 	if err != nil {
-		return nil, HttpError{422}
+		return nil, err
 	}
 	user, err := env.Users.GetOneByUsername(d.Username)
 	if err != nil {
-		return nil, HttpError{401}
+		return nil, errors.HttpError{Status: 401, Body: nil}
 	}
 	if !lib.CheckPasswordHash(d.Password, user.PasswordHash) {
-		return nil, HttpError{401}
+		return nil, errors.HttpError{Status: 401, Body: nil}
 	}
 	token, err := lib.GenerateJWT(user.Username, env.Settings.JWTSecret)
 	if err != nil {
