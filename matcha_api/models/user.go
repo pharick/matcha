@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"matcha_api/errors"
 )
 
 type User struct {
@@ -40,6 +41,22 @@ func (m UserModel) Create(
 		&user.LastName,
 	)
 	return user, err
+}
+
+func (m UserModel) CheckConflicts(username string, email string) []errors.ValidationError {
+	errs := make([]errors.ValidationError, 0)
+	_, err := m.GetOneByUsername(username)
+	if err == nil {
+		errs = append(errs, errors.ValidationError{Field: "username", Tag: "conflict"})
+	}
+	_, err = m.GetOneByEmail(email)
+	if err == nil {
+		errs = append(errs, errors.ValidationError{Field: "email", Tag: "conflict"})
+	}
+	if len(errs) > 0 {
+		return errs
+	}
+	return nil
 }
 
 func (m UserModel) GetAll() ([]User, error) {

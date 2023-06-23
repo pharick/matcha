@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"database/sql"
+	"matcha_api/errors"
 	"matcha_api/lib"
 	"matcha_api/models"
 	"matcha_api/schemas"
@@ -34,7 +35,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (interface{},
 	username := pat.Param(r, "username")
 	user, err := env.Users.GetOneByUsername(username)
 	if err == sql.ErrNoRows {
-		return nil, HttpError{404, nil}
+		return nil, errors.HttpError{Status: 404, Body: nil}
 	}
 	if err != nil {
 		return nil, err

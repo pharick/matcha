@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"log"
+	"matcha_api/errors"
 	"matcha_api/lib"
 	"net/http"
 	"strings"
@@ -16,20 +17,20 @@ func AuthRequired(
 	mw := func(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
 		authHeader := r.Header["Authorization"]
 		if len(authHeader) != 1 {
-			return nil, HttpError{401, nil}
+			return nil, errors.HttpError{Status: 401, Body: nil}
 		}
 		authHeader = strings.Split(authHeader[0], " ")
 		if len(authHeader) != 2 || authHeader[0] != "Bearer" {
-			return nil, HttpError{401, nil}
+			return nil, errors.HttpError{Status: 401, Body: nil}
 		}
 		username, err := lib.JWTParseUsername(authHeader[1], env.Settings.JWTSecret)
 		if err != nil {
 			log.Println(err)
-			return nil, HttpError{401, nil}
+			return nil, errors.HttpError{Status: 401, Body: nil}
 		}
 		user, err := env.Users.GetOneByUsername(username)
 		if err != nil {
-			return nil, HttpError{401, nil}
+			return nil, errors.HttpError{Status: 401, Body: nil}
 		}
 		ctx := context.WithValue(r.Context(), ContextKey("User"), user)
 		return inner(env, w, r.WithContext(ctx))
