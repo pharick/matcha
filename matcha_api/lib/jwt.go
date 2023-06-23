@@ -7,7 +7,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateJWT(username string, secret string) (s string, err error) {
+func GenerateAuthJWT(username string, secret string) (s string, err error) {
 	now := time.Now()
 	t := jwt.NewWithClaims(
 		jwt.SigningMethodHS256,
@@ -20,7 +20,20 @@ func GenerateJWT(username string, secret string) (s string, err error) {
 	return
 }
 
-func JWTParseUsername(tokenStr string, secret string) (string, error) {
+func GenerateActivationJWT(email string, secret string) (s string, err error) {
+	now := time.Now()
+	t := jwt.NewWithClaims(
+		jwt.SigningMethodHS256,
+		jwt.MapClaims{
+			"sub": email,
+			"exp": now.Add(time.Hour).Unix(),
+		},
+	)
+	s, err = t.SignedString([]byte(secret))
+	return
+}
+
+func ParseJWTSub(tokenStr string, secret string) (string, error) {
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		if method, ok := token.Method.(*jwt.SigningMethodHMAC); !ok || method != jwt.SigningMethodHS256 {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])

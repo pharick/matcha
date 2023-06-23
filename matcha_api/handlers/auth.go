@@ -22,7 +22,17 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, er
 	if err != nil {
 		return nil, err
 	}
-	token, err := lib.GenerateJWT(d.Username, env.Settings.JWTSecret)
+	user, err := env.Users.Create(
+		d.Username,
+		d.Email,
+		passwordHash,
+		d.FirstName,
+		d.LastName,
+	)
+	if err != nil {
+		return nil, err
+	}
+	activation_token, err := lib.GenerateActivationJWT(user.Email, env.Settings.JWTSecret)
 	if err != nil {
 		return nil, err
 	}
@@ -32,17 +42,12 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, er
 		env.Settings.SMTPEmail,
 		env.Settings.SMTPPassword,
 		d.Email,
+		activation_token,
 	)
 	if err != nil {
 		return nil, err
 	}
-	user, err := env.Users.Create(
-		d.Username,
-		d.Email,
-		passwordHash,
-		d.FirstName,
-		d.LastName,
-	)
+	token, err := lib.GenerateAuthJWT(d.Username, env.Settings.JWTSecret)
 	if err != nil {
 		return nil, err
 	}
@@ -54,6 +59,28 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, er
 		LastName:  user.LastName,
 	}}
 	return ret, nil
+}
+
+func Activate(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	var d schemas.ActivationData
+	err := lib.GetJSONBody(r, &d)
+	if err != nil {
+		return nil, err
+	}
+	email, err := lib.ParseJWTSub(d.Token, env.Settings.JWTSecret)
+	if err != nil {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	user := r.Context().Value(ContextKey("User")).(models.User)
+	if user.Email != email {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	user.Active = true
+	user, err = env.Users.Update(user)
+	if err != nil {
+		return nil, err
+	}
+	return map[string]string{}, nil
 }
 
 func Login(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error) {
@@ -69,7 +96,7 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) (interface{}, error
 	if !lib.CheckPasswordHash(d.Password, user.PasswordHash) {
 		return nil, errors.HttpError{Status: 401, Body: nil}
 	}
-	token, err := lib.GenerateJWT(user.Username, env.Settings.JWTSecret)
+	token, err := lib.GenerateAuthJWT(user.Username, env.Settings.JWTSecret)
 	if err != nil {
 		return nil, err
 	}

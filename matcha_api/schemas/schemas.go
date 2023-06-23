@@ -19,8 +19,8 @@ type UsersReturn struct {
 }
 
 type RegistrationData struct {
-	Username  string `json:"username" validate:"required"`
-	Email     string `json:"email" validate:"required,email"`
+	Username  string `json:"username" validate:"required,lowercase"`
+	Email     string `json:"email" validate:"required,email,lowercase"`
 	Password  string `json:"password" validate:"required"`
 	FirstName string `json:"first_name" validate:"required"`
 	LastName  string `json:"last_name" validate:"required"`
@@ -32,11 +32,15 @@ type RegistrationReturn struct {
 }
 
 type LoginData struct {
-	Username string `json:"username" validate:"required"`
+	Username string `json:"username" validate:"required,lowercase"`
 	Password string `json:"password" validate:"required"`
 }
 
 type LoginReturn struct {
 	Token string     `json:"token"`
 	User  UserReturn `json:"user"`
+}
+
+type ActivationData struct {
+	Token string `json:"token" validate:"required"`
 }

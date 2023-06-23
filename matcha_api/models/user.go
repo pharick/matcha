@@ -59,6 +59,27 @@ func (m UserModel) CheckConflicts(username string, email string) []errors.Valida
 	return nil
 }
 
+func (m UserModel) Update(
+	d User,
+) (User, error) {
+	var user User
+	err := m.DB.QueryRow(
+		`UPDATE users SET username = $2, email = $3, active = $4, password_hash = $5, first_name = $6, last_name = $7 
+		WHERE id = $1
+		RETURNING id, username, email, active, password_hash, first_name, last_name`,
+		d.Id, d.Username, d.Email, d.Active, d.PasswordHash, d.FirstName, d.LastName,
+	).Scan(
+		&user.Id,
+		&user.Username,
+		&user.Email,
+		&user.Active,
+		&user.PasswordHash,
+		&user.FirstName,
+		&user.LastName,
+	)
+	return user, err
+}
+
 func (m UserModel) GetAll() ([]User, error) {
 	users := make([]User, 0)
 	rows, err := m.DB.Query("SELECT id, username, email, active, password_hash, first_name, last_name FROM users")
