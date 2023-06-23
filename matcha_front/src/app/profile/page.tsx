@@ -1,8 +1,8 @@
 'use client';
 import { NextPage } from 'next';
 import Header from '@/components/Header';
-import ProfileForm from './ProfileForm';
-import { UserContext } from '@/components/UserProvider';
+import ProfileForm from './components/ProfileForm';
+import { UserContext, withLogin } from '@/components/UserProvider';
 import { useContext } from 'react';
 
 const ProfilePage: NextPage = () => {
@@ -15,4 +15,4 @@ const ProfilePage: NextPage = () => {
   );
 };
 
-export default ProfilePage;
+export default withLogin(<ProfilePage />);

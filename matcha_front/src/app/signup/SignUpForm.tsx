@@ -12,7 +12,10 @@ import {
   Field,
   FieldProps,
 } from 'formik';
-import { NextPage } from 'next';
+import { RegistrationResponse } from '../interfaces';
+import { useRouter } from 'next/navigation';
+import { FC, useContext } from 'react';
+import { UserContext } from '@/components/UserProvider';
 
 interface SignUpFormValues {
   username: string;
@@ -23,29 +26,11 @@ interface SignUpFormValues {
   confPassword: string;
 }
 
-const handleAutorization = async (values: SignUpFormValues) => {
-  const requestOptions = {
-    method: 'POST',
-    body: JSON.stringify({
-      username: values.username,
-      first_name: values.firstName,
-      last_name: values.lastName,
-      email: values.email,
-      password: values.password,
-    }),
-  };
-  console.log(requestOptions.body);
-  const uri = 'http://127.0.0.1:8000/register';
-  const res = await fetch(uri, requestOptions).catch((error) => {
-    console.log(error);
-  });
-  const data = await res.json();
-  console.log(data);
-};
-
-const SignUpForm: NextPage = () => {
+const SignUpForm: FC = () => {
+  const router = useRouter();
+  const userContext = useContext(UserContext);
   const validationSchema = Yup.object({
-    userName: Yup.string()
+    username: Yup.string()
       .required("What's your name?")
       .min(2, 'First name must be between 2 and 16 characters')
       .max(16, 'First name must be between 2 and 16 characters')
@@ -75,6 +60,28 @@ const SignUpForm: NextPage = () => {
       .required('Confirm your password.')
       .oneOf([Yup.ref('password')], 'Passwords must match.'),
   });
+
+  const handleAutorization = async (values: SignUpFormValues) => {
+    const requestOptions = {
+      method: 'POST',
+      body: JSON.stringify({
+        username: values.username,
+        first_name: values.firstName,
+        last_name: values.lastName,
+        email: values.email,
+        password: values.password,
+      }),
+    };
+    console.log(requestOptions.body);
+    const uri = 'http://127.0.0.1:8000/register';
+    const res = await fetch(uri, requestOptions);
+    if (res.ok) {
+      const data = (await res.json()) as RegistrationResponse;
+      localStorage.setItem('token', data.token);
+      router.push('/profile');
+    }
+  };
+
   const initialValues: SignUpFormValues = {
     username: '',
     firstName: '',
@@ -150,7 +157,7 @@ const SignUpForm: NextPage = () => {
           {errors.confPassword && touched.confPassword ? (
             <div>{errors.confPassword}</div>
           ) : null}
-          <Button type="submit" text="Confirm" />
+          <Button type="submit">Confirm</Button>
         </Form>
       )}
     </Formik>

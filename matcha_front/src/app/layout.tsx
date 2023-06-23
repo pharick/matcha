@@ -1,5 +1,4 @@
 import './globals.css';
-import UserProvider from '../components/UserProvider';
 import { Montserrat } from 'next/font/google';
 
 export const metadata = {
@@ -21,9 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={montserrat.className}>
-      <body>
-        <UserProvider>{children}</UserProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
