@@ -164,6 +164,28 @@ func PasswordReset(env *Env, w http.ResponseWriter, r *http.Request) (any, error
 	return nil, nil
 }
 
+func PasswordChange(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	var d schemas.PasswordChangeData
+	err := lib.GetJSONBody(r, &d)
+	if err != nil {
+		return nil, err
+	}
+	user := r.Context().Value(ContextKey("User")).(models.User)
+	if !lib.CheckPasswordHash(d.OldPassword, user.PasswordHash) {
+		return nil, errors.HttpError{Status: 401, Body: nil}
+	}
+	passwordHash, err := lib.HashPassword(d.NewPassword)
+	if err != nil {
+		return nil, err
+	}
+	user.PasswordHash = passwordHash
+	user, err = env.Users.Update(user)
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
+}
+
 func Login(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	var d schemas.LoginData
 	err := lib.GetJSONBody(r, &d)
