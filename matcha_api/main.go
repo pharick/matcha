@@ -32,7 +32,7 @@ func main() {
 		AllowedOrigins:   []string{"*"},
 		AllowCredentials: true,
 		AllowedHeaders:   []string{"Authorization"},
-		Debug:            true,
+		Debug:            false,
 	})
 	mux.Use(c.Handler)
 
