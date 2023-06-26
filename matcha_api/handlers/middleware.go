@@ -22,8 +22,8 @@ func AuthRequired(
 		if len(authHeader) != 2 || authHeader[0] != "Bearer" {
 			return nil, errors.HttpError{Status: 401, Body: nil}
 		}
-		username, err := lib.ParseJWTSub(authHeader[1], env.Settings.JWTSecret)
-		if err != nil {
+		username, target, err := lib.ParseJWT(authHeader[1], env.Settings.JWTSecret)
+		if err != nil || target != "auth" {
 			return nil, errors.HttpError{Status: 401, Body: nil}
 		}
 		user, err := env.Users.GetOneByUsername(username)

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"matcha_api/errors"
 	"matcha_api/lib"
 	"matcha_api/models"
@@ -36,13 +37,14 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = lib.SendActivationEmail(
+	err = lib.SendEmail(
 		env.Settings.SMTPHost,
 		env.Settings.SMTPPort,
 		env.Settings.SMTPEmail,
 		env.Settings.SMTPPassword,
 		user.Email,
-		activation_token,
+		"Matcha email verification",
+		fmt.Sprintf("Please, use this token to verify your email: %s", activation_token),
 	)
 	if err != nil {
 		return nil, err
@@ -67,8 +69,8 @@ func Activate(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
-	email, err := lib.ParseJWTSub(d.Token, env.Settings.JWTSecret)
-	if err != nil {
+	email, target, err := lib.ParseJWT(d.Token, env.Settings.JWTSecret)
+	if err != nil || target != "activation" {
 		return nil, errors.HttpError{Status: 400, Body: nil}
 	}
 	user := r.Context().Value(ContextKey("User")).(models.User)
@@ -92,14 +94,70 @@ func SendActivationEmail(env *Env, w http.ResponseWriter, r *http.Request) (any,
 	if err != nil {
 		return nil, err
 	}
-	err = lib.SendActivationEmail(
+	err = lib.SendEmail(
 		env.Settings.SMTPHost,
 		env.Settings.SMTPPort,
 		env.Settings.SMTPEmail,
 		env.Settings.SMTPPassword,
 		user.Email,
-		activation_token,
+		"Matcha email verification",
+		fmt.Sprintf("Please, use this token to verify your email: %s", activation_token),
 	)
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
+}
+
+func SendPasswordResetEmail(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	var d schemas.SendPasswordResetEmailData
+	err := lib.GetJSONBody(r, &d)
+	if err != nil {
+		return nil, err
+	}
+	user, err := env.Users.GetOneByEmail(d.Email)
+	if err != nil {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	reset_token, err := lib.GeneratePasswordResetJWT(user.Username, env.Settings.JWTSecret)
+	if err != nil {
+		return nil, err
+	}
+	err = lib.SendEmail(
+		env.Settings.SMTPHost,
+		env.Settings.SMTPPort,
+		env.Settings.SMTPEmail,
+		env.Settings.SMTPPassword,
+		user.Email,
+		"Matcha password reset",
+		fmt.Sprintf("Please, use this token to reset your password: %s", reset_token),
+	)
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
+}
+
+func PasswordReset(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	var d schemas.PasswordResetData
+	err := lib.GetJSONBody(r, &d)
+	if err != nil {
+		return nil, err
+	}
+	username, target, err := lib.ParseJWT(d.Token, env.Settings.JWTSecret)
+	if err != nil || target != "reset" {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	user, err := env.Users.GetOneByUsername(username)
+	if err != nil {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	passwordHash, err := lib.HashPassword(d.Password)
+	if err != nil {
+		return nil, err
+	}
+	user.PasswordHash = passwordHash
+	user, err = env.Users.Update(user)
 	if err != nil {
 		return nil, err
 	}

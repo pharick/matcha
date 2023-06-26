@@ -5,17 +5,17 @@ import (
 	"net/smtp"
 )
 
-func SendActivationEmail(
+func SendEmail(
 	smtpHost string,
 	smtpPort int,
 	emailFrom string,
 	password string,
 	emailTo string,
-	token string,
+	subject string,
+	body string,
 ) error {
 	auth := smtp.PlainAuth("", emailFrom, password, smtpHost)
-	text := fmt.Sprintf("Please, use this token to verify your email: %s", token)
-	msg := fmt.Sprintf("Subject: Matcha email verification\n\n%s", text)
+	msg := fmt.Sprintf("Subject: %s\n\n%s", subject, body)
 	err := smtp.SendMail(
 		fmt.Sprintf("%s:%d", smtpHost, smtpPort),
 		auth,
@@ -25,3 +25,6 @@ func SendActivationEmail(
 	)
 	return err
 }
+
+// text := fmt.Sprintf("Please, use this token to verify your email: %s", token)
+// msg := fmt.Sprintf("Subject: Matcha email verification\n\n%s", text)

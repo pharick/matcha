@@ -30,7 +30,7 @@ func GetJSONBody(r *http.Request, d any) error {
 		return errors.HttpValidationError{Status: 422, Errors: GetValidationErrors(err)}
 	}
 	if err != nil {
-		return errors.HttpError{Status: 500, Body: nil}
+		return err
 	}
 	return nil
 }

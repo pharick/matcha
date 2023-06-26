@@ -1,19 +1,5 @@
 package schemas
 
-import "matcha_api/errors"
-
-type ValidationErrorReturn struct {
-	Errors []errors.ValidationError `json:"validation_errors"`
-}
-
-type UserReturn struct {
-	Id        int    `json:"id"`
-	Username  string `json:"username"`
-	Email     string `json:"email"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-}
-
 type CurrenUserReturn struct {
 	Id        int    `json:"id"`
 	Username  string `json:"username"`
@@ -21,10 +7,6 @@ type CurrenUserReturn struct {
 	Email     string `json:"email"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
-}
-
-type UsersReturn struct {
-	List []UserReturn `json:"list"`
 }
 
 type RegistrationData struct {
@@ -52,4 +34,13 @@ type LoginReturn struct {
 
 type ActivationData struct {
 	Token string `json:"token" validate:"required"`
+}
+
+type SendPasswordResetEmailData struct {
+	Email string `json:"email" validate:"required"`
+}
+
+type PasswordResetData struct {
+	Token    string `json:"token" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
