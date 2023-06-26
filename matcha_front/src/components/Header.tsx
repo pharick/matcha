@@ -5,12 +5,10 @@ import Link from 'next/link';
 
 const Header = () => {
   return (
-    <header className="flex">
+    <header className="align-center flex">
       <Image src={Matcha} width={100} priority alt="logo" />
       <Image src={Cup} width={80} alt="cup" />
-      <Link href="" className="align-center">
-        header
-      </Link>
+      <Link href="">header</Link>
     </header>
   );
 };

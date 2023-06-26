@@ -36,9 +36,9 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
     images: [''],
   };
   return (
-    <div className="flex">
-      <div className="w-full"></div>
-      <div className="w-full text-center">
+    <div className="mt-[50px] flex">
+      <div className="w-2/5"></div>
+      <div className="mr-[20px] flex-1 text-center">
         <Formik
           // validationSchema={validationSchema}
           initialValues={initialValues}
