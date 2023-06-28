@@ -10,3 +10,7 @@ export interface RegistrationResponse {
   token: string;
   user: User;
 }
+
+export interface CurrentUser extends User {
+  active: boolean;
+}

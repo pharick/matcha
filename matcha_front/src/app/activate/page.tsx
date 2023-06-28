@@ -3,7 +3,6 @@ import { withLogin } from '@/components/UserProvider';
 import { NextPage } from 'next';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { boolean } from 'yup';
 
 const Activate: NextPage = () => {
   const router = useRouter();
