@@ -7,7 +7,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { User } from '@/app/interfaces';
+import { CurrentUser } from '@/app/interfaces';
 import { useRouter, usePathname } from 'next/navigation';
 import { NextPage } from 'next';
 
@@ -16,13 +16,13 @@ interface UserProviderProps {
 }
 
 interface UserContextInterface {
-  user?: User;
+  user?: CurrentUser;
 }
 
 export const UserContext = createContext<UserContextInterface>({});
 
 const UserProvider: FC<UserProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | undefined>(undefined);
+  const [user, setUser] = useState<CurrentUser | undefined>(undefined);
   const router = useRouter();
   const pathName = usePathname();
 
@@ -37,7 +37,7 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
-        const user = (await res.json()) as User;
+        const user = (await res.json()) as CurrentUser;
         console.log(user);
         setUser(user);
       } else {

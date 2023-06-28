@@ -6,9 +6,28 @@ import ProfileForm from './components/ProfileForm';
 import { UserContext, withLogin } from '@/components/UserProvider';
 import { useContext } from 'react';
 import LeafDown from '@/images/leafe_down.png';
+import Alert from '@/components/Alert';
 
 const ProfilePage: NextPage = () => {
   const userContext = useContext(UserContext);
+  // const [sended, setSended] = UseState<boolean>(false);
+
+  const resendEmail = async () => {
+    console.log('here');
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    const requestOptions = {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+    };
+    const uri = 'http://127.0.0.1:8000/send_activation_email';
+    const res = await fetch(uri, requestOptions);
+    console.log(res);
+    if (res.ok) {
+      console.log(res);
+    } else return;
+  };
+
   return (
     <>
       <Header />
@@ -18,6 +37,17 @@ const ProfilePage: NextPage = () => {
         alt="leaf"
         width={1500}
       />
+      {userContext.user && !userContext.user.active && (
+        <Alert type="warning">
+          Your email is not validated.
+          <button
+            onClick={() => void resendEmail()}
+            className="ml-[10px] underline"
+          >
+            Resend email
+          </button>
+        </Alert>
+      )}
       {userContext.user ? <ProfileForm user={userContext.user} /> : <></>}
     </>
   );
