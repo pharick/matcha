@@ -14,6 +14,7 @@ import (
 )
 
 func UploadFile(r *http.Request, fieldName string, types []string, subdir string) (url string, err error) {
+	UPLOADS_PATH := "/usr/share/uploads"
 	err = r.ParseMultipartForm(10 << 20)
 	if err != nil {
 		return "", err
@@ -38,17 +39,17 @@ func UploadFile(r *http.Request, fieldName string, types []string, subdir string
 		return "", err
 	}
 	// check filetype end
-	pathPrefix := fmt.Sprintf("/uploads/%s", subdir)
-	err = os.MkdirAll("."+pathPrefix, os.ModePerm)
+	err = os.MkdirAll(fmt.Sprintf("%s/%s", UPLOADS_PATH, subdir), os.ModePerm)
 	if err != nil {
 		return "", err
 	}
-	path := fmt.Sprintf("%s/%s%s", pathPrefix, strings.Replace(uuid.New().String(), "-", "", -1), filepath.Ext(fileHandler.Filename))
-	dest, err := os.Create("." + path)
+	path := fmt.Sprintf("%s/%s%s", subdir, strings.Replace(uuid.New().String(), "-", "", -1), filepath.Ext(fileHandler.Filename))
+	dest, err := os.Create(fmt.Sprintf("%s/%s", UPLOADS_PATH, path))
 	if err != nil {
 		return "", err
 	}
 	defer dest.Close()
 	_, err = io.Copy(dest, file)
-	return path, nil
+	url = fmt.Sprintf("/uploads/%s", path)
+	return url, nil
 }

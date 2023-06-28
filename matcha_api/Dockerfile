@@ -16,4 +16,8 @@ COPY . .
 RUN go build -v -o /usr/local/bin/app main.go
 RUN chmod a+x ./run.sh
 
+RUN mkdir -p /usr/share/uploads
+
+EXPOSE 8000
+
 CMD ["./run.sh"]
