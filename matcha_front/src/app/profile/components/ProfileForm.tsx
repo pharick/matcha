@@ -1,9 +1,10 @@
 'use client';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { User } from '@/app/interfaces';
 import Button from '@/components/Button';
 import { Field, Form, Formik } from 'formik';
 import FieldComponent from './FieldComponent';
+import PhotoUpload from './PhotoUpload';
 
 interface ProfileFormProps {
   user: User;
@@ -37,7 +38,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
   };
   return (
     <div className="mt-[50px] flex">
-      <div className="w-2/5"></div>
+      <PhotoUpload user={user}/>
       <div className="mr-[20px] flex-1 text-center">
         <Formik
           // validationSchema={validationSchema}

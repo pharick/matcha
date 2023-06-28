@@ -7,10 +7,7 @@ interface BtnProps {
 
 const Button: FC<BtnProps> = ({ type, children }) => {
   return (
-    <button
-      className="bg-radial-gradient rounded-[20px] from-green-1 to-green-2 text-[28px] font-bold"
-      type={type}
-    >
+    <button className="rounded-[20px] text-[28px] font-bold" type={type}>
       {children}
     </button>
   );

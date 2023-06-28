@@ -33,7 +33,7 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
         router.push('/login');
         return;
       }
-      const res = await fetch('http://localhost:8000/whoami', {
+      const res = await fetch(`/api/whoami`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {

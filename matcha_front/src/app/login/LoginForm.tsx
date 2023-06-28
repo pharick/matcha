@@ -39,7 +39,7 @@ const LoginForm: FC = () => {
         password: values.password,
       }),
     };
-    const uri = 'http://127.0.0.1:8000/login';
+    const uri = `/api/login`;
     const res = await fetch(uri, requestOptions);
     if (res.ok) {
       const data = (await res.json()) as RegistrationResponse;
