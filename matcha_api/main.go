@@ -51,6 +51,7 @@ func main() {
 	mux.Handle(pat.Get("/users/:username"), handlers.Handler{Env: env, Handle: handlers.UserProfile})
 
 	// photos
+	mux.Handle(pat.Get("/users/:username/photos/"), handlers.Handler{Env: env, Handle: handlers.PhotoList})
 	mux.Handle(pat.Post("/users/:username/photos/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UploadPhoto)})
 
 	http.ListenAndServe(":8000", mux)

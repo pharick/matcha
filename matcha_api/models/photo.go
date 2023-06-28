@@ -28,3 +28,24 @@ func (m PhotoModel) Create(
 	)
 	return photo, err
 }
+
+func (m PhotoModel) GetAllByUserId(user_id int) ([]Photo, error) {
+	photos := make([]Photo, 0)
+	rows, err := m.DB.Query("SELECT id, user_id, url FROM photos WHERE user_id = $1", user_id)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var photo Photo
+		err := rows.Scan(
+			&photo.Id,
+			&photo.UserId,
+			&photo.Url,
+		)
+		if err != nil {
+			return nil, err
+		}
+		photos = append(photos, photo)
+	}
+	return photos, nil
+}
