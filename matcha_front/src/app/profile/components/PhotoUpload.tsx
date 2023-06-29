@@ -21,20 +21,20 @@ const PhotoUpload: FC<ProfileFormProps> = ({ user }) => {
     const userToken = localStorage.getItem('token');
     if (!userToken) return;
     const formData = new FormData();
-    formData.append('value', image);
+    formData.append('photo', image);
     const requestOptions = {
       method: 'POST',
       body: formData,
-      //   headers: { Authorization: `Bearer ${userToken}`, Content-Type: 'multipart/form-data' },
       headers: {
         Authorization: `Bearer ${userToken}`,
-        'Content-Type': 'multipart/form-data',
       },
     };
     const uri = `/api/users/${user.username}/photos/`;
-    console.log(uri);
     const res = await fetch(uri, requestOptions);
-    if (res.ok) console.log(res);
+    if (res.ok) {
+      const photo = (await res.json()) as Map<string, unknown>;
+      console.log(photo);
+    }
   };
 
   const handlePhotoUpload = () => {
