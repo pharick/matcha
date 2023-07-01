@@ -39,6 +39,7 @@ func main() {
 	// users
 	mux.Handle(pat.Get("/users/"), handlers.Handler{Env: env, Handle: handlers.UserList})
 	mux.Handle(pat.Get("/users/:username/"), handlers.Handler{Env: env, Handle: handlers.UserProfile})
+	mux.Handle(pat.Patch("/users/:username/"), handlers.Handler{Env: env, Handle: handlers.UpdateUser})
 
 	// photos
 	mux.Handle(pat.Get("/users/:username/photos/"), handlers.Handler{Env: env, Handle: handlers.PhotoList})

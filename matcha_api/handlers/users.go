@@ -23,6 +23,8 @@ func UserList(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 			Email:     user.Email,
 			FirstName: user.FirstName,
 			LastName:  user.LastName,
+			Gender:    user.Gender,
+			Biography: user.Biography,
 		}
 	})
 	ret := schemas.UsersReturn{
@@ -46,6 +48,54 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Email:     user.Email,
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
+		Gender:    user.Gender,
+		Biography: user.Biography,
+	}
+	return ret, nil
+}
+
+func UpdateUser(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	username := pat.Param(r, "username")
+	user, err := env.Users.GetOneByUsername(username)
+	if err == sql.ErrNoRows {
+		return nil, errors.HttpError{Status: 404, Body: nil}
+	}
+	if err != nil {
+		return nil, err
+	}
+	var d schemas.UpdateUserData
+	err = lib.GetJSONBody(r, &d)
+	if err != nil {
+		return nil, err
+	}
+	if d.Email != "" {
+		user.Email = d.Email
+		user.Active = false
+	}
+	if d.FirstName != "" {
+		user.FirstName = d.FirstName
+	}
+	if d.LastName != "" {
+		user.LastName = d.LastName
+	}
+	if d.Gender != "" {
+		user.Gender = d.Gender
+	}
+	if d.Biography != "" {
+		user.Biography = d.Biography
+	}
+	user, err = env.Users.Update(user)
+	if err != nil {
+		return nil, err
+	}
+	ret := schemas.UserReturn{
+		Id:        user.Id,
+		Username:  user.Username,
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Gender:    user.Gender,
+		Biography: user.Biography,
 	}
 	return ret, nil
 }

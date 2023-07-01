@@ -1,3 +1,5 @@
+CREATE TYPE GENDER AS ENUM ('male', 'female', 'other');
+
 CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         username VARCHAR(100) UNIQUE NOT NULL,
@@ -5,8 +7,11 @@ CREATE TABLE IF NOT EXISTS users (
         password_hash VARCHAR(72) NOT NULL,
         first_name VARCHAR(200) NOT NULL,
         last_name VARCHAR(200) NOT NULL,
-        active BOOLEAN NOT NULL DEFAULT false
+        active BOOLEAN NOT NULL DEFAULT false,
+        gender GENDER,
+        biography TEXT
 );
 
 CREATE UNIQUE INDEX users_username_idx ON users (username);
 CREATE UNIQUE INDEX users_email_idx ON users (email);
+CREATE UNIQUE INDEX users_gender_idx ON users (gender);
