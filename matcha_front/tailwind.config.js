@@ -13,6 +13,7 @@ module.exports = {
         'green-2': '#6F805E',
         'green-5': '#879973',
         'brown': '#403539',
+        // 'overlay': 'rgba(0 0 0 0.7)',
         'green-radial-button': 'bg-[radial-gradient(#F1EAD070, #C9E6AC50)]',
       },
       // fontFamily: {

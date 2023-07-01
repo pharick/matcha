@@ -5,6 +5,8 @@ import Button from '@/components/Button';
 import { Field, Form, Formik } from 'formik';
 import FieldComponent from './FieldComponent';
 import PhotoUpload from './PhotoUpload';
+import Modal from '@/components/Modal';
+import ChangePasswordForm from './ChangePasswordForm';
 
 interface ProfileFormProps {
   user: User;
@@ -24,6 +26,9 @@ interface ProfileFormValues {
 }
 
 const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  console.log(isOpen);
+
   const initialValues: ProfileFormValues = {
     username: user.username,
     first_name: user.first_name,
@@ -38,7 +43,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
   };
   return (
     <div className="mt-[50px] flex">
-      <PhotoUpload user={user}/>
+      <PhotoUpload user={user} />
       <div className="mr-[20px] flex-1 text-center">
         <Formik
           // validationSchema={validationSchema}
@@ -72,12 +77,26 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
             </div>
             <FieldComponent field="biography">About me</FieldComponent>
             <FieldComponent field="tags">Tags #</FieldComponent>
+            <div>
+              <button
+                type="button"
+                onClick={() => setIsOpen(true)}
+                className="underline"
+              >
+                Change password
+              </button>
+            </div>
             <Button type="submit">Confirm</Button>
           </Form>
           {/* )} */}
         </Formik>
         <Button type="submit">Log Out</Button>
       </div>
+      {isOpen && (
+        <Modal>
+          <ChangePasswordForm handleClose={() => setIsOpen(false)} />
+        </Modal>
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
-import Logo from './Logo';
-import LoginForm from './LoginForm';
+import Logo from './components/Logo';
+import LoginForm from './components/LoginForm';
 
 const LoginPage: NextPage = () => {
   return (

@@ -22,7 +22,7 @@ const Activate: NextPage = () => {
         }),
         headers: { Authorization: `Bearer ${userToken}` },
       };
-      const uri = `${process.env.NEXT_PUBLIC_PREFIX_URL ?? ''}/api/activate`;
+      const uri = `/api/activate`;
       const res = await fetch(uri, requestOptions);
       setLoading(false);
       if (res.ok) {

@@ -6,7 +6,9 @@ import * as Yup from 'yup';
 import { RegistrationResponse } from '@/app/interfaces';
 
 import { Formik, Form, Field } from 'formik';
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import Modal from '@/components/Modal';
+import ResetPasswordForm from './ResetPasswordForm';
 
 interface LoginFormValues {
   username: string;
@@ -15,6 +17,7 @@ interface LoginFormValues {
 
 const LoginForm: FC = () => {
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const validationSchema = Yup.object({
     username: Yup.string()
@@ -49,46 +52,55 @@ const LoginForm: FC = () => {
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      // onSubmit={(values, actions) => {
-      //   console.log({ values, actions });
-      //   alert(JSON.stringify(values, null, 2));
-      //   actions.setSubmitting(false);
-      // }}
-      onSubmit={handleAutorization}
-    >
-      {({ errors, touched }) => (
-        <Form className="mx-auto flex flex-col [&>*]:mb-[30px]">
-          <Field
-            id="username"
-            name="username"
-            placeholder="username"
-            className="block"
-          />
-          {errors.username && touched.username ? (
-            <div>{errors.username}</div>
-          ) : null}
-          <Field
-            id="password"
-            name="password"
-            placeholder="password"
-            className="block"
-          />
-          {errors.password && touched.password ? (
-            <div>{errors.password}</div>
-          ) : null}
-          <Button type="submit">Log In</Button>
-          <Link
-            className="font-semi-bold text-center text-[28px]"
-            href="/signup"
-          >
-            Sign Up
-          </Link>
-        </Form>
+    <>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleAutorization}
+      >
+        {({ errors, touched }) => (
+          <Form className="mx-auto flex flex-col [&>*]:mb-[30px]">
+            <Field
+              id="username"
+              name="username"
+              placeholder="username"
+              className="block"
+            />
+            {errors.username && touched.username ? (
+              <div>{errors.username}</div>
+            ) : null}
+            <Field
+              id="password"
+              name="password"
+              placeholder="password"
+              className="block"
+            />
+            {errors.password && touched.password ? (
+              <div>{errors.password}</div>
+            ) : null}
+            <Button type="submit">Log In</Button>
+            <Link
+              className="font-semi-bold text-center text-[28px]"
+              href="/signup"
+            >
+              Sign Up
+            </Link>
+            <button
+              type="button"
+              onClick={() => setIsOpen(true)}
+              className="underline"
+            >
+              I forgot email
+            </button>
+          </Form>
+        )}
+      </Formik>
+      {isOpen && (
+        <Modal>
+          <ResetPasswordForm handleClose={() => setIsOpen(false)} />
+        </Modal>
       )}
-    </Formik>
+    </>
   );
 };
 
