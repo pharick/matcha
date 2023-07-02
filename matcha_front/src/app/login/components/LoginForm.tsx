@@ -17,7 +17,8 @@ interface LoginFormValues {
 
 const LoginForm: FC = () => {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  // const [isOpen, setIsOpen] = useState<boolean>(false);
+  // console.log(isOpen);
 
   const validationSchema = Yup.object({
     username: Yup.string()
@@ -85,21 +86,21 @@ const LoginForm: FC = () => {
             >
               Sign Up
             </Link>
-            <button
+            {/* <button
               type="button"
               onClick={() => setIsOpen(true)}
               className="underline"
             >
-              I forgot email
-            </button>
+              I forgot my password
+            </button> */}
           </Form>
         )}
       </Formik>
-      {isOpen && (
+      {/* {isOpen && (
         <Modal>
           <ResetPasswordForm handleClose={() => setIsOpen(false)} />
         </Modal>
-      )}
+      )} */}
     </>
   );
 };

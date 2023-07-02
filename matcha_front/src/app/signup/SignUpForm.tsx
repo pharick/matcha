@@ -73,7 +73,7 @@ const SignUpForm: FC = () => {
       }),
     };
     console.log(requestOptions.body);
-    const uri = `${process.env.NEXT_PUBLIC_PREFIX_URL ?? ''}/api/register`;
+    const uri = `/api/register`;
     const res = await fetch(uri, requestOptions);
     if (res.ok) {
       const data = (await res.json()) as RegistrationResponse;
