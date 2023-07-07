@@ -7,10 +7,10 @@ const Logo = () => {
     <div className="relative">
       <Image className="mx-auto" src={Cup} width={350} alt="cup" />
       <Image
-        className="mt-[-110px]"
+        className="mt-[-110px] scale-150"
         src={Matcha}
         priority
-        width={450}
+        width={600}
         alt="logo"
       />
     </div>

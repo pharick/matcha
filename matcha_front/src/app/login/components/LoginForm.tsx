@@ -49,7 +49,7 @@ const LoginForm: FC = () => {
         onSubmit={handleAutorization}
       >
         {({ errors, touched }) => (
-          <Form className="relative -top-[30px] mx-auto flex flex-col [&>*]:mb-[30px]">
+          <Form className="relative  mx-auto flex flex-col [&>*]:mb-[30px]">
             <Field
               id="username"
               name="username"

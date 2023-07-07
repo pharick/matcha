@@ -10,7 +10,8 @@ import LeafTop from '@/components/LeafTop';
 const LoginPage: NextPage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
-    <div>
+    <div className="flex h-screen w-screen items-center justify-center">
+      {/* <LeafTœop /> */}
       <div className="mx-auto my-[100px] w-[350px]">
         <Logo />
         <LoginForm />
