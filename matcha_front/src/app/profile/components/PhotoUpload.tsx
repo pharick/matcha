@@ -10,11 +10,13 @@ interface ProfileFormProps {
 
 const PhotoUpload: FC<ProfileFormProps> = ({ user }) => {
   const [images, setImages] = useState<ImageListType>([]);
+  const [PhotoUpload, setPhotoUpload] = useState<boolean>(false);
   const maxNumber = 5;
 
   const onChange = (imageList: ImageListType) => {
     // data for submit
     setImages(imageList);
+    setPhotoUpload(true);
   };
 
   const fetchData = async (image: File) => {
@@ -46,7 +48,7 @@ const PhotoUpload: FC<ProfileFormProps> = ({ user }) => {
   };
 
   return (
-    <div className="flex w-2/5 items-center justify-center">
+    <div className="w-2/5">
       <ImageUploading
         multiple
         value={images}
@@ -62,28 +64,44 @@ const PhotoUpload: FC<ProfileFormProps> = ({ user }) => {
           isDragging,
           dragProps,
         }) => (
-          // write your building UI
-          <div>
-            <button
-              className="rounded-[20px] bg-green-5 p-3 text-[28px] font-bold"
-              onClick={onImageUpload}
-              {...dragProps}
-            >
-              Upload Photo
-            </button>
-            {imageList.map((image, index) => (
-              <div key={index} className="">
-                <img src={image.data_url} alt="" width="200" />
-                <div className="">
-                  <button onClick={() => onImageUpdate(index)}>Update</button>
-                  <button onClick={() => onImageRemove(index)}>Remove</button>
-                </div>
+          <div className="h-full w-full">
+            {!PhotoUpload && (
+              <div className="flex h-full w-full items-center justify-center">
+                <button
+                  className="rounded-[20px] bg-green-5 p-3 text-[28px] font-bold"
+                  onClick={onImageUpload}
+                  {...dragProps}
+                >
+                  Upload Photo
+                </button>
               </div>
-            ))}
+            )}
+            <div className="flex flex-wrap justify-around">
+              {imageList.map((image, index) => (
+                <div key={index} className="ml-[50px] mb-[50px]">
+                  <img
+                    src={image.data_url}
+                    className="rounded-lg"
+                    alt="user photo"
+                    width="200"
+                    height="200"
+                  />
+                  <div className="flex w-[200px] justify-between font-bold underline">
+                    <button onClick={() => onImageUpdate(index)}>Update</button>
+                    <button onClick={() => onImageRemove(index)}>Remove</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div>
+              {PhotoUpload && (
+                <button className="m-auto block rounded-[20px] bg-green-5 p-3 text-[28px] font-bold" onClick={handlePhotoUpload}>Submit</button>
+              )}
+            </div>
           </div>
         )}
       </ImageUploading>
-      <button onClick={handlePhotoUpload}>Submit</button>
+      {/* {PhotoUpload && <button onClick={handlePhotoUpload}>Submit</button>} */}
     </div>
   );
 };

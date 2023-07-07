@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm';
 import Modal from '@/components/Modal';
 import ResetPasswordForm from './components/ResetPasswordForm';
 import { useState } from 'react';
+import LeafTop from '@/components/LeafTop';
 
 const LoginPage: NextPage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -16,7 +17,7 @@ const LoginPage: NextPage = () => {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="underline"
+          className="mx-auto block underline"
         >
           I forgot my password
         </button>

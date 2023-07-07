@@ -4,11 +4,9 @@ import Button from '@/components/Button';
 import Link from 'next/link';
 import * as Yup from 'yup';
 import { RegistrationResponse } from '@/app/interfaces';
-
 import { Formik, Form, Field } from 'formik';
 import { FC, useState } from 'react';
-import Modal from '@/components/Modal';
-import ResetPasswordForm from './ResetPasswordForm';
+import { BiRightArrowAlt } from 'react-icons/bi';
 
 interface LoginFormValues {
   username: string;
@@ -17,20 +15,11 @@ interface LoginFormValues {
 
 const LoginForm: FC = () => {
   const router = useRouter();
-  // const [isOpen, setIsOpen] = useState<boolean>(false);
-  // console.log(isOpen);
+  const [hovered, setHovered] = useState<boolean>(false);
 
   const validationSchema = Yup.object({
-    username: Yup.string()
-      .required("What's your name?")
-      .min(2, 'First name must be between 2 and 16 characters')
-      .max(16, 'First name must be between 2 and 16 characters')
-      .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed '),
-    password: Yup.string().required(
-      'Enter a combination of at least six numbers,letters and punctuation marks(such as ! and &).'
-    ),
-    // .min(6, 'Password must be atleast 6 characters.')
-    // .max(36, "Password can't be more than 36 characters"),
+    username: Yup.string().required("What's your username?"),
+    password: Yup.string().required('Enter your password'),
   });
 
   const initialValues: LoginFormValues = { username: '', password: '' };
@@ -60,7 +49,7 @@ const LoginForm: FC = () => {
         onSubmit={handleAutorization}
       >
         {({ errors, touched }) => (
-          <Form className="mx-auto flex flex-col [&>*]:mb-[30px]">
+          <Form className="relative -top-[30px] mx-auto flex flex-col [&>*]:mb-[30px]">
             <Field
               id="username"
               name="username"
@@ -68,39 +57,37 @@ const LoginForm: FC = () => {
               className="block"
             />
             {errors.username && touched.username ? (
-              <div>{errors.username}</div>
+              <div className="-mt-[30px] text-center text-pink-800">
+                {errors.username}
+              </div>
             ) : null}
             <Field
+              type="password"
               id="password"
               name="password"
               placeholder="password"
               className="block"
             />
             {errors.password && touched.password ? (
-              <div>{errors.password}</div>
+              <div className="-mt-[30px] text-center text-pink-800">
+                {errors.password}
+              </div>
             ) : null}
             <Button type="submit">Log In</Button>
-            <Link
-              className="font-semi-bold text-center text-[28px]"
-              href="/signup"
-            >
-              Sign Up
-            </Link>
-            {/* <button
-              type="button"
-              onClick={() => setIsOpen(true)}
-              className="underline"
-            >
-              I forgot my password
-            </button> */}
+            <div className="flex items-center w-full rounded-[20px] justify-center p-[5px] hover:border-2 hover:border-brown">
+              <Link
+                className="font-semi-bold text-[28px] "
+                href="/signup"
+                onMouseOver={() => setHovered(true)}
+                onMouseLeave={() => setHovered(false)}
+              >
+                Sign Up
+              </Link>
+              {hovered && <BiRightArrowAlt size={30} className="ml-[10px]" />}
+            </div>
           </Form>
         )}
       </Formik>
-      {/* {isOpen && (
-        <Modal>
-          <ResetPasswordForm handleClose={() => setIsOpen(false)} />
-        </Modal>
-      )} */}
     </>
   );
 };

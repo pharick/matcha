@@ -13,9 +13,15 @@ module.exports = {
         'green-2': '#6F805E',
         'green-5': '#879973',
         'brown': '#403539',
+        'light-button-1': '#6F805E',
+        'light-button-2': '#879973',
+        'pink-primary': '#F39BB3',
+        'neutral': '#F1EAD0',
         // 'overlay': 'rgba(0 0 0 0.7)',
-        'green-radial-button': 'bg-[radial-gradient(#F1EAD070, #C9E6AC50)]',
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+      }
       // fontFamily: {
       //   sans: ['Graphik', 'sans-serif']
       // }
