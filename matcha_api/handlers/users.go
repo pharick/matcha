@@ -42,6 +42,10 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 	if err != nil {
 		return nil, err
 	}
+	tags, err := env.Tags.GetAllByUserId(user.Id)
+	if err != nil {
+		return nil, err
+	}
 	ret := schemas.UserReturn{
 		Id:        user.Id,
 		Username:  user.Username,
@@ -50,6 +54,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		LastName:  user.LastName,
 		Gender:    user.Gender,
 		Biography: user.Biography,
+		Tags:      tags,
 	}
 	return ret, nil
 }
@@ -68,23 +73,15 @@ func UpdateUser(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
-	if d.Email != "" {
-		user.Email = d.Email
-		user.Active = false
-	}
-	if d.FirstName != "" {
-		user.FirstName = d.FirstName
-	}
-	if d.LastName != "" {
-		user.LastName = d.LastName
-	}
-	if d.Gender != "" {
-		user.Gender = d.Gender
-	}
-	if d.Biography != "" {
-		user.Biography = d.Biography
-	}
+	user.FirstName = d.FirstName
+	user.LastName = d.LastName
+	user.Gender = d.Gender
+	user.Biography = d.Biography
 	user, err = env.Users.Update(user)
+	if err != nil {
+		return nil, err
+	}
+	tags, err := env.Tags.Set(user.Id, d.Tags)
 	if err != nil {
 		return nil, err
 	}
@@ -96,6 +93,7 @@ func UpdateUser(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		LastName:  user.LastName,
 		Gender:    user.Gender,
 		Biography: user.Biography,
+		Tags:      tags,
 	}
 	return ret, nil
 }

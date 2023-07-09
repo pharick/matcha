@@ -29,9 +29,9 @@ func (m PhotoModel) Create(
 	return photo, err
 }
 
-func (m PhotoModel) GetAllByUserId(user_id int) ([]Photo, error) {
+func (m PhotoModel) GetAllByUserId(userId int) ([]Photo, error) {
 	photos := make([]Photo, 0)
-	rows, err := m.DB.Query("SELECT id, user_id, url FROM photos WHERE user_id = $1", user_id)
+	rows, err := m.DB.Query("SELECT id, user_id, url FROM photos WHERE user_id = $1", userId)
 	if err != nil {
 		return nil, err
 	}

@@ -1,13 +1,14 @@
 package schemas
 
 type UserReturn struct {
-	Id        int    `json:"id"`
-	Username  string `json:"username"`
-	Email     string `json:"email"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Gender    string `json:"gender"`
-	Biography string `json:"biography"`
+	Id        int      `json:"id"`
+	Username  string   `json:"username"`
+	Email     string   `json:"email"`
+	FirstName string   `json:"first_name"`
+	LastName  string   `json:"last_name"`
+	Gender    string   `json:"gender"`
+	Biography string   `json:"biography"`
+	Tags      []string `json:"tags"`
 }
 
 type UsersReturn struct {
@@ -15,9 +16,9 @@ type UsersReturn struct {
 }
 
 type UpdateUserData struct {
-	Email     string `json:"email" validate:"omitempty,email"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Gender    string `json:"gender" validate:"omitempty,oneof=male female other"`
-	Biography string `json:"biography"`
+	FirstName string   `json:"first_name" validate:"required"`
+	LastName  string   `json:"last_name" validate:"required"`
+	Gender    string   `json:"gender" validate:"required,oneof=male female other"`
+	Biography string   `json:"biography" validate:"required"`
+	Tags      []string `json:"tags" validate:"required"`
 }
