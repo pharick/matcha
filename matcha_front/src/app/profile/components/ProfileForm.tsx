@@ -8,6 +8,7 @@ import PhotoUpload from './PhotoUpload';
 import Modal from '@/components/Modal';
 import ChangePasswordForm from './ChangePasswordForm';
 import ChangeEmailForm from './ChangeEmailForm';
+import GenderCheckBox from './GenderCheckBox';
 
 interface ProfileFormProps {
   user: User;
@@ -67,8 +68,8 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
 
   return (
     <div className="mt-[50px] flex">
-      <PhotoUpload user={user} />
-      <div className="mr-[20px] flex-1 text-center">
+      {/* <PhotoUpload user={user} /> */}
+      <div className="m-auto w-[700px] text-center">
         <Formik
           // validationSchema={validationSchema}
           initialValues={initialValues}
@@ -79,22 +80,17 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
             <FieldComponent field="username">Username</FieldComponent>
             <FieldComponent field="first_name">First Name</FieldComponent>
             <FieldComponent field="last_name">Last Name</FieldComponent>
-            <div role="group" aria-labelledby="my-radio-group">
-              <label>
-                <Field type="radio" name="gender" value="male" />
-                Male
-              </label>
-              <label>
-                <Field type="radio" name="gender" value="female" />
-                Female
-              </label>
-              <label>
-                <Field type="radio" name="gender" value="other" />
-                Other
-              </label>
+            <div className="flex items-center justify-between">
+              <div className="font-bold">Gender</div>
+              <GenderCheckBox type="radio" name="gender" />
             </div>
             <FieldComponent field="biography">About me</FieldComponent>
-            <FieldComponent field="tags">Tags #</FieldComponent>
+            <div className="flex items-center justify-between">
+              <div className="font-bold">Sexual Preferencies</div>
+              <GenderCheckBox type="checkbox" name="gender_preferencies" />
+            </div>
+            <FieldComponent field="tags">Interests (use #tags)</FieldComponent>
+            <PhotoUpload user={user} />
             <div>
               <button
                 type="button"

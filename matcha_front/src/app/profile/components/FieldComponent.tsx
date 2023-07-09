@@ -17,7 +17,7 @@ const FieldComponent: FC<FieldProps> = ({ field, children }) => (
     id={field}
     name={field}
     placeholder={children}
-    className="block w-full"
+    className="block h-[50px] w-full rounded-[20px] border border-none bg-gradient-radial from-green-1/70 to-neutral/30 text-center "
   />
 );
 

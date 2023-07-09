@@ -14,7 +14,7 @@ const Alert: FC<AlertProps> = ({ children, type }) => {
     <div className="flex">
       <div className="w-2/5"></div>
       <div
-        className={`mr-[20px] mt-[20px] ml-[20px] w-3/5 rounded-lg text-right ${colorStyle}`}
+        className={`mr-[20px] mt-[20px] ml-[20px] w-3/4 rounded-lg text-right ${colorStyle}`}
       >
         {children}
       </div>
