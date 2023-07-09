@@ -53,6 +53,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
         last_name: values.last_name,
         gender: values.gender,
         biography: values.biography,
+        tags: [],
       }),
       headers: {
         Authorization: `Bearer ${userToken}`,
@@ -68,7 +69,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
 
   return (
     <>
-      <div className="mr-[20px] flex-1 text-center">
+      <div className="mx-auto max-w-[700px] text-center mt-[50px]">
         <Formik
           // validationSchema={validationSchema}
           initialValues={initialValues}
@@ -113,8 +114,6 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
           {/* )} */}
         </Formik>
         {/* <Button type="submit">Log Out</Button> */}
-
-        <PhotoUpload user={user} />
       </div>
 
       {isOpen && (

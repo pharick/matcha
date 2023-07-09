@@ -165,7 +165,9 @@ const PhotoUpload: FC<ProfileFormProps> = ({ user }) => {
         ))}
       </ul>
       <form>
-        <label htmlFor="new-photo-input">Upload photo</label>
+        <label htmlFor="new-photo-input" className="border-2 rounded-[20px] p-[10px]">
+          Upload photo
+        </label>
         <input
           id="new-photo-input"
           className="hidden"
