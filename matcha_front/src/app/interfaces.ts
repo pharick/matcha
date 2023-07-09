@@ -14,3 +14,9 @@ export interface RegistrationResponse {
 export interface CurrentUser extends User {
   active: boolean;
 }
+
+export interface Photo {
+  id: number;
+  user_id: number;
+  url: string;
+}

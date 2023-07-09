@@ -66,8 +66,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
   };
 
   return (
-    <div className="mt-[50px] flex">
-      <PhotoUpload user={user} />
+    <>
       <div className="mr-[20px] flex-1 text-center">
         <Formik
           // validationSchema={validationSchema}
@@ -118,7 +117,10 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
           {/* )} */}
         </Formik>
         {/* <Button type="submit">Log Out</Button> */}
+
+        <PhotoUpload user={user} />
       </div>
+
       {isOpen && (
         <Modal handleClose={() => setIsOpen(false)}>
           <ChangePasswordForm handleClose={() => setIsOpen(false)} />
@@ -129,7 +131,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
           <ChangeEmailForm handleClose={() => setShowAlert(false)} />
         </Modal>
       )}
-    </div>
+    </>
   );
 };
 
