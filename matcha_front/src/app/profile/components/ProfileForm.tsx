@@ -3,12 +3,13 @@ import { FC, useState } from 'react';
 import { User } from '@/app/interfaces';
 import Button from '@/components/Button';
 import { Field, Form, Formik } from 'formik';
-import FieldComponent from './FieldComponent';
+// import FieldComponent from './FieldComponent';
 import PhotoUpload from './PhotoUpload';
 import Modal from '@/components/Modal';
 import ChangePasswordForm from './ChangePasswordForm';
 import ChangeEmailForm from './ChangeEmailForm';
 import GenderCheckBox from './GenderCheckBox';
+import FieldComponent from '@/components/FieldComponent';
 
 interface ProfileFormProps {
   user: User;
@@ -69,7 +70,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
 
   return (
     <>
-      <div className="mx-auto max-w-[700px] text-center mt-[50px]">
+      <div className="mx-auto mt-[50px] max-w-[700px] text-center">
         <Formik
           // validationSchema={validationSchema}
           initialValues={initialValues}
@@ -77,25 +78,35 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
         >
           {/* {({ errors, touched }) => ( */}
           <Form className="[&>*]:mb-[30px]">
-            <FieldComponent field="username">Username</FieldComponent>
-            <FieldComponent field="first_name">First Name</FieldComponent>
-            <FieldComponent field="last_name">Last Name</FieldComponent>
+            <FieldComponent label="Username" name="username">
+              Username
+            </FieldComponent>
+            <FieldComponent label="First Name" name="first_name">
+              First Name
+            </FieldComponent>
+            <FieldComponent label="Last Name" name="last_name">
+              Last Name
+            </FieldComponent>
             <div className="flex items-center justify-between">
               <div className="font-bold">Gender</div>
               <GenderCheckBox type="radio" name="gender" />
             </div>
-            <FieldComponent field="biography">About me</FieldComponent>
+            <FieldComponent label="Biography" name="biography">
+              About me
+            </FieldComponent>
             <div className="flex items-center justify-between">
               <div className="font-bold">Sexual Preferencies</div>
               <GenderCheckBox type="checkbox" name="gender_preferencies" />
             </div>
-            <FieldComponent field="tags">Interests (use #tags)</FieldComponent>
+            <FieldComponent label="Interests" name="tags">
+              use #tags
+            </FieldComponent>
             <PhotoUpload user={user} />
             <div>
               <button
                 type="button"
                 onClick={() => setIsOpen(true)}
-                className="underline"
+                className="font-bold underline"
               >
                 Change password
               </button>
@@ -104,7 +115,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
               <button
                 type="button"
                 onClick={() => setShowAlert(true)}
-                className="underline"
+                className="font-bold underline"
               >
                 Change Email
               </button>

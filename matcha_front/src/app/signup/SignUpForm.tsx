@@ -3,6 +3,8 @@ import Button from '@/components/Button';
 import * as Yup from 'yup';
 import Image from 'next/image';
 import LeafDown from '@/images/leafe_down.png';
+// import FieldComponent from './FieldComponent';
+import FieldComponent from '@/components/FieldComponent';
 
 import {
   Formik,
@@ -36,12 +38,12 @@ const SignUpForm: FC = () => {
       .max(16, 'First name must be between 2 and 16 characters')
       .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed '),
     firstName: Yup.string()
-      .required("What's your name?")
+      .required("What's your First name?")
       .min(2, 'First name must be between 2 and 16 characters')
       .max(16, 'First name must be between 2 and 16 characters')
       .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed '),
     lastName: Yup.string()
-      .required("What's your name?")
+      .required("What's your Last name?")
       .min(2, 'First name must be between 2 and 16 characters')
       .max(16, 'First name must be between 2 and 16 characters')
       .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed '),
@@ -95,68 +97,52 @@ const SignUpForm: FC = () => {
     <Formik
       validationSchema={validationSchema}
       initialValues={initialValues}
-      // onSubmit={(values, actions) => {
-      //   autorization;
-      //   console.log({ values, actions });
-      //   alert(JSON.stringify(values, null, 2));
-      //   actions.setSubmitting(false);
-      // }}
       onSubmit={handleAutorization}
     >
       {({ errors, touched }) => (
-        <Form className="absolute left-[50%] top-[50%] mx-auto flex w-[350px] -translate-x-[50%] -translate-y-[50%] flex-col [&>*]:mb-[30px]">
-          <Field
-            id="username"
+        <Form className="absolute left-[50%] top-[50%] mx-auto flex w-[700px] -translate-x-[50%] -translate-y-[50%] flex-col [&>*]:mb-[30px]">
+          <FieldComponent
             name="username"
-            placeholder="User Name"
-            className="block"
-          />
-          {errors.username && touched.username ? (
-            <div>{errors.username}</div>
-          ) : null}
-          <Field
-            id="fistname"
+            errors={errors.username}
+            touched={touched.username}
+          >
+            username
+          </FieldComponent>
+          <FieldComponent
             name="firstName"
-            placeholder="First Name"
-            className="block"
-          />
-          {errors.firstName && touched.firstName ? (
-            <div>{errors.firstName}</div>
-          ) : null}
-          <Field
-            id="lastname"
+            errors={errors.firstName}
+            touched={touched.firstName}
+          >
+            First Name
+          </FieldComponent>
+          <FieldComponent
             name="lastName"
-            placeholder="Last Name"
-            className="block"
-          />
-          {errors.lastName && touched.lastName ? (
-            <div>{errors.lastName}</div>
-          ) : null}
-          <Field
-            id="email"
+            errors={errors.lastName}
+            touched={touched.lastName}
+          >
+            Last Name
+          </FieldComponent>
+          <FieldComponent
             name="email"
-            placeholder="Email"
-            className="block"
-          />
-          {errors.email && touched.email ? <div>{errors.email}</div> : null}
-          <Field
-            id="password"
+            errors={errors.email}
+            touched={touched.email}
+          >
+            Email
+          </FieldComponent>
+          <FieldComponent
             name="password"
-            placeholder="password"
-            className="block"
-          />
-          {errors.password && touched.password ? (
-            <div>{errors.password}</div>
-          ) : null}
-          <Field
-            id="password"
+            errors={errors.password}
+            touched={touched.password}
+          >
+            Password
+          </FieldComponent>
+          <FieldComponent
             name="confPassword"
-            placeholder="confirm password"
-            className="block"
-          />
-          {errors.confPassword && touched.confPassword ? (
-            <div>{errors.confPassword}</div>
-          ) : null}
+            errors={errors.confPassword}
+            touched={touched.confPassword}
+          >
+            Confirm Password
+          </FieldComponent>
           <Button type="submit">Confirm</Button>
         </Form>
       )}

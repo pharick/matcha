@@ -150,10 +150,10 @@ const PhotoUpload: FC<ProfileFormProps> = ({ user }) => {
 
   return (
     <section>
-      <ul className="flex flex-wrap">
+      <ul className="flex flex-wrap justify-center">
         {photos.map((photo) => (
           <li key={photo.id}>
-            <figure className="relative m-1 h-[250px] w-[200px]">
+            <figure className="relative m-1 h-[250px] w-[200px] rounded-lg border-2 border-brown">
               <Image
                 src={`http://localhost${photo.url}`}
                 fill={true}
@@ -164,8 +164,11 @@ const PhotoUpload: FC<ProfileFormProps> = ({ user }) => {
           </li>
         ))}
       </ul>
-      <form>
-        <label htmlFor="new-photo-input" className="border-2 rounded-[20px] p-[10px]">
+      <form className="mt-[20px]">
+        <label
+          htmlFor="new-photo-input"
+          className="rounded-[20px] border-2 border-brown bg-gradient-radial  from-green-2/50 to-green-1/30 p-[10px] font-bold"
+        >
           Upload photo
         </label>
         <input

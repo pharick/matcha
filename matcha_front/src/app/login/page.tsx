@@ -18,7 +18,7 @@ const LoginPage: NextPage = () => {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="mx-auto block underline"
+          className="mx-auto block font-bold underline"
         >
           I forgot my password
         </button>
