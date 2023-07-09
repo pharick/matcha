@@ -7,7 +7,7 @@ interface ModalProps {
 
 const ChangePasswordModal: FC<ModalProps> = ({ children, handleClose }) => {
   return (
-    <div className="absolute top-0 flex h-screen w-screen items-center justify-center bg-brown/50">
+    <div className="fixed top-0 flex h-screen w-screen items-center justify-center bg-brown/50">
       <div
         onClick={handleClose}
         className="absolute bottom-0 left-0 right-0 top-0"
