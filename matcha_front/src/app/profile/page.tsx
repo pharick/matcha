@@ -37,18 +37,21 @@ const ProfilePage: NextPage = () => {
         alt="leaf"
         width={1500}
       />
-      {userContext.user && !userContext.user.active && (
-        <Alert type="warning">
-          Your email is not validated.
-          <button
-            onClick={() => void resendEmail()}
-            className="ml-[10px] underline"
-          >
-            Resend email
-          </button>
-        </Alert>
-      )}
-      {userContext.user ? <ProfileForm user={userContext.user} /> : <></>}
+
+      <div className="mx-auto mt-[50px] max-w-[700px]">
+        {userContext.user && !userContext.user.active && (
+          <Alert type="warning" className="mb-3">
+            Your email is not validated.
+            <button
+              onClick={() => void resendEmail()}
+              className="ml-[10px] underline"
+            >
+              Resend email
+            </button>
+          </Alert>
+        )}
+        {userContext.user ? <ProfileForm user={userContext.user} /> : <></>}
+      </div>
     </>
   );
 };

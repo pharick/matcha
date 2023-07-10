@@ -1,23 +1,12 @@
 'use client';
 import Button from '@/components/Button';
 import * as Yup from 'yup';
-import Image from 'next/image';
-import LeafDown from '@/images/leafe_down.png';
-// import FieldComponent from './FieldComponent';
 import FieldComponent from '@/components/FieldComponent';
 
-import {
-  Formik,
-  FormikHelpers,
-  FormikProps,
-  Form,
-  Field,
-  FieldProps,
-} from 'formik';
-import { RegistrationResponse } from '../interfaces';
+import { Formik, Form } from 'formik';
+import { RegistrationResponse } from '../../interfaces';
 import { useRouter } from 'next/navigation';
-import { FC, useContext } from 'react';
-import { UserContext } from '@/components/UserProvider';
+import { FC } from 'react';
 
 interface SignUpFormValues {
   username: string;
@@ -30,7 +19,7 @@ interface SignUpFormValues {
 
 const SignUpForm: FC = () => {
   const router = useRouter();
-  const userContext = useContext(UserContext);
+
   const validationSchema = Yup.object({
     username: Yup.string()
       .required("What's your name?")
@@ -98,20 +87,23 @@ const SignUpForm: FC = () => {
       validationSchema={validationSchema}
       initialValues={initialValues}
       onSubmit={handleAutorization}
+      validateOnBlur={false}
     >
       {({ errors, touched }) => (
-        <Form className="absolute left-[50%] top-[50%] mx-auto flex w-[700px] -translate-x-[50%] -translate-y-[50%] flex-col [&>*]:mb-[30px]">
+        <Form className="max-w-[600px] flex-1">
           <FieldComponent
             name="username"
             errors={errors.username}
             touched={touched.username}
+            className="mb-[30px]"
           >
-            username
+            Username
           </FieldComponent>
           <FieldComponent
             name="firstName"
             errors={errors.firstName}
             touched={touched.firstName}
+            className="mb-[30px]"
           >
             First Name
           </FieldComponent>
@@ -119,6 +111,7 @@ const SignUpForm: FC = () => {
             name="lastName"
             errors={errors.lastName}
             touched={touched.lastName}
+            className="mb-[30px]"
           >
             Last Name
           </FieldComponent>
@@ -126,6 +119,7 @@ const SignUpForm: FC = () => {
             name="email"
             errors={errors.email}
             touched={touched.email}
+            className="mb-[30px]"
           >
             Email
           </FieldComponent>
@@ -133,6 +127,7 @@ const SignUpForm: FC = () => {
             name="password"
             errors={errors.password}
             touched={touched.password}
+            className="mb-[30px]"
           >
             Password
           </FieldComponent>
@@ -140,10 +135,13 @@ const SignUpForm: FC = () => {
             name="confPassword"
             errors={errors.confPassword}
             touched={touched.confPassword}
+            className="mb-[30px]"
           >
             Confirm Password
           </FieldComponent>
-          <Button type="submit">Confirm</Button>
+          <Button className="mx-auto" type="submit">
+            Confirm
+          </Button>
         </Form>
       )}
     </Formik>

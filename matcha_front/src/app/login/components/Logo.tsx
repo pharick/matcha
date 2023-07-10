@@ -4,7 +4,7 @@ import Cup from '@/images/cup.png';
 
 const Logo = () => {
   return (
-    <div className="relative">
+    <div>
       <Image className="mx-auto" src={Cup} width={350} alt="cup" />
       <Image
         className="mt-[-110px] scale-150"

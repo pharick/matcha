@@ -17,14 +17,10 @@ module.exports = {
         'light-button-2': '#879973',
         'pink-primary': '#F39BB3',
         'neutral': '#F1EAD0',
-        // 'overlay': 'rgba(0 0 0 0.7)',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-      }
-      // fontFamily: {
-      //   sans: ['Graphik', 'sans-serif']
-      // }
+      },
     },
   },
   plugins: [],

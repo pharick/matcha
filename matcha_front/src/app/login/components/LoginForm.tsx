@@ -4,10 +4,9 @@ import Button from '@/components/Button';
 import Link from 'next/link';
 import * as Yup from 'yup';
 import { RegistrationResponse } from '@/app/interfaces';
-import { Formik, Form, Field } from 'formik';
-import { FC, useState } from 'react';
+import { Formik, Form } from 'formik';
+import { FC } from 'react';
 import { BiRightArrowAlt } from 'react-icons/bi';
-// import FieldComponent from './FieldComponent';
 import FieldComponent from '@/components/FieldComponent';
 
 interface LoginFormValues {
@@ -17,7 +16,6 @@ interface LoginFormValues {
 
 const LoginForm: FC = () => {
   const router = useRouter();
-  const [hovered, setHovered] = useState<boolean>(false);
 
   const validationSchema = Yup.object({
     username: Yup.string().required("What's your username?"),
@@ -49,13 +47,15 @@ const LoginForm: FC = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleAutorization}
+        validateOnBlur={false}
       >
         {({ errors, touched }) => (
-          <Form className="relative  mx-auto flex flex-col [&>*]:mb-[30px]">
+          <Form className="relative mx-auto flex flex-col">
             <FieldComponent
               name="username"
               errors={errors.username}
               touched={touched.username}
+              className="mb-[30px]"
             >
               username
             </FieldComponent>
@@ -63,21 +63,25 @@ const LoginForm: FC = () => {
               name="password"
               errors={errors.password}
               touched={touched.password}
+              className="mb-[30px]"
             >
               password
             </FieldComponent>
-            <Button type="submit">Log In</Button>
-            <div className="flex w-full items-center justify-center rounded-[20px] p-[5px] hover:border-2 hover:border-brown">
-              <Link
-                className="font-semi-bold text-[28px] "
-                href="/signup"
-                onMouseOver={() => setHovered(true)}
-                onMouseLeave={() => setHovered(false)}
-              >
+            <Button type="submit" className="mb-[20px]">
+              Log In
+            </Button>
+            <Link
+              className="font-semi-bold group mb-[20px] flex items-center justify-center rounded-[20px] border-2 border-transparent p-[5px] text-[22px] hover:border-2 hover:border-brown"
+              href="/signup"
+            >
+              <div className="relative w-fit">
                 Sign Up
-              </Link>
-              {hovered && <BiRightArrowAlt size={30} className="ml-[10px]" />}
-            </div>
+                <BiRightArrowAlt
+                  size={30}
+                  className="absolute left-full top-0.5 hidden group-hover:block"
+                />
+              </div>
+            </Link>
           </Form>
         )}
       </Formik>

@@ -122,7 +122,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
   };
 
   return (
-    <section>
+    <>
       <ul className="flex flex-wrap justify-center">
         {photos.map((photo) => (
           <li key={photo.id}>
@@ -167,7 +167,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
           <Button onClick={() => void handleNewPhotoUpload()}>Upload</Button>
         </Modal>
       )}
-    </section>
+    </>
   );
 };
 

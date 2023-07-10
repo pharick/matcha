@@ -5,13 +5,11 @@ import LoginForm from './components/LoginForm';
 import Modal from '@/components/Modal';
 import ResetPasswordForm from './components/ResetPasswordForm';
 import { useState } from 'react';
-import LeafTop from '@/components/LeafTop';
 
 const LoginPage: NextPage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
-    <div className="flex h-screen w-screen items-center justify-center">
-      {/* <LeafTœop /> */}
+    <div className="flex min-h-screen w-screen items-center justify-center">
       <div className="mx-auto my-[100px] w-[350px]">
         <Logo />
         <LoginForm />

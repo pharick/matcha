@@ -32,14 +32,14 @@
 // };
 
 import { Field } from 'formik';
-import { FC, ReactNode } from 'react';
+import { FC, PropsWithChildren } from 'react';
 
-interface FieldProps {
+interface FieldProps extends PropsWithChildren {
   name: string;
   label?: string;
-  children: ReactNode;
   errors?: string;
   touched?: boolean;
+  className?: string;
 }
 
 const FieldComponent: FC<FieldProps> = ({
@@ -48,17 +48,18 @@ const FieldComponent: FC<FieldProps> = ({
   children,
   errors,
   touched,
+  className,
 }) => (
-  <div>
+  <div className={`${className ?? ''}`}>
     <label className="font-bold">{label}</label>
     <Field
       id={name}
       name={name}
       placeholder={children}
-      className="block h-[50px] w-full rounded-[20px] border border-none bg-gradient-radial from-green-1/70 to-neutral/30 text-center "
+      className="block h-[50px] w-full rounded-[20px] border border-none bg-transparent bg-gradient-radial from-green-1/70 to-neutral/30 text-center"
     />
     {errors && touched ? (
-      <div className="text-center text-pink-800">{errors}</div>
+      <div className="mt-1 text-center text-pink-800">{errors}</div>
     ) : null}
   </div>
 );

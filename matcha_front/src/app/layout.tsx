@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={montserrat.className}>
       <DndProvider backend={HTML5Backend}>
-        <body>{children}</body>
+        <body className="mx-10">{children}</body>
       </DndProvider>
     </html>
   );

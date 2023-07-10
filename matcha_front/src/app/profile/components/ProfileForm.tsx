@@ -70,38 +70,45 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
 
   return (
     <>
-      <div className="mx-auto mt-[50px] max-w-[700px] text-center">
+      <section className="mb-5">
+        <h2 className="mb-3 border-b border-brown text-center text-xl font-bold">
+          Profile information
+        </h2>
         <Formik
           // validationSchema={validationSchema}
           initialValues={initialValues}
           onSubmit={handleSubmitUserFullInformation}
         >
           {/* {({ errors, touched }) => ( */}
-          <Form className="[&>*]:mb-[30px]">
-            <FieldComponent label="Username" name="username">
+          <Form className="text-center">
+            <FieldComponent label="Username" name="username" className="mb-3">
               Username
             </FieldComponent>
-            <FieldComponent label="First Name" name="first_name">
+            <FieldComponent
+              label="First Name"
+              name="first_name"
+              className="mb-3"
+            >
               First Name
             </FieldComponent>
-            <FieldComponent label="Last Name" name="last_name">
+            <FieldComponent label="Last Name" name="last_name" className="mb-3">
               Last Name
             </FieldComponent>
-            <div className="flex items-center justify-between">
+            <div className="mb-3 flex items-center justify-between">
               <div className="font-bold">Gender</div>
               <GenderCheckBox type="radio" name="gender" />
             </div>
-            <FieldComponent label="Biography" name="biography">
+            <FieldComponent label="Biography" name="biography" className="mb-3">
               About me
             </FieldComponent>
-            <div className="flex items-center justify-between">
+            <div className="mb-3 flex items-center justify-between">
               <div className="font-bold">Sexual Preferencies</div>
               <GenderCheckBox type="checkbox" name="gender_preferencies" />
             </div>
-            <FieldComponent label="Interests" name="tags">
+            <FieldComponent label="Interests" name="tags" className="mb-3">
               use #tags
             </FieldComponent>
-            <PhotoUpload user={user} />
+
             <div>
               <button
                 type="button"
@@ -111,7 +118,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
                 Change password
               </button>
             </div>
-            <div>
+            <div className="mb-3">
               <button
                 type="button"
                 onClick={() => setShowAlert(true)}
@@ -120,12 +127,21 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
                 Change Email
               </button>
             </div>
-            <Button type="submit">Confirm</Button>
+            <Button type="submit" className="mx-auto">
+              Save
+            </Button>
           </Form>
           {/* )} */}
         </Formik>
         {/* <Button type="submit">Log Out</Button> */}
-      </div>
+      </section>
+
+      <section className="mb-3">
+        <h2 className="mb-3 border-b border-brown text-center text-xl font-bold">
+          Profile photos
+        </h2>
+        <PhotoUpload user={user} />
+      </section>
 
       {isOpen && (
         <Modal handleClose={() => setIsOpen(false)}>
