@@ -123,17 +123,24 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
 
   return (
     <section>
-      <ul className="mb-5 flex flex-wrap justify-center">
+      <ul className="flex flex-wrap justify-center">
         {photos.map((photo) => (
           <li key={photo.id}>
-            <PhotoUploadItem photo={photo} />
+            <figure className="relative m-1 h-[250px] w-[200px] rounded-lg border-2 border-brown">
+              <Image
+                src={`http://localhost${photo.url}`}
+                fill={true}
+                alt={`${user.username}-${photo.id}`}
+                className="object-cover"
+              />
+            </figure>
           </li>
         ))}
       </ul>
-      <form>
+      <form className="mt-[20px]">
         <label
           htmlFor="new-photo-input"
-          className="rounded-[20px] border-2 p-[10px]"
+          className="rounded-[20px] border-2 border-brown bg-gradient-radial  from-green-2/50 to-green-1/30 p-[10px] font-bold"
         >
           Upload photo
         </label>

@@ -1,6 +1,7 @@
 import Button from '@/components/Button';
 import { Field, Form, Formik } from 'formik';
 import { FC } from 'react';
+import FieldComponent from './FieldComponent';
 
 interface ChangePasswordFormProps {
   handleClose: () => void;

@@ -7,6 +7,8 @@ import { RegistrationResponse } from '@/app/interfaces';
 import { Formik, Form, Field } from 'formik';
 import { FC, useState } from 'react';
 import { BiRightArrowAlt } from 'react-icons/bi';
+// import FieldComponent from './FieldComponent';
+import FieldComponent from '@/components/FieldComponent';
 
 interface LoginFormValues {
   username: string;
@@ -50,31 +52,22 @@ const LoginForm: FC = () => {
       >
         {({ errors, touched }) => (
           <Form className="relative  mx-auto flex flex-col [&>*]:mb-[30px]">
-            <Field
-              id="username"
+            <FieldComponent
               name="username"
-              placeholder="username"
-              className="block"
-            />
-            {errors.username && touched.username ? (
-              <div className="-mt-[30px] text-center text-pink-800">
-                {errors.username}
-              </div>
-            ) : null}
-            <Field
-              type="password"
-              id="password"
+              errors={errors.username}
+              touched={touched.username}
+            >
+              username
+            </FieldComponent>
+            <FieldComponent
               name="password"
-              placeholder="password"
-              className="block"
-            />
-            {errors.password && touched.password ? (
-              <div className="-mt-[30px] text-center text-pink-800">
-                {errors.password}
-              </div>
-            ) : null}
+              errors={errors.password}
+              touched={touched.password}
+            >
+              password
+            </FieldComponent>
             <Button type="submit">Log In</Button>
-            <div className="flex items-center w-full rounded-[20px] justify-center p-[5px] hover:border-2 hover:border-brown">
+            <div className="flex w-full items-center justify-center rounded-[20px] p-[5px] hover:border-2 hover:border-brown">
               <Link
                 className="font-semi-bold text-[28px] "
                 href="/signup"
