@@ -1,10 +1,8 @@
+'use client';
 import './globals.css';
 import { Montserrat } from 'next/font/google';
-
-export const metadata = {
-  title: 'Matcha',
-  description: 'Made with ❤️ by 42Bankgok',
-};
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const montserrat = Montserrat({
   weight: ['400', '700'],
@@ -20,7 +18,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={montserrat.className}>
-      <body>{children}</body>
+      <DndProvider backend={HTML5Backend}>
+        <body>{children}</body>
+      </DndProvider>
     </html>
   );
 }

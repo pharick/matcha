@@ -1,10 +1,13 @@
 package models
 
-import "database/sql"
+import (
+	"database/sql"
+)
 
 type Photo struct {
 	Id     int
 	UserId int
+	Index  int
 	Url    string
 }
 
@@ -17,13 +20,58 @@ func (m PhotoModel) Create(
 	url string,
 ) (Photo, error) {
 	var photo Photo
+	var maxIndex int
 	err := m.DB.QueryRow(
-		`INSERT INTO photos(user_id, url) 
-		VALUES($1, $2) RETURNING id, user_id, url`,
-		user_id, url,
+		`SELECT COALESCE(MAX(index), 0) FROM photos WHERE user_id = $1`,
+		user_id,
+	).Scan(&maxIndex)
+	if err != nil {
+		return photo, err
+	}
+	err = m.DB.QueryRow(
+		`INSERT INTO photos(user_id, index, url) 
+		VALUES($1, $2, $3) RETURNING id, user_id, index, url`,
+		user_id, maxIndex+1, url,
 	).Scan(
 		&photo.Id,
 		&photo.UserId,
+		&photo.Index,
+		&photo.Url,
+	)
+	return photo, err
+}
+
+func (m PhotoModel) GetOneById(id int) (Photo, error) {
+	var photo Photo
+	err := m.DB.QueryRow("SELECT id, user_id, index, url FROM photos WHERE id = $1", id).Scan(
+		&photo.Id,
+		&photo.UserId,
+		&photo.Index,
+		&photo.Url,
+	)
+	return photo, err
+}
+
+func (m PhotoModel) Update(
+	d Photo,
+) (Photo, error) {
+	var photo Photo
+	_, err := m.DB.Query(
+		"UPDATE photos SET index = index + 1 WHERE index >= $1",
+		d.Index,
+	)
+	if err != nil {
+		return photo, err
+	}
+	err = m.DB.QueryRow(
+		`UPDATE photos SET index = $2 
+		WHERE id = $1
+		RETURNING id, user_id, index, url`,
+		d.Id, d.Index,
+	).Scan(
+		&photo.Id,
+		&photo.UserId,
+		&photo.Index,
 		&photo.Url,
 	)
 	return photo, err
@@ -31,7 +79,7 @@ func (m PhotoModel) Create(
 
 func (m PhotoModel) GetAllByUserId(userId int) ([]Photo, error) {
 	photos := make([]Photo, 0)
-	rows, err := m.DB.Query("SELECT id, user_id, url FROM photos WHERE user_id = $1", userId)
+	rows, err := m.DB.Query("SELECT id, user_id, index, url FROM photos WHERE user_id = $1 ORDER BY index", userId)
 	if err != nil {
 		return nil, err
 	}
@@ -40,6 +88,7 @@ func (m PhotoModel) GetAllByUserId(userId int) ([]Photo, error) {
 		err := rows.Scan(
 			&photo.Id,
 			&photo.UserId,
+			&photo.Index,
 			&photo.Url,
 		)
 		if err != nil {

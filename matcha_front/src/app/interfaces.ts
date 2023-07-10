@@ -18,5 +18,6 @@ export interface CurrentUser extends User {
 export interface Photo {
   id: number;
   user_id: number;
+  index: number;
   url: string;
 }
