@@ -7,44 +7,32 @@ import { useDrag, useDrop } from 'react-dnd';
 
 interface PhotoUploadItemProps {
   photo: Photo;
+  handleMove: (from: number, to: number) => void;
 }
 
-const PhotoUploadItem: FC<PhotoUploadItemProps> = ({ photo }) => {
+const PhotoUploadItem: FC<PhotoUploadItemProps> = ({ photo, handleMove }) => {
   const ref = useRef<HTMLElement | null>(null);
 
   const [, drop] = useDrop<Photo>({
     accept: 'profileImage',
-    hover: (item, monitor) => {
-      if (!ref.current) {
-        return;
-      }
+    // hover: (item, monitor) => {
+    //   if (!ref.current) {
+    //     return;
+    //   }
+
+    //   const dragIndex = item.index;
+    //   const hoverIndex = photo.index;
+    //   if (dragIndex == hoverIndex) {
+    //     return;
+    //   }
+    // },
+    drop: (item, monitor) => {
       const dragIndex = item.index;
       const hoverIndex = photo.index;
-
       if (dragIndex == hoverIndex) {
         return;
       }
-
-      const hoverBoundingRect = ref.current.getBoundingClientRect();
-
-      const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-
-      const clientOffset = monitor.getClientOffset();
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-        return;
-      }
-
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-        return;
-      }
-
-      //moveImage(dragIndex, hoverIndex);
-      console.log(dragIndex, hoverIndex);
-
-      item.index = hoverIndex;
+      handleMove(dragIndex - 1, hoverIndex - 1);
     },
   });
 
@@ -121,21 +109,27 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
     }
   };
 
+  const handleMove = (from: number, to: number) => {
+    if (from < to) {
+      setPhotos((photos) => [
+        ...photos.slice(0, from),
+        ...photos.slice(from + 1, to),
+        photos[from],
+        ...photos.slice(to, -1),
+      ]);
+    }
+  };
+
   return (
     <>
       <ul className="flex flex-wrap justify-center">
-        {photos.map((photo) => (
-          <li key={photo.id}>
-            <figure className="relative m-1 h-[250px] w-[200px] rounded-lg border-2 border-brown">
-              <Image
-                src={`http://localhost${photo.url}`}
-                fill={true}
-                alt={`${user.username}-${photo.id}`}
-                className="object-cover"
-              />
-            </figure>
-          </li>
-        ))}
+        {photos
+          .sort((a, b) => a.index - b.index)
+          .map((photo) => (
+            <li key={photo.id}>
+              <PhotoUploadItem photo={photo} handleMove={handleMove} />
+            </li>
+          ))}
       </ul>
       <form className="mt-[20px]">
         <label
