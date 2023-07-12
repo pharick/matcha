@@ -7,6 +7,8 @@ import { UserContext, withLogin } from '@/components/UserProvider';
 import { useContext } from 'react';
 import LeafDown from '@/images/leafe_down.png';
 import Alert from '@/components/Alert';
+import Tabs from './components/Tabs';
+import PhotoUpload from './components/PhotoUpload';
 
 const ProfilePage: NextPage = () => {
   const userContext = useContext(UserContext);
@@ -50,7 +52,20 @@ const ProfilePage: NextPage = () => {
             </button>
           </Alert>
         )}
-        {userContext.user ? <ProfileForm user={userContext.user} /> : <></>}
+        {/* {userContext.user ? <ProfileForm user={userContext.user} /> : <></>} */}
+        {userContext.user && (
+          <Tabs
+            captions={[
+              'Profile Information',
+              'Upload Photo',
+              'Change e-mail and password',
+            ]}
+          >
+            <ProfileForm user={userContext.user} />
+            <PhotoUpload user={userContext.user} />
+            <div>3</div>
+          </Tabs>
+        )}
       </div>
     </>
   );

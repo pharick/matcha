@@ -12,7 +12,7 @@ const ChangePasswordModal: FC<ModalProps> = ({ children, handleClose }) => {
         onClick={handleClose}
         className="absolute bottom-0 left-0 right-0 top-0"
       ></div>
-      <div className="absolute block w-2/4 rounded-[20px] bg-gradient-radial from-green-1 to-green-2 p-4">
+      <div className="absolute block w-2/4 rounded-[20px] bg-green-5 p-4">
         {children}
       </div>
     </div>

@@ -10,6 +10,7 @@ import ChangePasswordForm from './ChangePasswordForm';
 import ChangeEmailForm from './ChangeEmailForm';
 import GenderCheckBox from './GenderCheckBox';
 import FieldComponent from '@/components/FieldComponent';
+import Tabs from './Tabs';
 
 interface ProfileFormProps {
   user: User;
@@ -71,9 +72,9 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
   return (
     <>
       <section className="mb-5">
-        <h2 className="mb-3 border-b border-brown text-center text-xl font-bold">
+        {/* <h2 className="mb-3 border-b border-brown text-center text-xl font-bold">
           Profile information
-        </h2>
+        </h2> */}
         <Formik
           // validationSchema={validationSchema}
           initialValues={initialValues}
@@ -136,12 +137,12 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
         {/* <Button type="submit">Log Out</Button> */}
       </section>
 
-      <section className="mb-3">
+      {/* <section className="mb-3">
         <h2 className="mb-3 border-b border-brown text-center text-xl font-bold">
           Profile photos
         </h2>
         <PhotoUpload user={user} />
-      </section>
+      </section> */}
 
       {isOpen && (
         <Modal handleClose={() => setIsOpen(false)}>

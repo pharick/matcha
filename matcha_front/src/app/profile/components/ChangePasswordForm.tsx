@@ -1,7 +1,7 @@
 import Button from '@/components/Button';
 import { Field, Form, Formik } from 'formik';
 import { FC } from 'react';
-import FieldComponent from './FieldComponent';
+import FieldComponent from '@/components/FieldComponent';
 
 interface ChangePasswordFormProps {
   handleClose: () => void;
@@ -45,26 +45,19 @@ const ChangePasswordForm: FC<ChangePasswordFormProps> = ({ handleClose }) => {
         onSubmit={handleChangePassword}
       >
         {/* {({ errors, touched }) => ( */}
-        <Form className="[&>*]:mb-[30px]">
-          <Field
-            id="oldPassword"
-            name="oldPassword"
-            placeholder="Old Password"
-            className="block w-full"
-          />
-          <Field
-            id="newPassword"
-            name="newPassword"
-            placeholder="New Password"
-            className="block w-full"
-          />
-          <Field
-            id="confNewPassword"
-            name="confNewPassword"
-            placeholder="Confirm New Password"
-            className="block w-full"
-          />
-          <Button type="submit">Confirm</Button>
+        <Form>
+          <FieldComponent name="oldPassword" className="mb-3">
+            Old Password
+          </FieldComponent>
+          <FieldComponent name="newPassword" className="mb-3">
+            New Password
+          </FieldComponent>
+          <FieldComponent name="confNewPassword" className="mb-3">
+            Confirm New Password
+          </FieldComponent>
+          <Button className="m-auto block" type="submit">
+            Confirm
+          </Button>
         </Form>
       </Formik>
     </>

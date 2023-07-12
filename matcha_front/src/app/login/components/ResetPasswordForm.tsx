@@ -1,4 +1,5 @@
 import Button from '@/components/Button';
+import FieldComponent from '@/components/FieldComponent';
 import { Field, Form, Formik } from 'formik';
 import { FC } from 'react';
 
@@ -36,14 +37,13 @@ const ResetPasswordForm: FC<ChangePasswordFormProps> = ({ handleClose }) => {
         onSubmit={handleChangePassword}
       >
         {/* {({ errors, touched }) => ( */}
-        <Form className="[&>*]:mb-[30px]">
-          <Field
-            id="email"
-            name="email"
-            placeholder="Enter your registered email"
-            className="block w-full"
-          />
-          <Button type="submit">Reset</Button>
+        <Form>
+          <FieldComponent name="email" className="mb-3">
+            Enter your registered email
+          </FieldComponent>
+          <Button className="m-auto block" type="submit">
+            Reset
+          </Button>
         </Form>
       </Formik>
     </>

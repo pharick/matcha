@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Field, Form, Formik } from 'formik';
 import Button from '@/components/Button';
+import FieldComponent from '@/components/FieldComponent';
 
 interface ChangeEmailFormProps {
   handleClose: () => void;
@@ -33,7 +34,7 @@ const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ handleClose }) => {
   };
   return (
     <>
-      <h1 className="mb-7 mt-1 text-center">
+      <h1 className="mb-7 mt-1 text-center font-bold">
         You gonna change your e-mail, please, write your password to change it:
       </h1>
       <Formik
@@ -43,13 +44,12 @@ const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ handleClose }) => {
       >
         {/* {({ errors, touched }) => ( */}
         <Form className="[&>*]:mb-[30px]">
-          <Field
-            id="oldPassword"
-            name="oldPassword"
-            placeholder="Old Password"
-            className="block w-full"
-          />
-          <Button type="submit">Confirm</Button>
+          <FieldComponent name="oldPassword" className="mb-3">
+            Old Password
+          </FieldComponent>
+          <Button className="m-auto block" type="submit">
+            Confirm
+          </Button>
         </Form>
       </Formik>
     </>
