@@ -131,7 +131,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
             </li>
           ))}
       </ul>
-      <form className="mt-[20px]">
+      <form className="mt-[20px] text-center">
         <label
           htmlFor="new-photo-input"
           className="rounded-[20px] border-2 border-brown bg-gradient-radial  from-green-2/50 to-green-1/30 p-[10px] font-bold"

@@ -4,6 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { RegistrationResponse } from '@/app/interfaces';
 import { Field, Form, Formik } from 'formik';
 import Button from '@/components/Button';
+import FieldComponent from '@/components/FieldComponent';
 
 interface ResetPasswordFormValues {
   password: string;
@@ -46,20 +47,14 @@ const ResetPasswordForm: FC = () => {
         onSubmit={handleChangePassword}
       >
         {/* {({ errors, touched }) => ( */}
-        <Form className="[&>*]:mb-[30px]">
-          <Field
-            id="password"
-            name="password"
-            placeholder="New Password"
-            className="block w-full"
-          />
-          <Field
-            id="confPassword"
-            name="confPassword"
-            placeholder="Confirm New Password"
-            className="block w-full"
-          />
-          <Button type="submit">Confirm</Button>
+        <Form>
+          <FieldComponent name="password" className="mb-3">
+            New Password
+          </FieldComponent>
+          <FieldComponent name="confPassword" className="mb-3">
+            Confirm New Password
+          </FieldComponent>
+          <Button className="m-auto block" type="submit">Confirm</Button>
         </Form>
       </Formik>
     </div>
