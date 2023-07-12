@@ -15,19 +15,17 @@ const ProfilePage: NextPage = () => {
   // const [sended, setSended] = UseState<boolean>(false);
 
   const resendEmail = async () => {
-    console.log('here');
     const token = localStorage.getItem('token');
     if (!token) return;
     const requestOptions = {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
     };
-    const uri = 'http://127.0.0.1:8000/send_activation_email';
+    const uri = '/api/send_activation_email';
     const res = await fetch(uri, requestOptions);
-    console.log(res);
     if (res.ok) {
       console.log(res);
-    } else return;
+    }
   };
 
   return (

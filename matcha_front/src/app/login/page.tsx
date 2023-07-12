@@ -9,7 +9,7 @@ import { useState } from 'react';
 const LoginPage: NextPage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
-    <div className="flex min-h-screen w-screen items-center justify-center">
+    <div className="flex min-h-screen w-full items-center justify-center">
       <div className="mx-auto my-[100px] w-[350px]">
         <Logo />
         <LoginForm />
