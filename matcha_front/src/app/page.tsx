@@ -17,7 +17,7 @@ const Tabs: FC<TabsProps> = ({ children, captions }) => {
           </li>
         ))}
       </ul>
-      {Children.map(children, (child, i) => (i == index ? child : <></>))}
+      {Children.toArray(children)[index]}
     </div>
   );
 };
