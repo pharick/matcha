@@ -12,6 +12,29 @@ import (
 	"goji.io/pat"
 )
 
+func UploadPhoto(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	username := pat.Param(r, "username")
+	user := r.Context().Value(ContextKey("User")).(models.User)
+	if username != user.Username {
+		return nil, errors.HttpError{Status: 403, Body: nil}
+	}
+	url, err := lib.UploadFile(r, "photo", []string{"image/jpeg", "image/png"}, "photos")
+	if err != nil {
+		return nil, err
+	}
+	photo, err := env.Photos.Create(user.Id, url)
+	if err != nil {
+		return nil, err
+	}
+	ret := schemas.PhotoReturn{
+		Id:     photo.Id,
+		UserId: photo.UserId,
+		Index:  photo.Index,
+		Url:    photo.Url,
+	}
+	return ret, nil
+}
+
 func PhotoList(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	username := pat.Param(r, "username")
 	user, err := env.Users.GetOneByUsername(username)
@@ -73,12 +96,16 @@ func GetPhoto(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 
 func UpdatePhoto(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	username := pat.Param(r, "username")
+	current_user := r.Context().Value(ContextKey("User")).(models.User)
 	user, err := env.Users.GetOneByUsername(username)
 	if err == sql.ErrNoRows {
 		return nil, errors.HttpError{Status: 404, Body: nil}
 	}
 	if err != nil {
 		return nil, err
+	}
+	if user.Id != current_user.Id {
+		return nil, errors.HttpError{Status: 403, Body: nil}
 	}
 	id, err := strconv.Atoi(pat.Param(r, "id"))
 	if err != nil {
@@ -110,25 +137,33 @@ func UpdatePhoto(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 	return ret, nil
 }
 
-func UploadPhoto(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+func RemovePhoto(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	username := pat.Param(r, "username")
-	user := r.Context().Value(ContextKey("User")).(models.User)
-	if username != user.Username {
+	current_user := r.Context().Value(ContextKey("User")).(models.User)
+	user, err := env.Users.GetOneByUsername(username)
+	if err == sql.ErrNoRows {
+		return nil, errors.HttpError{Status: 404, Body: nil}
+	}
+	if err != nil {
+		return nil, err
+	}
+	if user.Id != current_user.Id {
 		return nil, errors.HttpError{Status: 403, Body: nil}
 	}
-	url, err := lib.UploadFile(r, "photo", []string{"image/jpeg", "image/png"}, "photos")
+	id, err := strconv.Atoi(pat.Param(r, "id"))
+	if err != nil {
+		return nil, errors.HttpError{Status: 404, Body: nil}
+	}
+	photo, err := env.Photos.GetOneById(id)
+	if err == sql.ErrNoRows {
+		return nil, errors.HttpError{Status: 404, Body: nil}
+	}
 	if err != nil {
 		return nil, err
 	}
-	photo, err := env.Photos.Create(user.Id, url)
-	if err != nil {
-		return nil, err
+	if photo.UserId != user.Id {
+		return nil, errors.HttpError{Status: 404, Body: nil}
 	}
-	ret := schemas.PhotoReturn{
-		Id:     photo.Id,
-		UserId: photo.UserId,
-		Index:  photo.Index,
-		Url:    photo.Url,
-	}
-	return ret, nil
+	err = env.Photos.Remove(photo.Id)
+	return nil, err
 }

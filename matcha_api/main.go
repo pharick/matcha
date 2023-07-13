@@ -42,10 +42,11 @@ func main() {
 	mux.Handle(pat.Patch("/users/:username/"), handlers.Handler{Env: env, Handle: handlers.UpdateUser})
 
 	// photos
+	mux.Handle(pat.Post("/users/:username/photos/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UploadPhoto)})
 	mux.Handle(pat.Get("/users/:username/photos/"), handlers.Handler{Env: env, Handle: handlers.PhotoList})
 	mux.Handle(pat.Get("/users/:username/photos/:id/"), handlers.Handler{Env: env, Handle: handlers.GetPhoto})
-	mux.Handle(pat.Patch("/users/:username/photos/:id/"), handlers.Handler{Env: env, Handle: handlers.UpdatePhoto})
-	mux.Handle(pat.Post("/users/:username/photos/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UploadPhoto)})
+	mux.Handle(pat.Patch("/users/:username/photos/:id/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UpdatePhoto)})
+	mux.Handle(pat.Delete("/users/:username/photos/:id/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.RemovePhoto)})
 
 	http.ListenAndServe(":8000", mux)
 }

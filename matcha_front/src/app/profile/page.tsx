@@ -38,7 +38,7 @@ const ProfilePage: NextPage = () => {
         width={1500}
       />
 
-      <div className="mx-auto mt-[50px] max-w-[700px]">
+      <div className="mx-auto my-[50px] max-w-[700px]">
         {userContext.user && !userContext.user.active && (
           <Alert type="warning" className="mb-3">
             Your email is not validated.

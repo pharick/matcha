@@ -11,13 +11,20 @@ import {
 import { Photo, User } from '@/app/interfaces';
 import Modal from '@/components/Modal';
 import { useDrag, useDrop } from 'react-dnd';
+import { IconContext } from 'react-icons';
+import { BiX } from 'react-icons/bi';
 
 interface PhotoUploadItemProps {
   photo: Photo;
-  handleMove: (from: number, to: number) => Promise<void>;
+  handleMove: (id: number, to: number) => Promise<void>;
+  handleRemove: (id: number) => Promise<void>;
 }
 
-const PhotoUploadItem: FC<PhotoUploadItemProps> = ({ photo, handleMove }) => {
+const PhotoUploadItem: FC<PhotoUploadItemProps> = ({
+  photo,
+  handleMove,
+  handleRemove,
+}) => {
   const ref = useRef<HTMLElement | null>(null);
 
   const [{ isOver }, drop] = useDrop({
@@ -50,16 +57,24 @@ const PhotoUploadItem: FC<PhotoUploadItemProps> = ({ photo, handleMove }) => {
     <figure
       ref={ref}
       className={`relative m-1 h-[250px] w-[200px] rounded-md border-2 border-brown bg-brown ${
-        isOver ? 'translate-y-1' : ''
+        isOver ? 'translate-y-1 opacity-50' : ''
       } ${isDragging ? 'invisible' : ''}`}
     >
-      <Image
-        src={`http://localhost${photo.url}`}
-        fill={true}
-        alt={`Photo ${photo.id}`}
-        className="rounded-md object-cover"
-        sizes="250px"
-      />
+      <IconContext.Provider value={{ color: 'white', size: '24px' }}>
+        <button
+          onClick={() => void handleRemove(photo.id)}
+          className="color-white absolute left-full top-0 z-50 -ml-3.5 -mt-1.5 rounded-full bg-brown transition hover:rotate-90"
+        >
+          <BiX />
+        </button>
+        <Image
+          src={`http://localhost${photo.url}`}
+          fill={true}
+          alt={`Photo ${photo.id}`}
+          className="rounded-md object-cover"
+          sizes="250px"
+        />
+      </IconContext.Provider>
     </figure>
   );
 };
@@ -76,7 +91,6 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
     const response = await fetch(`/api/users/${user.username}/photos/`);
     if (response.ok) {
       const photos = (await response.json()) as { list: Photo[] };
-      console.log(photos);
       setPhotos(photos.list);
     }
   }, [user]);
@@ -105,7 +119,6 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
     };
     const uri = `/api/users/${user.username}/photos/`;
     const res = await fetch(uri, requestOptions);
-    console.log(res);
     if (res.ok) {
       const photo = (await res.json()) as Photo;
       setPhotos((photos) => [...photos, photo]);
@@ -114,7 +127,6 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
   };
 
   const handleMove = async (id: number, to: number) => {
-    console.log(id, to);
     const userToken = localStorage.getItem('token');
     if (!userToken) return;
     const requestOptions = {
@@ -125,9 +137,22 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
       },
     };
     const uri = `/api/users/${user.username}/photos/${id}`;
-    const res = await fetch(uri, requestOptions);
-    console.log(await res.json());
+    await fetch(uri, requestOptions);
     await fetchPhotos();
+  };
+
+  const handleRemove = async (id: number) => {
+    const userToken = localStorage.getItem('token');
+    if (!userToken) return;
+    const requestOptions = {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    };
+    const uri = `/api/users/${user.username}/photos/${id}`;
+    await fetch(uri, requestOptions);
+    setPhotos((photos) => [...photos.filter((photo) => photo.id != id)]);
   };
 
   return (
@@ -137,7 +162,11 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
           .sort((a, b) => a.index - b.index)
           .map((photo) => (
             <li key={photo.id}>
-              <PhotoUploadItem photo={photo} handleMove={handleMove} />
+              <PhotoUploadItem
+                photo={photo}
+                handleMove={handleMove}
+                handleRemove={handleRemove}
+              />
             </li>
           ))}
       </ul>
