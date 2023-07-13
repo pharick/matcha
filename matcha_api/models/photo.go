@@ -2,7 +2,6 @@ package models
 
 import (
 	"database/sql"
-	"log"
 )
 
 type Photo struct {
@@ -76,7 +75,6 @@ func (m PhotoModel) Update(
 		&photo.Index,
 		&photo.Url,
 	)
-	log.Println(m.DB.Stats().OpenConnections)
 	return photo, err
 }
 
