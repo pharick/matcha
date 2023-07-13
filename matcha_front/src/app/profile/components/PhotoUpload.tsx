@@ -20,40 +20,44 @@ interface PhotoUploadItemProps {
 const PhotoUploadItem: FC<PhotoUploadItemProps> = ({ photo, handleMove }) => {
   const ref = useRef<HTMLElement | null>(null);
 
-  const [, drop] = useDrop<Photo>({
+  const [{ isOver }, drop] = useDrop({
     accept: 'profileImage',
-    hover: (item) => {
-      const dragIndex = item.index;
-      const hoverIndex = photo.index;
-      if (dragIndex == hoverIndex) {
-        return;
-      }
-    },
-    drop: async (item) => {
+    drop: async (item: Photo) => {
       if (item.index < photo.index) {
         await handleMove(item.id, photo.index + 1);
       } else if (item.index > photo.index) {
         await handleMove(item.id, photo.index);
       }
     },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
   });
 
-  const [, drag] = useDrag({
+  const [{ isDragging }, drag] = useDrag({
     type: 'profileImage',
     item: () => {
       return { id: photo.id, index: photo.index };
     },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
   });
 
   drag(drop(ref));
 
   return (
-    <figure ref={ref} className="relative m-1 h-[250px] w-[200px]">
+    <figure
+      ref={ref}
+      className={`relative m-1 h-[250px] w-[200px] rounded-md border-2 border-brown bg-brown ${
+        isOver ? 'translate-y-1' : ''
+      } ${isDragging ? 'invisible' : ''}`}
+    >
       <Image
         src={`http://localhost${photo.url}`}
         fill={true}
         alt={`Photo ${photo.id}`}
-        className="object-cover"
+        className="rounded-md object-cover"
         sizes="250px"
       />
     </figure>
