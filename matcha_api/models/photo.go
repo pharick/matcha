@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"log"
 )
 
 type Photo struct {
@@ -56,13 +57,14 @@ func (m PhotoModel) Update(
 	d Photo,
 ) (Photo, error) {
 	var photo Photo
-	_, err := m.DB.Query(
+	res, err := m.DB.Query(
 		"UPDATE photos SET index = index + 1 WHERE index >= $1",
 		d.Index,
 	)
 	if err != nil {
 		return photo, err
 	}
+	defer res.Close()
 	err = m.DB.QueryRow(
 		`UPDATE photos SET index = $2 
 		WHERE id = $1
@@ -74,6 +76,7 @@ func (m PhotoModel) Update(
 		&photo.Index,
 		&photo.Url,
 	)
+	log.Println(m.DB.Stats().OpenConnections)
 	return photo, err
 }
 

@@ -1,13 +1,20 @@
 import Button from '@/components/Button';
 import Image from 'next/image';
-import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
+import {
+  ChangeEvent,
+  FC,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Photo, User } from '@/app/interfaces';
 import Modal from '@/components/Modal';
 import { useDrag, useDrop } from 'react-dnd';
 
 interface PhotoUploadItemProps {
   photo: Photo;
-  handleMove: (from: number, to: number) => void;
+  handleMove: (from: number, to: number) => Promise<void>;
 }
 
 const PhotoUploadItem: FC<PhotoUploadItemProps> = ({ photo, handleMove }) => {
@@ -15,36 +22,26 @@ const PhotoUploadItem: FC<PhotoUploadItemProps> = ({ photo, handleMove }) => {
 
   const [, drop] = useDrop<Photo>({
     accept: 'profileImage',
-    // hover: (item, monitor) => {
-    //   if (!ref.current) {
-    //     return;
-    //   }
-
-    //   const dragIndex = item.index;
-    //   const hoverIndex = photo.index;
-    //   if (dragIndex == hoverIndex) {
-    //     return;
-    //   }
-    // },
-    drop: (item, monitor) => {
+    hover: (item) => {
       const dragIndex = item.index;
       const hoverIndex = photo.index;
       if (dragIndex == hoverIndex) {
         return;
       }
-      handleMove(dragIndex - 1, hoverIndex - 1);
+    },
+    drop: async (item) => {
+      if (item.index < photo.index) {
+        await handleMove(item.id, photo.index + 1);
+      } else if (item.index > photo.index) {
+        await handleMove(item.id, photo.index);
+      }
     },
   });
 
-  const [{ isDragging }, drag] = useDrag({
+  const [, drag] = useDrag({
     type: 'profileImage',
     item: () => {
       return { id: photo.id, index: photo.index };
-    },
-    collect: (monitor) => {
-      return {
-        isDragging: monitor.isDragging(),
-      };
     },
   });
 
@@ -71,16 +68,18 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [newPhoto, setNewPhoto] = useState<File>();
 
-  useEffect(() => {
-    const fetchPhotos = async () => {
-      const response = await fetch(`/api/users/${user.username}/photos/`);
-      if (response.ok) {
-        const photos = (await response.json()) as { list: Photo[] };
-        setPhotos(photos.list);
-      }
-    };
-    void fetchPhotos();
+  const fetchPhotos = useCallback(async () => {
+    const response = await fetch(`/api/users/${user.username}/photos/`);
+    if (response.ok) {
+      const photos = (await response.json()) as { list: Photo[] };
+      console.log(photos);
+      setPhotos(photos.list);
+    }
   }, [user]);
+
+  useEffect(() => {
+    void fetchPhotos();
+  }, [fetchPhotos]);
 
   const handleNewPhotoChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -110,15 +109,21 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
     }
   };
 
-  const handleMove = (from: number, to: number) => {
-    if (from < to) {
-      setPhotos((photos) => [
-        ...photos.slice(0, from),
-        ...photos.slice(from + 1, to),
-        photos[from],
-        ...photos.slice(to, -1),
-      ]);
-    }
+  const handleMove = async (id: number, to: number) => {
+    console.log(id, to);
+    const userToken = localStorage.getItem('token');
+    if (!userToken) return;
+    const requestOptions = {
+      method: 'PATCH',
+      body: JSON.stringify({ index: to }),
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    };
+    const uri = `/api/users/${user.username}/photos/${id}`;
+    const res = await fetch(uri, requestOptions);
+    console.log(await res.json());
+    await fetchPhotos();
   };
 
   return (
