@@ -56,14 +56,14 @@ const PhotoUploadItem: FC<PhotoUploadItemProps> = ({
   return (
     <figure
       ref={ref}
-      className={`relative m-1 h-[250px] w-[200px] rounded-md border-2 border-brown bg-brown ${
+      className={`group relative m-1 h-[250px] w-[200px] rounded-md border-2 border-brown bg-brown ${
         isOver ? 'translate-y-1 opacity-50' : ''
       } ${isDragging ? 'invisible' : ''}`}
     >
       <IconContext.Provider value={{ color: 'white', size: '24px' }}>
         <button
           onClick={() => void handleRemove(photo.id)}
-          className="color-white absolute left-full top-0 z-50 -ml-3.5 -mt-1.5 rounded-full bg-brown transition hover:rotate-90"
+          className="color-white absolute left-full top-0 z-50 -ml-3.5 -mt-1.5 hidden rounded-full bg-brown transition hover:rotate-90 group-hover:block"
         >
           <BiX />
         </button>
