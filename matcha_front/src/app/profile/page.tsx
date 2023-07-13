@@ -50,7 +50,6 @@ const ProfilePage: NextPage = () => {
             </button>
           </Alert>
         )}
-        {/* {userContext.user ? <ProfileForm user={userContext.user} /> : <></>} */}
         {userContext.user && (
           <Tabs
             captions={[
@@ -69,4 +68,4 @@ const ProfilePage: NextPage = () => {
   );
 };
 
-export default withLogin(<ProfilePage />);
+export default withLogin(ProfilePage);

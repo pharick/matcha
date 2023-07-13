@@ -38,7 +38,6 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
       });
       if (res.ok) {
         const user = (await res.json()) as CurrentUser;
-        console.log(user);
         setUser(user);
       } else {
         router.push('/login');
@@ -58,9 +57,14 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
-export const withLogin = (children?: ReactNode) => {
-  const page: NextPage = () => <UserProvider>{children}</UserProvider>;
-  return page;
+export const withLogin = (page: NextPage) => {
+  const Page = page;
+  const PageWithLogin = () => (
+    <UserProvider>
+      <Page />
+    </UserProvider>
+  );
+  return PageWithLogin;
 };
 
 export default UserProvider;

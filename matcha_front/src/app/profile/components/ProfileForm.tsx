@@ -2,15 +2,12 @@
 import { FC, useState } from 'react';
 import { User } from '@/app/interfaces';
 import Button from '@/components/Button';
-import { Field, Form, Formik } from 'formik';
-// import FieldComponent from './FieldComponent';
-import PhotoUpload from './PhotoUpload';
+import { Form, Formik } from 'formik';
 import Modal from '@/components/Modal';
 import ChangePasswordForm from './ChangePasswordForm';
 import ChangeEmailForm from './ChangeEmailForm';
 import GenderCheckBox from './GenderCheckBox';
 import FieldComponent from '@/components/FieldComponent';
-import Tabs from './Tabs';
 
 interface ProfileFormProps {
   user: User;

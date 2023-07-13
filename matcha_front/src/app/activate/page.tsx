@@ -38,4 +38,4 @@ const Activate: NextPage = () => {
   else if (!success) return <p>Validation error</p>;
 };
 
-export default withLogin(<Activate />);
+export default withLogin(Activate);

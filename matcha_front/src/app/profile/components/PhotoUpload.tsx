@@ -57,6 +57,7 @@ const PhotoUploadItem: FC<PhotoUploadItemProps> = ({ photo, handleMove }) => {
         fill={true}
         alt={`Photo ${photo.id}`}
         className="object-cover"
+        sizes="250px"
       />
     </figure>
   );
