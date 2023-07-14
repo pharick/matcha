@@ -52,6 +52,7 @@ const LoginForm: FC = () => {
         {({ errors, touched }) => (
           <Form className="relative mx-auto flex flex-col">
             <FieldComponent
+              type="text"
               name="username"
               errors={errors.username}
               touched={touched.username}
@@ -60,6 +61,7 @@ const LoginForm: FC = () => {
               username
             </FieldComponent>
             <FieldComponent
+              type="password"
               name="password"
               errors={errors.password}
               touched={touched.password}

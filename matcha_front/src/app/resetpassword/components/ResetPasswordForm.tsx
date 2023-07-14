@@ -48,13 +48,15 @@ const ResetPasswordForm: FC = () => {
       >
         {/* {({ errors, touched }) => ( */}
         <Form>
-          <FieldComponent name="password" className="mb-3">
+          <FieldComponent type="password" name="password" className="mb-3">
             New Password
           </FieldComponent>
-          <FieldComponent name="confPassword" className="mb-3">
+          <FieldComponent type="password" name="confPassword" className="mb-3">
             Confirm New Password
           </FieldComponent>
-          <Button className="m-auto block" type="submit">Confirm</Button>
+          <Button className="m-auto block" type="submit">
+            Confirm
+          </Button>
         </Form>
       </Formik>
     </div>

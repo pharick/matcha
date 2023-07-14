@@ -38,7 +38,7 @@ const ResetPasswordForm: FC<ChangePasswordFormProps> = ({ handleClose }) => {
       >
         {/* {({ errors, touched }) => ( */}
         <Form>
-          <FieldComponent name="email" className="mb-3">
+          <FieldComponent type="email" name="email" className="mb-3">
             Enter your registered email
           </FieldComponent>
           <Button className="m-auto block" type="submit">

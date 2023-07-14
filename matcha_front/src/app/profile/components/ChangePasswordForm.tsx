@@ -46,13 +46,17 @@ const ChangePasswordForm: FC<ChangePasswordFormProps> = ({ handleClose }) => {
       >
         {/* {({ errors, touched }) => ( */}
         <Form>
-          <FieldComponent name="oldPassword" className="mb-3">
+          <FieldComponent type="password" name="oldPassword" className="mb-3">
             Old Password
           </FieldComponent>
-          <FieldComponent name="newPassword" className="mb-3">
+          <FieldComponent type="password" name="newPassword" className="mb-3">
             New Password
           </FieldComponent>
-          <FieldComponent name="confNewPassword" className="mb-3">
+          <FieldComponent
+            type="password"
+            name="confNewPassword"
+            className="mb-3"
+          >
             Confirm New Password
           </FieldComponent>
           <Button className="m-auto block" type="submit">

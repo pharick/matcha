@@ -92,6 +92,7 @@ const SignUpForm: FC = () => {
       {({ errors, touched }) => (
         <Form className="max-w-[600px] flex-1">
           <FieldComponent
+            type="text"
             name="username"
             errors={errors.username}
             touched={touched.username}
@@ -100,6 +101,7 @@ const SignUpForm: FC = () => {
             Username
           </FieldComponent>
           <FieldComponent
+            type="text"
             name="firstName"
             errors={errors.firstName}
             touched={touched.firstName}
@@ -108,6 +110,7 @@ const SignUpForm: FC = () => {
             First Name
           </FieldComponent>
           <FieldComponent
+            type="text"
             name="lastName"
             errors={errors.lastName}
             touched={touched.lastName}
@@ -116,6 +119,7 @@ const SignUpForm: FC = () => {
             Last Name
           </FieldComponent>
           <FieldComponent
+            type="email"
             name="email"
             errors={errors.email}
             touched={touched.email}
@@ -124,6 +128,7 @@ const SignUpForm: FC = () => {
             Email
           </FieldComponent>
           <FieldComponent
+            type="password"
             name="password"
             errors={errors.password}
             touched={touched.password}
@@ -132,6 +137,7 @@ const SignUpForm: FC = () => {
             Password
           </FieldComponent>
           <FieldComponent
+            type="password"
             name="confPassword"
             errors={errors.confPassword}
             touched={touched.confPassword}

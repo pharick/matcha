@@ -44,8 +44,8 @@ const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ handleClose }) => {
       >
         {/* {({ errors, touched }) => ( */}
         <Form className="[&>*]:mb-[30px]">
-          <FieldComponent name="oldPassword" className="mb-3">
-            Old Password
+          <FieldComponent type="password" name="password" className="mb-3">
+            Password
           </FieldComponent>
           <Button className="m-auto block" type="submit">
             Confirm

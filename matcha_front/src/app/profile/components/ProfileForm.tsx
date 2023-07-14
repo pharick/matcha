@@ -79,31 +79,52 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
         >
           {/* {({ errors, touched }) => ( */}
           <Form className="text-center">
-            <FieldComponent label="Username" name="username" className="mb-3">
+            <FieldComponent
+              type="text"
+              label="Username"
+              name="username"
+              className="mb-3"
+            >
               Username
             </FieldComponent>
             <FieldComponent
+              type="text"
               label="First Name"
               name="first_name"
               className="mb-3"
             >
               First Name
             </FieldComponent>
-            <FieldComponent label="Last Name" name="last_name" className="mb-3">
+            <FieldComponent
+              type="text"
+              label="Last Name"
+              name="last_name"
+              className="mb-3"
+            >
               Last Name
             </FieldComponent>
             <div className="mb-3 flex items-center justify-between">
               <div className="font-bold">Gender</div>
               <GenderCheckBox type="radio" name="gender" />
             </div>
-            <FieldComponent label="Biography" name="biography" className="mb-3">
+            <FieldComponent
+              type="text"
+              label="Biography"
+              name="biography"
+              className="mb-3"
+            >
               About me
             </FieldComponent>
             <div className="mb-3 flex items-center justify-between">
               <div className="font-bold">Sexual Preferencies</div>
               <GenderCheckBox type="checkbox" name="gender_preferencies" />
             </div>
-            <FieldComponent label="Interests" name="tags" className="mb-3">
+            <FieldComponent
+              type="text"
+              label="Interests"
+              name="tags"
+              className="mb-3"
+            >
               use #tags
             </FieldComponent>
 
