@@ -1,6 +1,6 @@
 'use client';
 import { FC, useState } from 'react';
-import { User } from '@/app/interfaces';
+import { User } from '@/interfaces';
 import Button from '@/components/Button';
 import { Form, Formik } from 'formik';
 import Modal from '@/components/Modal';

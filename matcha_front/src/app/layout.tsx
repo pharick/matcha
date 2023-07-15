@@ -1,8 +1,17 @@
-'use client';
-import './globals.css';
+import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+
+import { DndProvider } from '@/imports/react-dnd';
+import { HTML5Backend } from '@/imports/react-dnd';
+
+import './globals.css';
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s | Matcha',
+    default: 'Matcha',
+  },
+};
 
 const montserrat = Montserrat({
   weight: ['400', '700'],

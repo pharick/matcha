@@ -1,3 +1,5 @@
+'use client';
+
 import Button from '@/components/Button';
 import Image from 'next/image';
 import {
@@ -8,7 +10,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Photo, User } from '@/app/interfaces';
+import { Photo, User } from '@/interfaces';
 import Modal from '@/components/Modal';
 import { useDrag, useDrop } from 'react-dnd';
 import { IconContext } from 'react-icons';

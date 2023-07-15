@@ -1,13 +1,17 @@
 'use client';
-import { useRouter } from 'next/navigation';
-import Button from '@/components/Button';
+
+import { FC, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import * as Yup from 'yup';
-import { RegistrationResponse } from '@/app/interfaces';
 import { Formik, Form } from 'formik';
-import { FC } from 'react';
 import { BiRightArrowAlt } from 'react-icons/bi';
+
+import Button from '@/components/Button';
+import { RegistrationResponse } from '@/interfaces';
 import FieldComponent from '@/components/FieldComponent';
+import Modal from '@/components/Modal';
+import ResetPasswordForm from './ResetPasswordForm';
 
 interface LoginFormValues {
   username: string;
@@ -16,6 +20,8 @@ interface LoginFormValues {
 
 const LoginForm: FC = () => {
   const router = useRouter();
+  const [passwordResetModalOpen, setPasswordResetModalOpen] =
+    useState<boolean>(false);
 
   const validationSchema = Yup.object({
     username: Yup.string().required("What's your username?"),
@@ -48,6 +54,7 @@ const LoginForm: FC = () => {
         validationSchema={validationSchema}
         onSubmit={handleAutorization}
         validateOnBlur={false}
+        validateOnChange={false}
       >
         {({ errors, touched }) => (
           <Form className="relative mx-auto flex flex-col">
@@ -87,6 +94,23 @@ const LoginForm: FC = () => {
           </Form>
         )}
       </Formik>
+
+      <button
+        type="button"
+        onClick={() => setPasswordResetModalOpen(true)}
+        className="mx-auto block font-bold underline hover:opacity-80"
+      >
+        I forgot my password
+      </button>
+
+      <Modal
+        isOpen={passwordResetModalOpen}
+        handleClose={() => setPasswordResetModalOpen(false)}
+      >
+        <ResetPasswordForm
+          handleClose={() => setPasswordResetModalOpen(false)}
+        />
+      </Modal>
     </>
   );
 };

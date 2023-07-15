@@ -1,22 +1,26 @@
-'use client';
 import { NextPage } from 'next';
+import type { Metadata } from 'next';
+
 import Header from '@/components/Header';
 import SignUpForm from './components/SignUpForm';
-import Image from 'next/image';
-import LeafDown from '@/images/leafe_down.png';
+
+export const metadata: Metadata = {
+  title: 'Sign Up',
+};
 
 const SignUpPage: NextPage = () => {
   return (
     <>
       <Header />
-      <div className="my-4 flex min-h-screen min-w-fit items-center justify-center">
-        <SignUpForm />
+
+      <div className="mx-auto my-5 flex min-h-screen max-w-[600px] flex-col justify-center">
+        <h1 className="mb-[30px] border-b-2 border-brown pb-1 text-center text-xl text-brown">
+          Sign Up
+        </h1>
+        <div className="w-full">
+          <SignUpForm />
+        </div>
       </div>
-      <Image
-        className="w-2/2 absolute bottom-0 left-0 -z-50"
-        src={LeafDown}
-        alt="leaf"
-      />
     </>
   );
 };

@@ -1,7 +1,8 @@
+import { FC } from 'react';
+import { Form, Formik } from 'formik';
+
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
-import { Field, Form, Formik } from 'formik';
-import { FC } from 'react';
 
 interface ResetPasswordFormValues {
   email: string;

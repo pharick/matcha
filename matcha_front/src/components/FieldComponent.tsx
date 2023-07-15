@@ -1,40 +1,7 @@
-// import { useField, ErrorMessage, FieldHookConfig } from 'formik';
-// import { FC, InputHTMLAttributes, ReactNode } from 'react';
-
-// interface FieldComponentProps extends InputHTMLAttributes<HTMLInputElement> {
-//   children: ReactNode;
-//   name: string;
-//   validate?: (value: any) => undefined | string | Promise<any>;
-//   type?: string;
-//   multiple?: boolean;
-//   value?: string;
-// }
-
-// const FieldComponent: FC<FieldComponentProps> = ({
-//   children,
-//   ...props
-// }: FieldComponentProps) => {
-//   const [field, meta] = useField(props);
-//   return (
-//     <div>
-//       <input
-//         placeholder={children}
-//         {...field}
-//         {...props}
-//       />
-//       {meta.touched && meta.error && (
-//         <div>
-//           <ErrorMessage name={field.name} />
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
 import { Field } from 'formik';
 import { FC, PropsWithChildren, useState } from 'react';
+
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
-import { IconContext } from 'react-icons';
 
 interface FieldProps extends PropsWithChildren {
   name: string;
@@ -61,39 +28,43 @@ const FieldComponent: FC<FieldProps> = ({
   };
 
   return (
-    <div className={`${className ?? ''}`}>
-      <label className="font-bold">{label}</label>
-      {type === 'password' ? (
-        <div className="relative -mb-[30px]">
-          <Field
-            type={passwordShown ? 'text' : 'password'}
-            id={name}
-            name={name}
-            placeholder={children}
-            className="block h-[50px] w-full items-center rounded-[20px] border border-none bg-transparent bg-gradient-radial from-green-1/70 to-neutral/30 text-center"
-          />
-          <button type="button" onClick={togglePassword}>
-            {passwordShown ? (
-              <FaRegEye size={20} className="absolute left-full top-3 -ml-9 text-brown" />
-            ) : (
-              <FaRegEyeSlash
-                size={20}
-                className="absolute left-full top-3 -ml-9 text-brown/50"
-              />
-            )}
-          </button>
-        </div>
-      ) : (
+    <div className={`${className ?? ''} relative`}>
+      {label && (
+        <label htmlFor={name} className="font-bold">
+          {label}
+        </label>
+      )}
+      <div>
         <Field
-          type={type}
+          type={
+            type == 'password' && passwordShown
+              ? 'text'
+              : type == 'password'
+              ? 'password'
+              : type
+          }
           id={name}
           name={name}
           placeholder={children}
-          className="block h-[50px] w-full rounded-[20px] border border-none bg-transparent bg-gradient-radial from-green-1/70 to-neutral/30 text-center"
+          className="block h-[50px] w-full items-center rounded-[20px] border border-none bg-transparent bg-gradient-radial from-green-1/70 to-neutral/30 text-center"
         />
-      )}
+        {type === 'password' && (
+          <button
+            type="button"
+            onClick={togglePassword}
+            className="absolute left-full top-3.5 -ml-9"
+          >
+            {passwordShown ? (
+              <FaRegEye size={20} className="text-brown" />
+            ) : (
+              <FaRegEyeSlash size={20} className="text-brown/50" />
+            )}
+          </button>
+        )}
+      </div>
+
       {errors && touched ? (
-        <div className="mt-1 text-center text-pink-800">{errors}</div>
+        <div className="py-1 text-center text-sm text-pink-800">{errors}</div>
       ) : null}
     </div>
   );

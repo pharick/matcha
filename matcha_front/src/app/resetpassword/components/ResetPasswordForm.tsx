@@ -1,7 +1,7 @@
 'use client';
 import { FC } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { RegistrationResponse } from '@/app/interfaces';
+import { RegistrationResponse } from '@/interfaces';
 import { Field, Form, Formik } from 'formik';
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';

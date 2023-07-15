@@ -1,4 +1,5 @@
 'use client';
+
 import {
   createContext,
   FC,
@@ -7,7 +8,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { CurrentUser } from '@/app/interfaces';
+import { CurrentUser } from '@/interfaces';
 import { useRouter, usePathname } from 'next/navigation';
 import { NextPage } from 'next';
 

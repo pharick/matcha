@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import FieldComponent from '@/components/FieldComponent';
 
 import { Formik, Form } from 'formik';
-import { RegistrationResponse } from '../../interfaces';
+import { RegistrationResponse } from '../../../interfaces';
 import { useRouter } from 'next/navigation';
 import { FC } from 'react';
 
@@ -90,7 +90,7 @@ const SignUpForm: FC = () => {
       validateOnBlur={false}
     >
       {({ errors, touched }) => (
-        <Form className="max-w-[600px] flex-1">
+        <Form>
           <FieldComponent
             type="text"
             name="username"
