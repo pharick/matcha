@@ -1,15 +1,13 @@
 'use client';
 
-import { FC, useState } from 'react';
-import { Form, Formik } from 'formik';
+import { FC } from 'react';
+import { Field, Form, Formik } from 'formik';
 
 import { User } from '@/interfaces';
+import RadioButton from '@/components/RadioButton';
 import Button from '@/components/Button';
-import Modal from '@/components/Modal';
 import FieldComponent from '@/components/FieldComponent';
-import ChangePasswordForm from './ChangePasswordForm';
-import ChangeEmailForm from './ChangeEmailForm';
-import GenderCheckBox from './GenderCheckBox';
+import Checkbox from '@/components/CheckBox';
 
 interface ProfileFormProps {
   user: User;
@@ -28,11 +26,6 @@ interface ProfileFormValues {
 }
 
 const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
-  const [changePasswordFormOpen, setChangePasswordFormOpen] =
-    useState<boolean>(false);
-  const [changeEmailFormOpen, setChangeEmailFormOpen] =
-    useState<boolean>(false);
-
   const initialValues: ProfileFormValues = {
     username: user.username,
     first_name: user.first_name,
@@ -103,10 +96,6 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
             >
               Last Name
             </FieldComponent>
-            <div className="mb-3 flex items-center justify-between">
-              <div className="font-bold">Gender</div>
-              <GenderCheckBox type="radio" name="gender" />
-            </div>
             <FieldComponent
               type="text"
               label="Biography"
@@ -115,10 +104,6 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
             >
               About me
             </FieldComponent>
-            <div className="mb-3 flex items-center justify-between">
-              <div className="font-bold">Sexual Preferencies</div>
-              <GenderCheckBox type="checkbox" name="gender_preferencies" />
-            </div>
             <FieldComponent
               type="text"
               label="Interests"
@@ -128,24 +113,36 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
               use #tags
             </FieldComponent>
 
-            <div>
-              <button
-                type="button"
-                onClick={() => setChangePasswordFormOpen(true)}
-                className="font-bold underline"
-              >
-                Change password
-              </button>
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="font-bold">Gender</h3>
+              <div className="flex rounded-md border border-brown">
+                <RadioButton name="gender" value="male">
+                  Male
+                </RadioButton>
+                <RadioButton name="gender" value="female">
+                  Female
+                </RadioButton>
+                <RadioButton name="gender" value="other">
+                  Other
+                </RadioButton>
+              </div>
             </div>
-            <div className="mb-3">
-              <button
-                type="button"
-                onClick={() => setChangeEmailFormOpen(true)}
-                className="font-bold underline"
-              >
-                Change Email
-              </button>
+
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="font-bold">Sexual preferences</h3>
+              <div className="flex">
+                <Checkbox name="sex-preferences" value="male">
+                  Male
+                </Checkbox>
+                <Checkbox name="sex-preferences" value="female">
+                  Female
+                </Checkbox>
+                <Checkbox name="sex-preferences" value="other">
+                  Other
+                </Checkbox>
+              </div>
             </div>
+
             <Button type="submit" className="mx-auto">
               Save
             </Button>
@@ -153,22 +150,6 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
           {/* )} */}
         </Formik>
       </section>
-
-      <Modal
-        isOpen={changePasswordFormOpen}
-        handleClose={() => setChangePasswordFormOpen(false)}
-      >
-        <ChangePasswordForm
-          handleClose={() => setChangePasswordFormOpen(false)}
-        />
-      </Modal>
-
-      <Modal
-        isOpen={changeEmailFormOpen}
-        handleClose={() => setChangeEmailFormOpen(false)}
-      >
-        <ChangeEmailForm handleClose={() => setChangeEmailFormOpen(false)} />
-      </Modal>
     </>
   );
 };
