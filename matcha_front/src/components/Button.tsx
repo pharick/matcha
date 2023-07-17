@@ -1,10 +1,11 @@
-import { FC, MouseEventHandler, ReactNode } from 'react';
+import { FC, MouseEventHandler, ReactNode, useState } from 'react';
 
 interface BtnProps {
   type?: 'button' | 'submit' | 'reset';
   children?: ReactNode;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   className?: string;
+  // handleLoading: () => void;
 }
 
 const Button: FC<BtnProps> = ({ type, children, onClick, className }) => {
@@ -17,6 +18,9 @@ const Button: FC<BtnProps> = ({ type, children, onClick, className }) => {
       type={type}
       onClick={onClick}
     >
+      {/* {showLoader && (
+        <div className="h-[20px] w-[20px] animate-spin rounded-full border-4 border-slate-200 border-r-brown"></div>
+      )} */}
       {children}
     </button>
   );

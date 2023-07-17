@@ -57,6 +57,14 @@ const Profile: FC = () => {
           <PhotoUpload user={userContext.user} />
           <ul>
             <li>
+              <ChangePasswordForm />
+            </li>
+            <li>
+              <ChangeEmailForm />
+            </li>
+          </ul>
+          {/* <ul>
+            <li>
               <button
                 type="button"
                 onClick={() => setChangePasswordFormOpen(true)}
@@ -74,10 +82,10 @@ const Profile: FC = () => {
                 Change Email
               </button>
             </li>
-          </ul>
+          </ul> */}
         </Tabs>
       )}
-
+{/* 
       <Modal
         isOpen={changePasswordFormOpen}
         handleClose={() => setChangePasswordFormOpen(false)}
@@ -92,7 +100,7 @@ const Profile: FC = () => {
         handleClose={() => setChangeEmailFormOpen(false)}
       >
         <ChangeEmailForm handleClose={() => setChangeEmailFormOpen(false)} />
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

@@ -22,6 +22,7 @@ const LoginForm: FC = () => {
   const router = useRouter();
   const [passwordResetModalOpen, setPasswordResetModalOpen] =
     useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const validationSchema = Yup.object({
     username: Yup.string().required("What's your username?"),

@@ -1,6 +1,6 @@
-import { NextPage } from "next";
+import { NextPage } from 'next';
 
-const UserPage : NextPage= () => {
+const UserPage: NextPage = () => {
     return <div>User Page</div>;
 };
 

@@ -3,9 +3,9 @@ import { Field, Form, Formik } from 'formik';
 import { FC } from 'react';
 import FieldComponent from '@/components/FieldComponent';
 
-interface ChangePasswordFormProps {
-  handleClose: () => void;
-}
+// interface ChangePasswordFormProps {
+//   handleClose: () => void;
+// }
 
 interface ChangePasswordFormValues {
   oldPassword: string;
@@ -13,7 +13,7 @@ interface ChangePasswordFormValues {
   confNewPassword: string;
 }
 
-const ChangePasswordForm: FC<ChangePasswordFormProps> = ({ handleClose }) => {
+const ChangePasswordForm: FC<> = () => {
   const initialValues: ChangePasswordFormValues = {
     oldPassword: '',
     newPassword: '',
@@ -33,12 +33,15 @@ const ChangePasswordForm: FC<ChangePasswordFormProps> = ({ handleClose }) => {
     };
     const uri = `/api/password_change`;
     const res = await fetch(uri, requestOptions);
-    if (res.ok) {
-      handleClose();
-    }
+    // if (res.ok) {
+    //   handleClose();
+    // }
   };
   return (
     <>
+      <div className="my-5 border-b-2 border-brown pb-1 text-center text-xl text-brown">
+        Change password
+      </div>
       <Formik
         // validationSchema={validationSchema}
         initialValues={initialValues}
@@ -59,7 +62,7 @@ const ChangePasswordForm: FC<ChangePasswordFormProps> = ({ handleClose }) => {
           >
             Confirm New Password
           </FieldComponent>
-          <Button className="m-auto block" type="submit">
+          <Button className="ml-auto" type="submit">
             Confirm
           </Button>
         </Form>

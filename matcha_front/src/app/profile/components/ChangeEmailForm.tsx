@@ -3,17 +3,19 @@ import { Field, Form, Formik } from 'formik';
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
 
-interface ChangeEmailFormProps {
-  handleClose: () => void;
-}
+// interface ChangeEmailFormProps {
+//   handleClose: () => void;
+// }
 
 interface ChangeEmailFormValues {
   password: string;
+  email: string;
 }
 
-const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ handleClose }) => {
+const ChangeEmailForm: FC<> = () => {
   const initialValues: ChangeEmailFormValues = {
     password: '',
+    email: '',
   };
 
   const handleChangeEmail = async (values: ChangeEmailFormValues) => {
@@ -28,15 +30,15 @@ const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ handleClose }) => {
     };
     const uri = `/api/password_change`;
     const res = await fetch(uri, requestOptions);
-    if (res.ok) {
-      handleClose();
-    }
+    // if (res.ok) {
+    //   handleClose();
+    // }
   };
   return (
     <>
-      <h1 className="mb-7 mt-1 text-center font-bold">
-        You gonna change your e-mail, please, write your password to change it:
-      </h1>
+      <h3 className="my-5 border-b-2 border-brown pb-1 text-center text-xl text-brown">
+        Change e-mail
+      </h3>
       <Formik
         // validationSchema={validationSchema}
         initialValues={initialValues}
@@ -44,10 +46,13 @@ const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ handleClose }) => {
       >
         {/* {({ errors, touched }) => ( */}
         <Form className="[&>*]:mb-[30px]">
+          <FieldComponent type="email" name="email" className="mb-3">
+            Email
+          </FieldComponent>
           <FieldComponent type="password" name="password" className="mb-3">
             Password
           </FieldComponent>
-          <Button className="m-auto block" type="submit">
+          <Button className="ml-auto" type="submit">
             Confirm
           </Button>
         </Form>
