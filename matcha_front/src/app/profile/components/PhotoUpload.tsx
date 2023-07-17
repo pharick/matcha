@@ -175,7 +175,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
       <form className="mt-[20px] text-center">
         <label
           htmlFor="new-photo-input"
-          className="rounded-[20px] border-2 border-brown bg-gradient-radial  from-green-2/50 to-green-1/30 p-[10px] font-bold"
+          className="mx-auto block w-fit cursor-pointer rounded-[20px] border-2 border-brown bg-gradient-radial from-green-2/50 to-green-1/30 px-[20px] py-[5px] text-[24px] font-bold shadow-md hover:bg-gradient-radial hover:from-green-5/70 hover:to-brown/70 active:translate-x-px active:translate-y-px active:shadow-none"
         >
           Upload photo
         </label>
@@ -189,19 +189,17 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
         />
       </form>
 
-      {newPhoto && (
-        <Modal handleClose={() => setNewPhoto(undefined)}>
-          <figure className="relative h-[250px] w-[200px]">
-            <Image
-              src={URL.createObjectURL(newPhoto)}
-              fill={true}
-              alt="Photo to upload"
-              className="object-cover"
-            />
-          </figure>
-          <Button onClick={() => void handleNewPhotoUpload()}>Upload</Button>
-        </Modal>
-      )}
+      <Modal isOpen={!!newPhoto} handleClose={() => setNewPhoto(undefined)}>
+        <figure className="relative h-[250px] w-[200px]">
+          <Image
+            src={newPhoto ? URL.createObjectURL(newPhoto) : '#'}
+            fill={true}
+            alt="Photo to upload"
+            className="object-cover"
+          />
+        </figure>
+        <Button onClick={() => void handleNewPhotoUpload()}>Upload</Button>
+      </Modal>
     </>
   );
 };
