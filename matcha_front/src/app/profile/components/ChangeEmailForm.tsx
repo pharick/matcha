@@ -1,18 +1,14 @@
 import { FC } from 'react';
-import { Field, Form, Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
-
-// interface ChangeEmailFormProps {
-//   handleClose: () => void;
-// }
 
 interface ChangeEmailFormValues {
   password: string;
   email: string;
 }
 
-const ChangeEmailForm: FC<> = () => {
+const ChangeEmailForm: FC = () => {
   const initialValues: ChangeEmailFormValues = {
     password: '',
     email: '',
@@ -30,9 +26,6 @@ const ChangeEmailForm: FC<> = () => {
     };
     const uri = `/api/password_change`;
     const res = await fetch(uri, requestOptions);
-    // if (res.ok) {
-    //   handleClose();
-    // }
   };
   return (
     <>

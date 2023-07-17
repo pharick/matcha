@@ -10,3 +10,5 @@ export const withLogin = (page: NextPage) => {
   );
   return PageWithLogin;
 };
+
+export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));

@@ -12,6 +12,8 @@ import { RegistrationResponse } from '@/interfaces';
 import FieldComponent from '@/components/FieldComponent';
 import Modal from '@/components/Modal';
 import ResetPasswordForm from './ResetPasswordForm';
+import Alert from '@/components/Alert';
+import { sleep } from '@/helpers';
 
 interface LoginFormValues {
   username: string;
@@ -22,7 +24,8 @@ const LoginForm: FC = () => {
   const router = useRouter();
   const [passwordResetModalOpen, setPasswordResetModalOpen] =
     useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isValid, setIsValid] = useState<boolean>(true);
 
   const validationSchema = Yup.object({
     username: Yup.string().required("What's your username?"),
@@ -32,6 +35,7 @@ const LoginForm: FC = () => {
   const initialValues: LoginFormValues = { username: '', password: '' };
 
   const handleAutorization = async (values: LoginFormValues) => {
+    setIsLoading(true);
     const requestOptions = {
       method: 'POST',
       body: JSON.stringify({
@@ -41,15 +45,22 @@ const LoginForm: FC = () => {
     };
     const uri = `/api/login`;
     const res = await fetch(uri, requestOptions);
+    await sleep(500);
     if (res.ok) {
       const data = (await res.json()) as RegistrationResponse;
       localStorage.setItem('token', data.token);
       router.push('/profile');
-    }
+    } else setIsValid(false);
+    setIsLoading(false);
   };
 
   return (
     <>
+      {!isValid && (
+        <Alert type="error" className="mb-5">
+          Invalid Username or Password
+        </Alert>
+      )}
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -77,7 +88,12 @@ const LoginForm: FC = () => {
             >
               password
             </FieldComponent>
-            <Button type="submit" className="mb-[20px]">
+            <Button
+              type="submit"
+              disabled={isLoading}
+              loading={isLoading}
+              // className="mb-[20px] flex items-center justify-center"
+            >
               Log In
             </Button>
             <Link

@@ -1,10 +1,8 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useContext } from 'react';
-
 import Alert from '@/components/Alert';
-import Modal from '@/components/Modal';
 import ChangePasswordForm from './ChangePasswordForm';
 import ChangeEmailForm from './ChangeEmailForm';
 import Tabs from './Tabs';
@@ -14,11 +12,6 @@ import { UserContext } from '@/components/UserProvider';
 
 const Profile: FC = () => {
   const userContext = useContext(UserContext);
-
-  const [changePasswordFormOpen, setChangePasswordFormOpen] =
-    useState<boolean>(false);
-  const [changeEmailFormOpen, setChangeEmailFormOpen] =
-    useState<boolean>(false);
 
   const resendEmail = async () => {
     const token = localStorage.getItem('token');
@@ -63,44 +56,8 @@ const Profile: FC = () => {
               <ChangeEmailForm />
             </li>
           </ul>
-          {/* <ul>
-            <li>
-              <button
-                type="button"
-                onClick={() => setChangePasswordFormOpen(true)}
-                className="font-bold underline"
-              >
-                Change password
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                onClick={() => setChangeEmailFormOpen(true)}
-                className="font-bold underline"
-              >
-                Change Email
-              </button>
-            </li>
-          </ul> */}
         </Tabs>
       )}
-{/* 
-      <Modal
-        isOpen={changePasswordFormOpen}
-        handleClose={() => setChangePasswordFormOpen(false)}
-      >
-        <ChangePasswordForm
-          handleClose={() => setChangePasswordFormOpen(false)}
-        />
-      </Modal>
-
-      <Modal
-        isOpen={changeEmailFormOpen}
-        handleClose={() => setChangeEmailFormOpen(false)}
-      >
-        <ChangeEmailForm handleClose={() => setChangeEmailFormOpen(false)} />
-      </Modal> */}
     </div>
   );
 };
