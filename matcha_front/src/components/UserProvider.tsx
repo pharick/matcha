@@ -10,7 +10,6 @@ import {
 } from 'react';
 import { CurrentUser } from '@/interfaces';
 import { useRouter, usePathname } from 'next/navigation';
-import { NextPage } from 'next';
 
 interface UserProviderProps {
   children?: ReactNode;
@@ -56,16 +55,6 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
-};
-
-export const withLogin = (page: NextPage) => {
-  const Page = page;
-  const PageWithLogin = () => (
-    <UserProvider>
-      <Page />
-    </UserProvider>
-  );
-  return PageWithLogin;
 };
 
 export default UserProvider;

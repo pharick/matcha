@@ -14,9 +14,11 @@ const Tabs: FC<TabsProps> = ({ children, captions }) => {
         {captions.map((caption, i) => (
           <li className="w-1/3" key={i}>
             <button
-              className={`h-full w-full border-brown/30 bg-green-1 font-bold hover:bg-neutral/50 ${
+              className={`h-full w-full border-brown/30 bg-green-1 p-2 font-bold ${
                 i < captions.length - 1 ? 'border-r' : ''
-              } ${i == index ? 'bg-green-2/50' : ''}`}
+              } ${i == index ? 'bg-green-2/50' : ''} ${
+                i != index ? 'hover:bg-neutral/50' : ''
+              }`}
               onClick={() => setIndex(i)}
             >
               {caption}

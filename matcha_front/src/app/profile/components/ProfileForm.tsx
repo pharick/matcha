@@ -1,13 +1,15 @@
 'use client';
+
 import { FC, useState } from 'react';
+import { Form, Formik } from 'formik';
+
 import { User } from '@/interfaces';
 import Button from '@/components/Button';
-import { Form, Formik } from 'formik';
 import Modal from '@/components/Modal';
+import FieldComponent from '@/components/FieldComponent';
 import ChangePasswordForm from './ChangePasswordForm';
 import ChangeEmailForm from './ChangeEmailForm';
 import GenderCheckBox from './GenderCheckBox';
-import FieldComponent from '@/components/FieldComponent';
 
 interface ProfileFormProps {
   user: User;
@@ -26,9 +28,10 @@ interface ProfileFormValues {
 }
 
 const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  console.log(isOpen);
+  const [changePasswordFormOpen, setChangePasswordFormOpen] =
+    useState<boolean>(false);
+  const [changeEmailFormOpen, setChangeEmailFormOpen] =
+    useState<boolean>(false);
 
   const initialValues: ProfileFormValues = {
     username: user.username,
@@ -69,9 +72,6 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
   return (
     <>
       <section className="mb-5">
-        {/* <h2 className="mb-3 border-b border-brown text-center text-xl font-bold">
-          Profile information
-        </h2> */}
         <Formik
           // validationSchema={validationSchema}
           initialValues={initialValues}
@@ -131,7 +131,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
             <div>
               <button
                 type="button"
-                onClick={() => setIsOpen(true)}
+                onClick={() => setChangePasswordFormOpen(true)}
                 className="font-bold underline"
               >
                 Change password
@@ -140,7 +140,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
             <div className="mb-3">
               <button
                 type="button"
-                onClick={() => setShowAlert(true)}
+                onClick={() => setChangeEmailFormOpen(true)}
                 className="font-bold underline"
               >
                 Change Email
@@ -152,26 +152,23 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
           </Form>
           {/* )} */}
         </Formik>
-        {/* <Button type="submit">Log Out</Button> */}
       </section>
 
-      {/* <section className="mb-3">
-        <h2 className="mb-3 border-b border-brown text-center text-xl font-bold">
-          Profile photos
-        </h2>
-        <PhotoUpload user={user} />
-      </section> */}
+      <Modal
+        isOpen={changePasswordFormOpen}
+        handleClose={() => setChangePasswordFormOpen(false)}
+      >
+        <ChangePasswordForm
+          handleClose={() => setChangePasswordFormOpen(false)}
+        />
+      </Modal>
 
-      {isOpen && (
-        <Modal handleClose={() => setIsOpen(false)}>
-          <ChangePasswordForm handleClose={() => setIsOpen(false)} />
-        </Modal>
-      )}
-      {showAlert && (
-        <Modal handleClose={() => setShowAlert(false)}>
-          <ChangeEmailForm handleClose={() => setShowAlert(false)} />
-        </Modal>
-      )}
+      <Modal
+        isOpen={changeEmailFormOpen}
+        handleClose={() => setChangeEmailFormOpen(false)}
+      >
+        <ChangeEmailForm handleClose={() => setChangeEmailFormOpen(false)} />
+      </Modal>
     </>
   );
 };
