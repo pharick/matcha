@@ -7,7 +7,6 @@ interface BtnProps {
   className?: string;
   disabled?: boolean;
   loading?: boolean;
-  // handleLoading: () => void;
 }
 
 const Button: FC<BtnProps> = ({
@@ -29,7 +28,7 @@ const Button: FC<BtnProps> = ({
       disabled={disabled}
     >
       {loading && (
-        <div className="mr-5 h-[20px] w-[20px] animate-spin rounded-full border-4 border-neutral border-r-brown"></div>
+        <div className="mr-2 h-[20px] w-[20px] animate-spin rounded-full border-4 border-neutral border-r-brown"></div>
       )}
       {children}
     </button>

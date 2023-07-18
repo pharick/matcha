@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
         last_name VARCHAR(200) NOT NULL,
         active BOOLEAN NOT NULL DEFAULT false,
         gender GENDER,
+        gender_preferences GENDER[] DEFAULT '{}',
         biography TEXT
 );
 

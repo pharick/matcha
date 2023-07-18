@@ -18,13 +18,14 @@ func UserList(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	}
 	usersRet := lib.Map(users, func(user models.User) schemas.UserReturn {
 		return schemas.UserReturn{
-			Id:        user.Id,
-			Username:  user.Username,
-			Email:     user.Email,
-			FirstName: user.FirstName,
-			LastName:  user.LastName,
-			Gender:    user.Gender,
-			Biography: user.Biography,
+			Id:                user.Id,
+			Username:          user.Username,
+			Email:             user.Email,
+			FirstName:         user.FirstName,
+			LastName:          user.LastName,
+			Gender:            user.Gender,
+			GenderPreferences: user.GenderPreferences,
+			Biography:         user.Biography,
 		}
 	})
 	ret := schemas.UsersReturn{
@@ -47,14 +48,15 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		return nil, err
 	}
 	ret := schemas.UserReturn{
-		Id:        user.Id,
-		Username:  user.Username,
-		Email:     user.Email,
-		FirstName: user.FirstName,
-		LastName:  user.LastName,
-		Gender:    user.Gender,
-		Biography: user.Biography,
-		Tags:      tags,
+		Id:                user.Id,
+		Username:          user.Username,
+		Email:             user.Email,
+		FirstName:         user.FirstName,
+		LastName:          user.LastName,
+		Gender:            user.Gender,
+		GenderPreferences: user.GenderPreferences,
+		Biography:         user.Biography,
+		Tags:              tags,
 	}
 	return ret, nil
 }
@@ -76,6 +78,7 @@ func UpdateUser(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	user.FirstName = d.FirstName
 	user.LastName = d.LastName
 	user.Gender = d.Gender
+	user.GenderPreferences = d.GenderPreferences
 	user.Biography = d.Biography
 	user, err = env.Users.Update(user)
 	if err != nil {
@@ -86,14 +89,15 @@ func UpdateUser(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		return nil, err
 	}
 	ret := schemas.UserReturn{
-		Id:        user.Id,
-		Username:  user.Username,
-		Email:     user.Email,
-		FirstName: user.FirstName,
-		LastName:  user.LastName,
-		Gender:    user.Gender,
-		Biography: user.Biography,
-		Tags:      tags,
+		Id:                user.Id,
+		Username:          user.Username,
+		Email:             user.Email,
+		FirstName:         user.FirstName,
+		LastName:          user.LastName,
+		Gender:            user.Gender,
+		GenderPreferences: user.GenderPreferences,
+		Biography:         user.Biography,
+		Tags:              tags,
 	}
 	return ret, nil
 }

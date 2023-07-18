@@ -1,13 +1,14 @@
 'use client';
 
-import { FC } from 'react';
-import { Field, Form, Formik } from 'formik';
+import { FC, useState } from 'react';
+import { Form, Formik } from 'formik';
 
 import { User } from '@/interfaces';
 import RadioButton from '@/components/RadioButton';
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
 import Checkbox from '@/components/CheckBox';
+import { sleep } from '@/helpers';
 
 interface ProfileFormProps {
   user: User;
@@ -21,24 +22,25 @@ interface ProfileFormValues {
   gender_preferences: ('male' | 'female' | 'other' | '')[];
   biography: string;
   tags: string[];
-  image_main: string;
-  images?: string[];
 }
 
 const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const initialValues: ProfileFormValues = {
     username: user.username,
     first_name: user.first_name,
     last_name: user.last_name,
-    gender: 'female',
-    gender_preferences: [''],
-    biography: '',
-    tags: [''],
-    image_main: '',
-    images: [''],
+    gender: user.gender,
+    gender_preferences: user.gender_preferences,
+    biography: user.biography,
+    tags: [],
   };
 
   const handleSubmitUserFullInformation = async (values: ProfileFormValues) => {
+    console.log(values);
+
+    setIsLoading(true);
     const userToken = localStorage.getItem('token');
     if (!userToken) return;
     const requestOptions = {
@@ -47,6 +49,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
         first_name: values.first_name,
         last_name: values.last_name,
         gender: values.gender,
+        gender_preferences: values.gender_preferences,
         biography: values.biography,
         tags: [],
       }),
@@ -60,6 +63,8 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
     if (res.ok) {
       console.log(res);
     }
+    await sleep(500);
+    setIsLoading(false);
   };
 
   return (
@@ -77,6 +82,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
               label="Username"
               name="username"
               className="mb-3"
+              disabled={true}
             >
               Username
             </FieldComponent>
@@ -97,7 +103,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
               Last Name
             </FieldComponent>
             <FieldComponent
-              type="text"
+              type="textarea"
               label="Biography"
               name="biography"
               className="mb-3"
@@ -129,21 +135,26 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
             </div>
 
             <div className="mb-3 flex items-center justify-between">
-              <h3 className="font-bold">Sexual preferences</h3>
+              <h3 className="font-bold">Gender preferences</h3>
               <div className="flex">
-                <Checkbox name="sex-preferences" value="male">
+                <Checkbox name="gender_preferences" value="male">
                   Male
                 </Checkbox>
-                <Checkbox name="sex-preferences" value="female">
+                <Checkbox name="gender_preferences" value="female">
                   Female
                 </Checkbox>
-                <Checkbox name="sex-preferences" value="other">
+                <Checkbox name="gender_preferences" value="other">
                   Other
                 </Checkbox>
               </div>
             </div>
 
-            <Button type="submit" className="mx-auto">
+            <Button
+              loading={isLoading}
+              disabled={isLoading}
+              type="submit"
+              className="mx-auto"
+            >
               Save
             </Button>
           </Form>

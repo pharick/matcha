@@ -1,12 +1,15 @@
 package schemas
 
 type CurrenUserReturn struct {
-	Id        int    `json:"id"`
-	Username  string `json:"username"`
-	Active    bool   `json:"active"`
-	Email     string `json:"email"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
+	Id                int      `json:"id"`
+	Username          string   `json:"username"`
+	Active            bool     `json:"active"`
+	Email             string   `json:"email"`
+	FirstName         string   `json:"first_name"`
+	LastName          string   `json:"last_name"`
+	Gender            string   `json:"gender"`
+	GenderPreferences []string `json:"gender_preferences"`
+	Biography         string   `json:"biography"`
 }
 
 type RegistrationData struct {

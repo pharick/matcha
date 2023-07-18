@@ -9,7 +9,8 @@ interface FieldProps extends PropsWithChildren {
   errors?: string;
   touched?: boolean;
   className?: string;
-  type: 'text' | 'password' | 'email';
+  type: 'text' | 'password' | 'email' | 'textarea';
+  disabled?: boolean;
 }
 
 const FieldComponent: FC<FieldProps> = ({
@@ -20,6 +21,7 @@ const FieldComponent: FC<FieldProps> = ({
   touched,
   className,
   type,
+  disabled,
 }) => {
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
 
@@ -36,6 +38,7 @@ const FieldComponent: FC<FieldProps> = ({
       )}
       <div>
         <Field
+          as={type == 'textarea' ? 'textarea' : ''}
           type={
             type == 'password' && passwordShown
               ? 'text'
@@ -46,7 +49,12 @@ const FieldComponent: FC<FieldProps> = ({
           id={name}
           name={name}
           placeholder={children}
-          className="block h-[50px] w-full items-center rounded-[20px] border border-none bg-transparent bg-gradient-radial from-green-1/70 to-neutral/30 text-center"
+          className={`block w-full items-center rounded-[20px] border border-none bg-transparent bg-gradient-radial from-green-1/70 to-neutral/30 ${
+            type == 'textarea'
+              ? 'h-[120px] resize-none p-3 text-left'
+              : 'h-[50px] text-center'
+          }`}
+          disabled={disabled}
         />
         {type === 'password' && (
           <button

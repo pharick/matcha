@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"fmt"
 	"matcha_api/errors"
 	"matcha_api/lib"
@@ -193,8 +194,11 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		return nil, err
 	}
 	user, err := env.Users.GetOneByUsername(d.Username)
-	if err != nil {
+	if err == sql.ErrNoRows {
 		return nil, errors.HttpError{Status: 401, Body: nil}
+	}
+	if err != nil {
+		return nil, err
 	}
 	if !lib.CheckPasswordHash(d.Password, user.PasswordHash) {
 		return nil, errors.HttpError{Status: 401, Body: nil}
@@ -216,12 +220,15 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 func WhoAmI(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	user := r.Context().Value(ContextKey("User")).(models.User)
 	ret := schemas.CurrenUserReturn{
-		Id:        user.Id,
-		Username:  user.Username,
-		Active:    user.Active,
-		Email:     user.Email,
-		FirstName: user.FirstName,
-		LastName:  user.LastName,
+		Id:                user.Id,
+		Username:          user.Username,
+		Active:            user.Active,
+		Email:             user.Email,
+		FirstName:         user.FirstName,
+		LastName:          user.LastName,
+		Gender:            user.Gender,
+		GenderPreferences: user.GenderPreferences,
+		Biography:         user.Biography,
 	}
 	return ret, nil
 }
