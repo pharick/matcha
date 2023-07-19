@@ -1,4 +1,4 @@
-import { Field } from 'formik';
+import { Field, FieldArray } from 'formik';
 import { FC, PropsWithChildren, useState } from 'react';
 
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
@@ -7,7 +7,7 @@ interface FieldProps extends PropsWithChildren {
   name: string;
   label?: string;
   errors?: string | string[];
-  touched?: boolean | string[];
+  touched?: boolean;
   className?: string;
   type: 'text' | 'password' | 'email' | 'textarea';
   disabled?: boolean;
@@ -28,6 +28,7 @@ const FieldComponent: FC<FieldProps> = ({
   const togglePassword = () => {
     setPasswordShown(!passwordShown);
   };
+
 
   return (
     <div className={`${className ?? ''} relative`}>

@@ -1,7 +1,7 @@
 'use client';
 
 import { FC, useState } from 'react';
-import { Form, Formik } from 'formik';
+import { FieldArray, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
 import { User } from '@/interfaces';
@@ -54,9 +54,10 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
       .required("Can not be blank")
       .min(2, 'Biography must be more than 2 characters')
       .max(200, 'Biography must be not more than 200 characters'),
-    tags: Yup.array().of(Yup.string()).required('Can not be blank')
+    tags: Yup.array().of(Yup.string().required('Can not be blank'))
       .min(1, 'Write minimum 1 tag')
-      .max(10, 'Only 10 tags are allowed'),
+      .max(10, 'Only 10 tags are allowed')
+      .required('Can not be blank'),
     gender: Yup.string().required('Please choose your gender').oneOf(['male', 'female', 'other']),
     gender_preferences: Yup.array().required('Choose at least one')
     .min(1, 'Choose at least 1 gender preferences')
@@ -148,13 +149,14 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
               <FieldComponent
                 type="text"
                 label="Interests"
-                name="tags[]"
+                name="tags"
                 className="mb-3"
                 errors={errors.tags}
                 touched={touched.tags}
               >
                 use #tags
               </FieldComponent>
+              <FieldArray></FieldArray>
 
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="font-bold">Gender</h3>
