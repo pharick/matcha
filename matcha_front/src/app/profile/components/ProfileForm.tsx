@@ -54,9 +54,8 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
       .required("Can not be blank")
       .min(2, 'Biography must be more than 2 characters')
       .max(200, 'Biography must be not more than 200 characters'),
-    tags: Yup.array().of(Yup.string().required('Can not be blank'))
+    tags: Yup.array().of(Yup.string())
       .min(1, 'Write minimum 1 tag')
-      .max(10, 'Only 10 tags are allowed')
       .required('Can not be blank'),
     gender: Yup.string().required('Please choose your gender').oneOf(['male', 'female', 'other']),
     gender_preferences: Yup.array().required('Choose at least one')
@@ -149,7 +148,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
               <FieldComponent
                 type="text"
                 label="Interests"
-                name="tags"
+                name="tags[]"
                 className="mb-3"
                 errors={errors.tags}
                 touched={touched.tags}
