@@ -6,8 +6,8 @@ import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 interface FieldProps extends PropsWithChildren {
   name: string;
   label?: string;
-  errors?: string;
-  touched?: boolean;
+  errors?: string | string[];
+  touched?: boolean | string[];
   className?: string;
   type: 'text' | 'password' | 'email' | 'textarea';
   disabled?: boolean;

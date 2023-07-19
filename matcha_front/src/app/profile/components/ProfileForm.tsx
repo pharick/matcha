@@ -2,6 +2,7 @@
 
 import { FC, useState } from 'react';
 import { Form, Formik } from 'formik';
+import * as Yup from 'yup';
 
 import { User } from '@/interfaces';
 import RadioButton from '@/components/RadioButton';
@@ -37,6 +38,30 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
     tags: [],
   };
 
+  const validationSchema = Yup.object({
+    username: Yup.string().required('Can not be blank'),
+    firstName: Yup.string()
+      .required("Can not be blank")
+      .min(2, 'First name must be between 2 and 16 characters')
+      .max(16, 'First name must be between 2 and 16 characters')
+      .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed '),
+    lastName: Yup.string()
+      .required("Can not be blank")
+      .min(2, 'Last name must be between 2 and 16 characters')
+      .max(16, 'Last name must be between 2 and 16 characters')
+      .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed '),
+    biography: Yup.string()
+      .required("Can not be blank")
+      .min(2, 'Biography must be more than 2 characters')
+      .max(200, 'Biography must be not more than 200 characters'),
+    tags: Yup.array().of(Yup.string()).required('Can not be blank')
+      .min(1, 'Write minimum 1 tag')
+      .max(10, 'Only 10 tags are allowed'),
+    gender: Yup.string().required('Please choose your gender').oneOf(['male', 'female', 'other']),
+    gender_preferences: Yup.array().required('Choose at least one')
+    .min(1, 'Choose at least 1 gender preferences')
+  });
+
   const handleSubmitUserFullInformation = async (values: ProfileFormValues) => {
     console.log(values);
 
@@ -71,94 +96,112 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
     <>
       <section className="mb-5">
         <Formik
-          // validationSchema={validationSchema}
+          validationSchema={validationSchema}
           initialValues={initialValues}
           onSubmit={handleSubmitUserFullInformation}
+          validateOnBlur={false}
+          validateOnChange={false}
         >
-          {/* {({ errors, touched }) => ( */}
-          <Form className="text-center">
-            <FieldComponent
-              type="text"
-              label="Username"
-              name="username"
-              className="mb-3"
-              disabled={true}
-            >
-              Username
-            </FieldComponent>
-            <FieldComponent
-              type="text"
-              label="First Name"
-              name="first_name"
-              className="mb-3"
-            >
-              First Name
-            </FieldComponent>
-            <FieldComponent
-              type="text"
-              label="Last Name"
-              name="last_name"
-              className="mb-3"
-            >
-              Last Name
-            </FieldComponent>
-            <FieldComponent
-              type="textarea"
-              label="Biography"
-              name="biography"
-              className="mb-3"
-            >
-              About me
-            </FieldComponent>
-            <FieldComponent
-              type="text"
-              label="Interests"
-              name="tags"
-              className="mb-3"
-            >
-              use #tags
-            </FieldComponent>
+          {({ errors, touched }) => (
+            <Form className="text-center">
+              <FieldComponent
+                type="text"
+                label="Username"
+                name="username"
+                className="mb-3"
+                disabled={true}
+                errors={errors.username}
+                touched={touched.username}
+              >
+                Username
+              </FieldComponent>
+              <FieldComponent
+                type="text"
+                label="First Name"
+                name="first_name"
+                className="mb-3"
+                errors={errors.first_name}
+                touched={touched.first_name}
+              >
+                First Name
+              </FieldComponent>
+              <FieldComponent
+                type="text"
+                label="Last Name"
+                name="last_name"
+                className="mb-3"
+                errors={errors.last_name}
+                touched={touched.last_name}
+              >
+                Last Name
+              </FieldComponent>
+              <FieldComponent
+                type="textarea"
+                label="Biography"
+                name="biography"
+                className="mb-3"
+                errors={errors.biography}
+                touched={touched.biography}
+              >
+                About me
+              </FieldComponent>
+              <FieldComponent
+                type="text"
+                label="Interests"
+                name="tags[]"
+                className="mb-3"
+                errors={errors.tags}
+                touched={touched.tags}
+              >
+                use #tags
+              </FieldComponent>
 
-            <div className="mb-3 flex items-center justify-between">
-              <h3 className="font-bold">Gender</h3>
-              <div className="flex rounded-md border border-brown">
-                <RadioButton name="gender" value="male">
-                  Male
-                </RadioButton>
-                <RadioButton name="gender" value="female">
-                  Female
-                </RadioButton>
-                <RadioButton name="gender" value="other">
-                  Other
-                </RadioButton>
+              <div className="mb-3 flex items-center justify-between">
+                <h3 className="font-bold">Gender</h3>
+                {errors.gender && touched.gender ? (
+                  <div className="py-1 text-center text-sm text-pink-800">{errors.gender}</div>
+                ) : null}
+                <div className="flex rounded-md border border-brown">
+                  <RadioButton name="gender" value="male">
+                    Male
+                  </RadioButton>
+                  <RadioButton name="gender" value="female">
+                    Female
+                  </RadioButton>
+                  <RadioButton name="gender" value="other">
+                    Other
+                  </RadioButton>
+                </div>
               </div>
-            </div>
 
-            <div className="mb-3 flex items-center justify-between">
-              <h3 className="font-bold">Gender preferences</h3>
-              <div className="flex">
-                <Checkbox name="gender_preferences" value="male">
-                  Male
-                </Checkbox>
-                <Checkbox name="gender_preferences" value="female">
-                  Female
-                </Checkbox>
-                <Checkbox name="gender_preferences" value="other">
-                  Other
-                </Checkbox>
+              <div className="mb-3 flex items-center justify-between">
+                <h3 className="font-bold">Gender preferences</h3>
+                {errors.gender_preferences && touched.gender_preferences ? (
+                  <div className="py-1 text-center text-sm text-pink-800">{errors.gender_preferences}</div>
+                ) : null}
+                <div className="flex">
+                  <Checkbox name="gender_preferences" value="male">
+                    Male
+                  </Checkbox>
+                  <Checkbox name="gender_preferences" value="female">
+                    Female
+                  </Checkbox>
+                  <Checkbox name="gender_preferences" value="other">
+                    Other
+                  </Checkbox>
+                </div>
               </div>
-            </div>
 
-            <Button
-              loading={isLoading}
-              disabled={isLoading}
-              type="submit"
-              className="mx-auto"
-            >
-              Save
-            </Button>
-          </Form>
-          {/* )} */}
+              <Button
+                loading={isLoading}
+                disabled={isLoading}
+                type="submit"
+                className="mx-auto"
+              >
+                Save
+              </Button>
+            </Form>
+          )}
         </Formik>
       </section>
     </>
