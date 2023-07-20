@@ -7,6 +7,7 @@ export interface User {
   gender: 'male' | 'female' | 'other' | '';
   gender_preferences: ('male' | 'female' | 'other')[];
   biography: string;
+  tags: string[];
 }
 
 export interface RegistrationResponse {

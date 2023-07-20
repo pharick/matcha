@@ -10,6 +10,7 @@ type CurrenUserReturn struct {
 	Gender            string   `json:"gender"`
 	GenderPreferences []string `json:"gender_preferences"`
 	Biography         string   `json:"biography"`
+	Tags              []string `json:"tags"`
 }
 
 type RegistrationData struct {

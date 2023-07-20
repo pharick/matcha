@@ -219,6 +219,10 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 
 func WhoAmI(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	user := r.Context().Value(ContextKey("User")).(models.User)
+	tags, err := env.Tags.GetAllByUserId(user.Id)
+	if err != nil {
+		return nil, err
+	}
 	ret := schemas.CurrenUserReturn{
 		Id:                user.Id,
 		Username:          user.Username,
@@ -229,6 +233,7 @@ func WhoAmI(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		Gender:            user.Gender,
 		GenderPreferences: user.GenderPreferences,
 		Biography:         user.Biography,
+		Tags:              tags,
 	}
 	return ret, nil
 }

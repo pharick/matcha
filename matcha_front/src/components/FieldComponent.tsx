@@ -1,4 +1,4 @@
-import { Field, FieldArray } from 'formik';
+import { Field } from 'formik';
 import { FC, PropsWithChildren, useState } from 'react';
 
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
@@ -29,7 +29,6 @@ const FieldComponent: FC<FieldProps> = ({
     setPasswordShown(!passwordShown);
   };
 
-
   return (
     <div className={`${className ?? ''} relative`}>
       {label && (
@@ -50,11 +49,11 @@ const FieldComponent: FC<FieldProps> = ({
           id={name}
           name={name}
           placeholder={children}
-          className={`block w-full items-center rounded-[20px] border border-none bg-transparent bg-gradient-radial from-green-1/70 to-neutral/30 ${
+          className={`block w-full items-center rounded-[20px] bg-transparent bg-gradient-radial from-green-1/70 to-neutral/30 ${
             type == 'textarea'
               ? 'h-[120px] resize-none p-3 text-left'
               : 'h-[50px] text-center'
-          }`}
+          } ${disabled ? 'text-gray-500' : ''}`}
           disabled={disabled}
         />
         {type === 'password' && (

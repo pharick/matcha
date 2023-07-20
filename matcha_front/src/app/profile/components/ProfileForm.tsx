@@ -1,7 +1,7 @@
 'use client';
 
 import { FC, useState } from 'react';
-import { FieldArray, Form, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
 import { User } from '@/interfaces';
@@ -10,6 +10,7 @@ import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
 import Checkbox from '@/components/CheckBox';
 import { sleep } from '@/helpers';
+import TagsField from '@/components/TagsField';
 
 interface ProfileFormProps {
   user: User;
@@ -17,10 +18,10 @@ interface ProfileFormProps {
 
 interface ProfileFormValues {
   username: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   gender: 'male' | 'female' | 'other' | '';
-  gender_preferences: ('male' | 'female' | 'other' | '')[];
+  genderPreferences: ('male' | 'female' | 'other' | '')[];
   biography: string;
   tags: string[];
 }
@@ -30,36 +31,37 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
 
   const initialValues: ProfileFormValues = {
     username: user.username,
-    first_name: user.first_name,
-    last_name: user.last_name,
+    firstName: user.first_name,
+    lastName: user.last_name,
     gender: user.gender,
-    gender_preferences: user.gender_preferences,
+    genderPreferences: user.gender_preferences,
     biography: user.biography,
-    tags: [],
+    tags: user.tags,
   };
 
   const validationSchema = Yup.object({
     username: Yup.string().required('Can not be blank'),
     firstName: Yup.string()
-      .required("Can not be blank")
+      .required('Can not be blank')
       .min(2, 'First name must be between 2 and 16 characters')
       .max(16, 'First name must be between 2 and 16 characters')
       .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed '),
     lastName: Yup.string()
-      .required("Can not be blank")
+      .required('Can not be blank')
       .min(2, 'Last name must be between 2 and 16 characters')
       .max(16, 'Last name must be between 2 and 16 characters')
       .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed '),
-    biography: Yup.string()
-      .required("Can not be blank")
-      .min(2, 'Biography must be more than 2 characters')
-      .max(200, 'Biography must be not more than 200 characters'),
-    tags: Yup.array().of(Yup.string())
-      .min(1, 'Write minimum 1 tag')
-      .required('Can not be blank'),
-    gender: Yup.string().required('Please choose your gender').oneOf(['male', 'female', 'other']),
-    gender_preferences: Yup.array().required('Choose at least one')
-    .min(1, 'Choose at least 1 gender preferences')
+    biography: Yup.string().max(
+      200,
+      'Biography must be not more than 200 characters'
+    ),
+    tags: Yup.array().of(Yup.string()),
+    gender: Yup.string()
+      .required('Please choose your gender')
+      .oneOf(['male', 'female', 'other']),
+    genderPreferences: Yup.array()
+      .required('Choose at least one')
+      .min(1, 'Choose at least 1 gender preferences'),
   });
 
   const handleSubmitUserFullInformation = async (values: ProfileFormValues) => {
@@ -71,12 +73,12 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
     const requestOptions = {
       method: 'PATCH',
       body: JSON.stringify({
-        first_name: values.first_name,
-        last_name: values.last_name,
+        first_name: values.firstName,
+        last_name: values.lastName,
         gender: values.gender,
-        gender_preferences: values.gender_preferences,
+        gender_preferences: values.genderPreferences,
         biography: values.biography,
-        tags: [],
+        tags: values.tags,
       }),
       headers: {
         Authorization: `Bearer ${userToken}`,
@@ -102,7 +104,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
           validateOnBlur={false}
           validateOnChange={false}
         >
-          {({ errors, touched }) => (
+          {({ errors, touched, setFieldValue }) => (
             <Form className="text-center">
               <FieldComponent
                 type="text"
@@ -118,20 +120,20 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
               <FieldComponent
                 type="text"
                 label="First Name"
-                name="first_name"
+                name="firstName"
                 className="mb-3"
-                errors={errors.first_name}
-                touched={touched.first_name}
+                errors={errors.firstName}
+                touched={touched.firstName}
               >
                 First Name
               </FieldComponent>
               <FieldComponent
                 type="text"
                 label="Last Name"
-                name="last_name"
+                name="lastName"
                 className="mb-3"
-                errors={errors.last_name}
-                touched={touched.last_name}
+                errors={errors.lastName}
+                touched={touched.lastName}
               >
                 Last Name
               </FieldComponent>
@@ -145,22 +147,23 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
               >
                 About me
               </FieldComponent>
-              <FieldComponent
-                type="text"
-                label="Interests"
-                name="tags[]"
+
+              <label htmlFor="tags" className="font-bold">
+                Interests
+              </label>
+              <Field
+                as={TagsField}
+                name="tags"
                 className="mb-3"
-                errors={errors.tags}
-                touched={touched.tags}
-              >
-                use #tags
-              </FieldComponent>
-              <FieldArray></FieldArray>
+                onChange={(value: string[]) => setFieldValue('tags', value)}
+              />
 
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="font-bold">Gender</h3>
                 {errors.gender && touched.gender ? (
-                  <div className="py-1 text-center text-sm text-pink-800">{errors.gender}</div>
+                  <div className="py-1 text-center text-sm text-pink-800">
+                    {errors.gender}
+                  </div>
                 ) : null}
                 <div className="flex rounded-md border border-brown">
                   <RadioButton name="gender" value="male">
@@ -177,17 +180,19 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
 
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="font-bold">Gender preferences</h3>
-                {errors.gender_preferences && touched.gender_preferences ? (
-                  <div className="py-1 text-center text-sm text-pink-800">{errors.gender_preferences}</div>
+                {errors.genderPreferences && touched.genderPreferences ? (
+                  <div className="py-1 text-center text-sm text-pink-800">
+                    {errors.genderPreferences}
+                  </div>
                 ) : null}
                 <div className="flex">
-                  <Checkbox name="gender_preferences" value="male">
+                  <Checkbox name="genderPreferences" value="male">
                     Male
                   </Checkbox>
-                  <Checkbox name="gender_preferences" value="female">
+                  <Checkbox name="genderPreferences" value="female">
                     Female
                   </Checkbox>
-                  <Checkbox name="gender_preferences" value="other">
+                  <Checkbox name="genderPreferences" value="other">
                     Other
                   </Checkbox>
                 </div>
