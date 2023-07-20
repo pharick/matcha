@@ -48,5 +48,8 @@ func main() {
 	mux.Handle(pat.Patch("/users/:username/photos/:id/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UpdatePhoto)})
 	mux.Handle(pat.Delete("/users/:username/photos/:id/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.RemovePhoto)})
 
+	// tags
+	mux.Handle(pat.Post("/tags/find/"), handlers.Handler{Env: env, Handle: handlers.FindTag})
+
 	http.ListenAndServe(":8000", mux)
 }

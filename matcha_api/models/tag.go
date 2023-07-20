@@ -51,6 +51,26 @@ func (m TagModel) Set(userId int, tagNames []string) ([]string, error) {
 	return insertedTagNames, nil
 }
 
+func (m TagModel) GetAllContains(value string) ([]string, error) {
+	tagNames := make([]string, 0)
+	rows, err := m.DB.Query(
+		"SELECT name FROM tags WHERE name LIKE '%' || $1 || '%'",
+		value,
+	)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var tag string
+		err := rows.Scan(&tag)
+		if err != nil {
+			return nil, err
+		}
+		tagNames = append(tagNames, tag)
+	}
+	return tagNames, nil
+}
+
 func (m TagModel) GetAllByUserId(userId int) ([]string, error) {
 	tagNames := make([]string, 0)
 	rows, err := m.DB.Query(

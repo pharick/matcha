@@ -49,7 +49,7 @@ const TagsField: FC<TagsFieldProps> = ({
       <input
         name={name}
         type="text"
-        className="mt-2 block h-[50px] w-full bg-transparent"
+        className="mt-2 block h-[50px] w-full rounded-b-[20px] bg-transparent text-center"
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         value={fieldVal}
