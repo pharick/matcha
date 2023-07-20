@@ -106,6 +106,7 @@ const TagsField: FC<TagsFieldProps> = ({
           >
             {val}
             <button
+              type="button"
               className="hover:text-gray-400"
               onClick={() => handleRemove(i)}
             >
