@@ -13,7 +13,6 @@ import {
 import { Photo, User } from '@/interfaces';
 import Modal from '@/components/Modal';
 import { useDrag, useDrop } from 'react-dnd';
-import { IconContext } from 'react-icons';
 import { BiX } from 'react-icons/bi';
 
 interface PhotoUploadItemProps {
@@ -62,21 +61,19 @@ const PhotoUploadItem: FC<PhotoUploadItemProps> = ({
         isOver ? 'translate-y-1 opacity-50' : ''
       } ${isDragging ? 'invisible' : ''}`}
     >
-      <IconContext.Provider value={{ color: 'white', size: '24px' }}>
-        <button
-          onClick={() => void handleRemove(photo.id)}
-          className="color-white absolute left-full top-0 z-50 -ml-3.5 -mt-1.5 hidden rounded-full bg-brown transition hover:rotate-90 group-hover:block"
-        >
-          <BiX />
-        </button>
-        <Image
-          src={`http://localhost${photo.url}`}
-          fill={true}
-          alt={`Photo ${photo.id}`}
-          className="rounded-md object-cover"
-          sizes="250px"
-        />
-      </IconContext.Provider>
+      <button
+        onClick={() => void handleRemove(photo.id)}
+        className="color-white absolute left-full top-0 z-50 -ml-3.5 -mt-1.5 hidden rounded-full bg-brown transition hover:rotate-90 group-hover:block"
+      >
+        <BiX color="white" size={24} />
+      </button>
+      <Image
+        src={`http://localhost${photo.url}`}
+        fill={true}
+        alt={`Photo ${photo.id}`}
+        className="rounded-md object-cover"
+        sizes="250px"
+      />
     </figure>
   );
 };
@@ -159,19 +156,23 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
 
   return (
     <>
-      <ul className="flex flex-wrap justify-center">
-        {photos
-          .sort((a, b) => a.index - b.index)
-          .map((photo) => (
-            <li key={photo.id}>
-              <PhotoUploadItem
-                photo={photo}
-                handleMove={handleMove}
-                handleRemove={handleRemove}
-              />
-            </li>
-          ))}
-      </ul>
+      {photos.length > 0 ? (
+        <ul className="flex flex-wrap justify-center">
+          {photos
+            .sort((a, b) => a.index - b.index)
+            .map((photo) => (
+              <li key={photo.id}>
+                <PhotoUploadItem
+                  photo={photo}
+                  handleMove={handleMove}
+                  handleRemove={handleRemove}
+                />
+              </li>
+            ))}
+        </ul>
+      ) : (
+        <p className="text-center">No photos in your profile yet</p>
+      )}
       <form className="mt-[20px] text-center">
         <label
           htmlFor="new-photo-input"
