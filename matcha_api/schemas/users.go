@@ -17,8 +17,8 @@ type UsersReturn struct {
 }
 
 type UpdateUserData struct {
-	FirstName         string   `json:"first_name" validate:"required"`
-	LastName          string   `json:"last_name" validate:"required"`
+	FirstName         string   `json:"first_name" validate:"required,alpha,min=2,max=16"`
+	LastName          string   `json:"last_name" validate:"required,alpha,min=2,max=16"`
 	Gender            string   `json:"gender" validate:"required,oneof=male female other"`
 	GenderPreferences []string `json:"gender_preferences" validate:"required,dive,oneof=male female other"`
 	Biography         string   `json:"biography"`
