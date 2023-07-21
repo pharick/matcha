@@ -102,7 +102,10 @@ func SendActivationEmail(env *Env, w http.ResponseWriter, r *http.Request) (any,
 		env.Settings.SMTPPassword,
 		user.Email,
 		"Matcha email verification",
-		fmt.Sprintf("Please, use this token to verify your email: %s", activation_token),
+		fmt.Sprintf(
+			"Follow this link to verify your email: %s/activate?token=%s",
+			env.Settings.FrontBaseUrl, activation_token,
+		),
 	)
 	if err != nil {
 		return nil, err
@@ -131,7 +134,10 @@ func SendPasswordResetEmail(env *Env, w http.ResponseWriter, r *http.Request) (a
 		env.Settings.SMTPPassword,
 		user.Email,
 		"Matcha password reset",
-		fmt.Sprintf("Please, use this token to reset your password: %s", reset_token),
+		fmt.Sprintf(
+			"Follow this link to reset your password: %s/resetpassword?token=%s",
+			env.Settings.FrontBaseUrl, reset_token,
+		),
 	)
 	if err != nil {
 		return nil, err

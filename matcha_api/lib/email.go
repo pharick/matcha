@@ -25,6 +25,3 @@ func SendEmail(
 	)
 	return err
 }
-
-// text := fmt.Sprintf("Please, use this token to verify your email: %s", token)
-// msg := fmt.Sprintf("Subject: Matcha email verification\n\n%s", text)

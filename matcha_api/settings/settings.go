@@ -17,6 +17,7 @@ type Settings struct {
 	SMTPPort         int    `koanf:"SMTP_PORT" validate:"required"`
 	SMTPEmail        string `koanf:"SMTP_EMAIL" validate:"required"`
 	SMTPPassword     string `koanf:"SMTP_PASSWORD" validate:"required"`
+	FrontBaseUrl     string `koanf:"FRONT_BASE_URL" validate:"required"`
 }
 
 func LoadSettings() (settings Settings, err error) {
