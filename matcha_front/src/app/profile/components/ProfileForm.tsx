@@ -65,8 +65,6 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
   });
 
   const handleSubmitUserFullInformation = async (values: ProfileFormValues) => {
-    console.log(values);
-
     setIsLoading(true);
     const userToken = localStorage.getItem('token');
     if (!userToken) return;
@@ -85,11 +83,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
       },
     };
     const uri = `/api/users/${user.username}`;
-    const res = await fetch(uri, requestOptions);
-    console.log(await res.json());
-    if (res.ok) {
-      console.log(res);
-    }
+    await fetch(uri, requestOptions);
     await sleep(500);
     setIsLoading(false);
   };
