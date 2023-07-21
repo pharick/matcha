@@ -191,15 +191,17 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
       </form>
 
       <Modal isOpen={!!newPhoto} handleClose={() => setNewPhoto(undefined)}>
-        <figure className="relative h-[250px] w-[200px]">
+        <figure className="relative mb-2 h-[400px] w-full">
           <Image
             src={newPhoto ? URL.createObjectURL(newPhoto) : '#'}
             fill={true}
             alt="Photo to upload"
-            className="object-cover"
+            className="object-contain"
           />
         </figure>
-        <Button onClick={() => void handleNewPhotoUpload()}>Upload</Button>
+        <Button onClick={() => void handleNewPhotoUpload()} className="mx-auto">
+          Upload
+        </Button>
       </Modal>
     </>
   );
