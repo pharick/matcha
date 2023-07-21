@@ -53,10 +53,10 @@ func (m TagModel) Set(userId int, tagNames []string) ([]string, error) {
 	return insertedTagNames, nil
 }
 
-func (m TagModel) GetAllContains(value string) ([]string, error) {
+func (m TagModel) GetSuggestions(value string) ([]string, error) {
 	tagNames := make([]string, 0)
 	rows, err := m.DB.Query(
-		"SELECT name FROM tags WHERE name LIKE '%' || $1 || '%'",
+		"SELECT name FROM tags WHERE name LIKE '%' || $1 || '%' LIMIT 5",
 		value,
 	)
 	if err != nil {

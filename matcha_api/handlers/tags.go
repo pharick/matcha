@@ -12,7 +12,7 @@ func FindTag(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
-	tags, err := env.Tags.GetAllContains(d.Value)
+	tags, err := env.Tags.GetSuggestions(d.Value)
 	if err != nil {
 		return nil, err
 	}
