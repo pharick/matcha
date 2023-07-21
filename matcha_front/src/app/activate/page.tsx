@@ -1,5 +1,5 @@
 'use client';
-import { withLogin } from '@/components/UserProvider';
+import { withLogin } from '@/helpers';
 import { NextPage } from 'next';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
