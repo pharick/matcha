@@ -193,6 +193,24 @@ func PasswordChange(env *Env, w http.ResponseWriter, r *http.Request) (any, erro
 	return nil, nil
 }
 
+func EmailChange(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	var d schemas.ChangeEmailData
+	err := lib.GetJSONBody(r, &d)
+	if err != nil {
+		return nil, err
+	}
+	user := r.Context().Value(ContextKey("User")).(models.User)
+	if !lib.CheckPasswordHash(d.Password, user.PasswordHash) {
+		return nil, errors.HttpError{Status: 403, Body: nil}
+	}
+	user.Email = d.Email
+	user, err = env.Users.Update(user)
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
+}
+
 func Login(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	var d schemas.LoginData
 	err := lib.GetJSONBody(r, &d)
