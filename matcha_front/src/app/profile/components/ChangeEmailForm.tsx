@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { Form, Formik } from 'formik';
+
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
 
@@ -30,7 +31,7 @@ const ChangeEmailForm: FC = () => {
   return (
     <>
       <h3 className="my-5 border-b-2 border-brown pb-1 text-center text-xl text-brown">
-        Change e-mail
+        Change email
       </h3>
       <Formik
         // validationSchema={validationSchema}
