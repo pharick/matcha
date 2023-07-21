@@ -119,9 +119,7 @@ const LoginForm: FC = () => {
         isOpen={passwordResetModalOpen}
         handleClose={() => setPasswordResetModalOpen(false)}
       >
-        <ResetPasswordForm
-          handleClose={() => setPasswordResetModalOpen(false)}
-        />
+        <ResetPasswordForm />
       </Modal>
     </>
   );

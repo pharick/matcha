@@ -77,13 +77,26 @@ func (m UserModel) Update(
 	var user User
 	var gender sql.NullString
 	var biography sql.NullString
-	err := m.DB.QueryRow(
-		`UPDATE users SET username = $2, email = $3, active = $4, password_hash = $5, 
-		first_name = $6, last_name = $7, gender = $8, gender_preferences = $9, biography = $10 
-		WHERE id = $1
-		RETURNING id, username, email, active, password_hash, first_name, last_name, gender, gender_preferences, biography`,
-		d.Id, d.Username, d.Email, d.Active, d.PasswordHash, d.FirstName, d.LastName, d.Gender, pq.Array(d.GenderPreferences), d.Biography,
-	).Scan(
+
+	query := `UPDATE users SET username = $2, email = $3, active = $4, password_hash = $5, 
+	          first_name = $6, last_name = $7, gender = $8, gender_preferences = $9, biography = $10 
+	          WHERE id = $1
+	          RETURNING id, username, email, active, password_hash, first_name, last_name, gender, gender_preferences, biography`
+
+	var res *sql.Row
+	if len(d.Gender) > 0 {
+		res = m.DB.QueryRow(
+			query,
+			d.Id, d.Username, d.Email, d.Active, d.PasswordHash, d.FirstName, d.LastName, d.Gender, pq.Array(d.GenderPreferences), d.Biography,
+		)
+	} else {
+		res = m.DB.QueryRow(
+			query,
+			d.Id, d.Username, d.Email, d.Active, d.PasswordHash, d.FirstName, d.LastName, nil, pq.Array(d.GenderPreferences), d.Biography,
+		)
+	}
+
+	err := res.Scan(
 		&user.Id,
 		&user.Username,
 		&user.Email,

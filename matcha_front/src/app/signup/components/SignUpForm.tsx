@@ -45,9 +45,7 @@ const SignUpForm: FC = () => {
       .required("You'll need this when if you ever forgot your password")
       .email('Enter a valid email address'),
     password: Yup.string()
-      .required(
-        'Your password shoud be at least six characters long and contain at least one number, letter and punctuation mark (such as ! and &)'
-      )
+      .required(passwordRequiremets)
       .min(6, 'Password must be atleast 6 characters')
       .max(36, "Password can't be more than 36 characters")
       .matches(/[0-9]/, passwordRequiremets)
