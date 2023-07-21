@@ -98,29 +98,31 @@ const TagsField: FC<TagsFieldProps> = ({
         className ?? ''
       } items-center rounded-[20px] bg-transparent bg-gradient-radial from-green-1/70 to-neutral/30`}
     >
-      <ul className="flex flex-wrap">
-        {value.map((val, i) => (
-          <li
-            key={i}
-            className="ml-2 mt-2 flex items-center rounded bg-brown px-1 py-0.5 text-white"
-          >
-            {val}
-            <button
-              type="button"
-              className="hover:text-gray-400"
-              onClick={() => handleRemove(i)}
+      {value.length > 0 && (
+        <ul className="mb-2 flex flex-wrap">
+          {value.map((val, i) => (
+            <li
+              key={i}
+              className="ml-2 mt-2 flex items-center rounded bg-brown px-1 py-0.5 text-white"
             >
-              <BiX />
-            </button>
-          </li>
-        ))}
-      </ul>
+              {val}
+              <button
+                type="button"
+                className="hover:text-gray-400"
+                onClick={() => handleRemove(i)}
+              >
+                <BiX />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
 
       <input
         name={name}
         type="text"
         placeholder="Enter new interest and press enter"
-        className="mt-2 block h-[50px] w-full rounded-[20px] bg-transparent text-center"
+        className="block h-[50px] w-full rounded-[20px] bg-transparent text-center"
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         value={fieldVal}

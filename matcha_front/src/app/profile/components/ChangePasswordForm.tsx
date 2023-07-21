@@ -9,7 +9,7 @@ interface ChangePasswordFormValues {
   confNewPassword: string;
 }
 
-const ChangePasswordForm: FC<> = () => {
+const ChangePasswordForm: FC = () => {
   const initialValues: ChangePasswordFormValues = {
     oldPassword: '',
     newPassword: '',

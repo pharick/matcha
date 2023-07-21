@@ -1,12 +1,13 @@
 'use client';
-import Button from '@/components/Button';
-import * as Yup from 'yup';
-import FieldComponent from '@/components/FieldComponent';
-
-import { Formik, Form } from 'formik';
-import { RegistrationResponse } from '../../../interfaces';
 import { useRouter } from 'next/navigation';
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import * as Yup from 'yup';
+import { Formik, Form } from 'formik';
+
+import FieldComponent from '@/components/FieldComponent';
+import Button from '@/components/Button';
+import { RegistrationResponse } from '@/interfaces';
+import { sleep } from '@/helpers';
 
 interface SignUpFormValues {
   username: string;
@@ -19,47 +20,54 @@ interface SignUpFormValues {
 
 const SignUpForm: FC = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const passwordRequiremets =
+    'Password shoud be at least six characters long and contain at least one number, letter and punctuation mark (such as ! and &)';
 
   const validationSchema = Yup.object({
     username: Yup.string()
-      .required("What's your name?")
-      .min(2, 'First name must be between 2 and 16 characters')
-      .max(16, 'First name must be between 2 and 16 characters')
-      .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed '),
+      .required("What's your username?")
+      .min(2, 'Username must be between 2 and 16 characters')
+      .max(16, 'Username must be between 2 and 16 characters')
+      .matches(/^[aA-zZ]*$/, 'Numbers and special characters are not allowed'),
     firstName: Yup.string()
-      .required("What's your First name?")
+      .required("What's your first name?")
       .min(2, 'First name must be between 2 and 16 characters')
       .max(16, 'First name must be between 2 and 16 characters')
-      .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed '),
+      .matches(/^[aA-zZ]*$/, 'Numbers and special characters are not allowed'),
     lastName: Yup.string()
-      .required("What's your Last name?")
+      .required("What's your last name?")
       .min(2, 'First name must be between 2 and 16 characters')
       .max(16, 'First name must be between 2 and 16 characters')
-      .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed '),
+      .matches(/^[aA-zZ]*$/, 'Numbers and special characters are not allowed'),
     email: Yup.string()
-      .required(
-        "You'll need this when you log in and if you ever need to reset your password."
-      )
-      .email('Enter a valid email address.'),
+      .required("You'll need this when if you ever forgot your password")
+      .email('Enter a valid email address'),
     password: Yup.string()
       .required(
-        'Enter a combination of at least six numbers,letters and punctuation marks(such as ! and &).'
+        'Your password shoud be at least six characters long and contain at least one number, letter and punctuation mark (such as ! and &)'
       )
-      .min(6, 'Password must be atleast 6 characters.')
-      .max(36, "Password can't be more than 36 characters"),
+      .min(6, 'Password must be atleast 6 characters')
+      .max(36, "Password can't be more than 36 characters")
+      .matches(/[0-9]/, passwordRequiremets)
+      .matches(/[a-z]/, passwordRequiremets)
+      .matches(/[A-Z]/, passwordRequiremets)
+      .matches(/[.#!$%^&*;:{}\-_~()]/, passwordRequiremets),
     confPassword: Yup.string()
-      .required('Confirm your password.')
-      .oneOf([Yup.ref('password')], 'Passwords must match.'),
+      .required('Confirm your password')
+      .oneOf([Yup.ref('password')], 'Passwords does not match'),
   });
 
   const handleAutorization = async (values: SignUpFormValues) => {
+    setIsLoading(true);
     const requestOptions = {
       method: 'POST',
       body: JSON.stringify({
-        username: values.username,
+        username: values.username.toLowerCase(),
         first_name: values.firstName,
         last_name: values.lastName,
-        email: values.email,
+        email: values.email.toLowerCase(),
         password: values.password,
       }),
     };
@@ -71,6 +79,8 @@ const SignUpForm: FC = () => {
       localStorage.setItem('token', data.token);
       router.push('/profile');
     }
+    await sleep(500);
+    setIsLoading(false);
   };
 
   const initialValues: SignUpFormValues = {
@@ -88,6 +98,7 @@ const SignUpForm: FC = () => {
       initialValues={initialValues}
       onSubmit={handleAutorization}
       validateOnBlur={false}
+      validateOnChange={false}
     >
       {({ errors, touched }) => (
         <Form>
@@ -119,7 +130,7 @@ const SignUpForm: FC = () => {
             Last Name
           </FieldComponent>
           <FieldComponent
-            type="email"
+            type="text"
             name="email"
             errors={errors.email}
             touched={touched.email}
@@ -145,7 +156,7 @@ const SignUpForm: FC = () => {
           >
             Confirm Password
           </FieldComponent>
-          <Button className="mx-auto" type="submit">
+          <Button className="mx-auto" type="submit" loading={isLoading}>
             Confirm
           </Button>
         </Form>

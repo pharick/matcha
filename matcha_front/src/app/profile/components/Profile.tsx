@@ -48,14 +48,11 @@ const Profile: FC = () => {
         >
           <ProfileForm user={userContext.user} />
           <PhotoUpload user={userContext.user} />
-          <ul>
-            <li>
-              <ChangePasswordForm />
-            </li>
-            <li>
-              <ChangeEmailForm />
-            </li>
-          </ul>
+
+          <div>
+            <ChangePasswordForm />
+            <ChangeEmailForm />
+          </div>
         </Tabs>
       )}
     </div>

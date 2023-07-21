@@ -38,7 +38,7 @@ const ChangeEmailForm: FC = () => {
         onSubmit={handleChangeEmail}
       >
         {/* {({ errors, touched }) => ( */}
-        <Form className="[&>*]:mb-[30px]">
+        <Form>
           <FieldComponent type="email" name="email" className="mb-3">
             Email
           </FieldComponent>

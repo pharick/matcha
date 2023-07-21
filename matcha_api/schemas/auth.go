@@ -14,11 +14,11 @@ type CurrenUserReturn struct {
 }
 
 type RegistrationData struct {
-	Username  string `json:"username" validate:"required,lowercase"`
+	Username  string `json:"username" validate:"required,lowercase,alpha,min=2,max=16"`
 	Email     string `json:"email" validate:"required,email,lowercase"`
-	Password  string `json:"password" validate:"required"`
-	FirstName string `json:"first_name" validate:"required"`
-	LastName  string `json:"last_name" validate:"required"`
+	Password  string `json:"password" validate:"required,min=6,max=36,containsany=abcdefghijklmnopqrstuvwxyz,containsany=ABCDEFGHIJKLMNOPQRSTUVWXYZ,containsany=.#!$%^&*;:{}-_~()"`
+	FirstName string `json:"first_name" validate:"required,alpha,min=2,max=16"`
+	LastName  string `json:"last_name" validate:"required,alpha,min=2,max=16"`
 }
 
 type RegistrationReturn struct {
