@@ -119,7 +119,7 @@ const TagsField: FC<TagsFieldProps> = ({
       <input
         name={name}
         type="text"
-        placeholder="Enter new interest"
+        placeholder="Enter new interest and press enter"
         className="mt-2 block h-[50px] w-full rounded-[20px] bg-transparent text-center"
         onChange={handleChange}
         onKeyDown={handleKeyDown}
