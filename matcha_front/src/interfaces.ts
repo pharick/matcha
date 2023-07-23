@@ -34,3 +34,8 @@ export interface Position {
   longitude: number;
   latitude: number;
 }
+
+export interface GeolocationDBResponse {
+  longitude: number;
+  latitude: number;
+}

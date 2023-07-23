@@ -1,7 +1,7 @@
 'use client';
 
 import { NextPage } from 'next';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { Map, View } from 'ol';
 
 import OSM from 'ol/source/OSM';

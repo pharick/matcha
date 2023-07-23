@@ -8,7 +8,8 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { Position } from '@/interfaces';
+
+import { GeolocationDBResponse, Position } from '@/interfaces';
 
 interface PositionProviderProps {
   children?: ReactNode;
@@ -29,12 +30,24 @@ const PositionProvider: FC<PositionProviderProps> = ({ children }) => {
   });
 
   const getPosition = async () => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setPosition({
-        longitude: position.coords.longitude,
-        latitude: position.coords.latitude,
-      });
-    });
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setPosition({
+          longitude: position.coords.longitude,
+          latitude: position.coords.latitude,
+        });
+      },
+      async (error) => {
+        console.log(error);
+        if (!process.env.NEXT_PUBLIC_GEOLOCATIONDB_KEY) return;
+        const res = await fetch(
+          `https://geolocation-db.com/json/${process.env.NEXT_PUBLIC_GEOLOCATIONDB_KEY}`
+        );
+        if (!res.ok) return;
+        const data = (await res.json()) as GeolocationDBResponse;
+        setPosition({ longitude: data.longitude, latitude: data.latitude });
+      }
+    );
   };
 
   useEffect(() => {
