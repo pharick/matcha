@@ -29,3 +29,8 @@ export interface Photo {
 export interface UserPhotos {
   list: Photo[];
 }
+
+export interface Position {
+  longitude: number;
+  latitude: number;
+}
