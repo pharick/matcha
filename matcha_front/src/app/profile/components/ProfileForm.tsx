@@ -3,6 +3,7 @@
 import { FC, useState } from 'react';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import { useRouter } from 'next/navigation';
 
 import { User } from '@/interfaces';
 import RadioButton from '@/components/RadioButton';
@@ -27,6 +28,7 @@ interface ProfileFormValues {
 }
 
 const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const initialValues: ProfileFormValues = {
@@ -83,8 +85,9 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
       },
     };
     const uri = `/api/users/${user.username}`;
-    await fetch(uri, requestOptions);
+    const res = await fetch(uri, requestOptions);
     await sleep(500);
+    if (res.ok) router.push(`/users/${user.username}`);
     setIsLoading(false);
   };
 

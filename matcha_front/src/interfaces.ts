@@ -25,3 +25,7 @@ export interface Photo {
   index: number;
   url: string;
 }
+
+export interface UserPhotos {
+  list: Photo[];
+}
