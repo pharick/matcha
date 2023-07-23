@@ -17,6 +17,7 @@ interface UserProviderProps {
 
 interface UserContextInterface {
   user?: CurrentUser;
+  getUser?: () => void;
 }
 
 export const UserContext = createContext<UserContextInterface>({});
@@ -26,30 +27,32 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const router = useRouter();
   const pathName = usePathname();
 
+  const getUser = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+    const res = await fetch(`/api/whoami`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) {
+      const user = (await res.json()) as CurrentUser;
+      setUser(user);
+    } else {
+      router.push('/login');
+      return;
+    }
+  };
+
   useEffect(() => {
-    const getUser = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        router.push('/login');
-        return;
-      }
-      const res = await fetch(`/api/whoami`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        const user = (await res.json()) as CurrentUser;
-        setUser(user);
-      } else {
-        router.push('/login');
-        return;
-      }
-    };
     void getUser();
   }, [router, pathName]);
 
   const value = useMemo(
     () => ({
       user,
+      getUser,
     }),
     [user]
   );

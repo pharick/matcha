@@ -1,12 +1,12 @@
-import { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { useRouter } from 'next/navigation';
 
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
 import { User } from '@/interfaces';
 import Alert from '@/components/Alert';
+import { UserContext } from '@/components/UserProvider';
 
 interface ChangeEmailFormProps {
   user: User;
@@ -23,7 +23,7 @@ enum Result {
 }
 
 const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ user }) => {
-  const router = useRouter();
+  const userContext = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<Result>();
 
@@ -53,7 +53,7 @@ const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ user }) => {
     const res = await fetch(uri, requestOptions);
     setResult(res.ok ? Result.Valid : Result.Invalid);
     setIsLoading(false);
-    if (res.ok) router.refresh();
+    if (res.ok && userContext.getUser) userContext.getUser();
   };
   return (
     <>
