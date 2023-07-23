@@ -29,7 +29,7 @@ const UserProfile: FC<UserProfileProps> = ({ username }) => {
   }, [username]);
 
   return (
-    <div className="mr-5 h-screen w-[350px] rounded-xl border border-none bg-green-5/50 px-5 py-5">
+    <div className="mr-5 h-screen w-[400px] rounded-xl border border-none bg-green-5/50 px-5 py-5">
       <ul className="font-bold [&>*]:mb-5">
         <li className="flex justify-between">
           <h1>Username:</h1>
@@ -54,10 +54,6 @@ const UserProfile: FC<UserProfileProps> = ({ username }) => {
         <li className="flex justify-between">
           <h1>Bio:</h1>
           <h1>{user?.biography}</h1>
-        </li>
-        <li className="flex justify-between">
-          <h1>Interests:</h1>
-          <h1>{user?.tags}</h1>
         </li>
       </ul>
     </div>

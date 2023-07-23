@@ -48,6 +48,7 @@ const LoginForm: FC = () => {
     await sleep(500);
     if (res.ok) {
       const data = (await res.json()) as RegistrationResponse;
+      console.log(data);
       localStorage.setItem('token', data.token);
       router.push('/profile');
     } else setIsValid(false);

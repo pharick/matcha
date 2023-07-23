@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { BiRightArrowAlt, BiLeftArrowAlt } from 'react-icons/bi';
 
 import { Photo, UserPhotos } from '@/interfaces';
+import QuickInfo from './QuickInfo';
 
 interface UserProfileProps {
   username: string;
@@ -33,60 +34,42 @@ const UserPhoto: FC<UserProfileProps> = ({ username }) => {
   }, [username]);
 
   return (
-    <div className="-mt-[200px] flex w-screen items-center justify-center">
-      <button className="rounded-xl bg-green-5/50 hover:bg-green-5">
-        <BiLeftArrowAlt size={50} onClick={() => setPhotoId(photoId - 1)} />
-      </button>
-
-      {photoId == 0 && (
-        <div className="flex items-center">
-          <figure className="relative z-50 h-[300px] w-[300px]">
-            <Image
-              src={`http://localhost/${photos[photoId]?.url}`}
-              fill={true}
-              className="rounded-md object-cover"
-              sizes="250px"
-              alt="photo"
-            />
-          </figure>
-          <figure className="relative z-10 h-[200px] w-[200px] -translate-x-[100px]">
-            <Image
-              src={`http://localhost/${photos[photoId + 1]?.url}`}
-              fill={true}
-              className="rounded-md object-cover"
-              sizes="250px"
-              alt="photo"
-            />
-          </figure>
+    <div className="flex items-start justify-center py-4">
+      <div className="flex h-3/5 items-center">
+        {photoId > 0 ? (
+          <button className="rounded-xl bg-green-5/50 hover:bg-green-5">
+            <BiLeftArrowAlt size={40} onClick={() => setPhotoId(photoId - 1)} />
+          </button>
+        ) : (
+          <div className="w-[40px]"></div>
+        )}
+      </div>
+      <div className="h-[700px] w-2/5  overflow-auto border-2 rounded-lg border-brown">
+        <figure className="relative -z-50  h-4/5 overflow-hidden">
+          <Image
+            src={`http://localhost/${photos[photoId]?.url}`}
+            fill={true}
+            className="object-cover"
+            sizes="250px"
+            alt="photo"
+          />
+        </figure>
+        <div className="relative  bg-green-2/50 overflow-hidden">
+          <QuickInfo username={username} />
         </div>
-      )}
-
-      {photoId > 0 && (
-        <div className="flex items-center">
-          <figure className="relative z-10 h-[200px] w-[200px] translate-x-[50px]">
-            <Image
-              src={`http://localhost/${photos[photoId - 1]?.url}`}
-              fill={true}
-              className="rounded-md object-cover"
-              sizes="250px"
-              alt="photo"
+      </div>
+      <div className="flex h-3/5 items-center">
+        {photoId + 1 != Object.keys(photos).length ? (
+          <button className="rounded-xl bg-green-5/50 hover:bg-green-5">
+            <BiRightArrowAlt
+              size={40}
+              onClick={() => setPhotoId(photoId + 1)}
             />
-          </figure>
-          <figure className="relative z-50 h-[300px] w-[300px]">
-            <Image
-              src={`http://localhost/${photos[photoId]?.url}`}
-              fill={true}
-              className="rounded-md object-cover"
-              sizes="250px"
-              alt="photo"
-            />
-          </figure>
-        </div>
-      )}
-
-      <button className="rounded-xl bg-green-5/50 hover:bg-green-5">
-        <BiRightArrowAlt size={50} onClick={() => setPhotoId(photoId + 1)} />
-      </button>
+          </button>
+        ) : (
+          <div className="w-[40px]"></div>
+        )}
+      </div>
     </div>
   );
 };
