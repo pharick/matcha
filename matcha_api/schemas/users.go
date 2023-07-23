@@ -24,3 +24,8 @@ type UpdateUserData struct {
 	Biography         string   `json:"biography"`
 	Tags              []string `json:"tags" validate:"required"`
 }
+
+type ChangeEmailData struct {
+	Email    string `json:"email" validate:"required,email,lowercase"`
+	Password string `json:"password" validate:"required"`
+}

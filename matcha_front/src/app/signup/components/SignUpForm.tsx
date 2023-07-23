@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
 import * as Yup from 'yup';
-import { Formik, Form } from 'formik';
+import { Formik, Form, FormikHelpers } from 'formik';
 
 import FieldComponent from '@/components/FieldComponent';
 import Button from '@/components/Button';
@@ -57,7 +57,10 @@ const SignUpForm: FC = () => {
       .oneOf([Yup.ref('password')], 'Passwords does not match'),
   });
 
-  const handleAutorization = async (values: SignUpFormValues) => {
+  const handleAutorization = async (
+    values: SignUpFormValues,
+    { setFieldError }: FormikHelpers<SignUpFormValues>
+  ) => {
     setIsLoading(true);
     const requestOptions = {
       method: 'POST',
@@ -76,6 +79,8 @@ const SignUpForm: FC = () => {
       const data = (await res.json()) as RegistrationResponse;
       localStorage.setItem('token', data.token);
       router.push('/profile');
+    } else if (res.status == 409) {
+      setFieldError('username', 'This username is already in use');
     }
     await sleep(500);
     setIsLoading(false);

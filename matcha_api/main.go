@@ -33,13 +33,14 @@ func main() {
 	mux.Handle(pat.Post("/password_change/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.PasswordChange)})
 	mux.Handle(pat.Post("/password_reset/"), handlers.Handler{Env: env, Handle: handlers.PasswordReset})
 	mux.Handle(pat.Post("/send_activation_email/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.SendActivationEmail)})
+	mux.Handle(pat.Post("/email_change/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.EmailChange)})
 	mux.Handle(pat.Post("/send_reset_email/"), handlers.Handler{Env: env, Handle: handlers.SendPasswordResetEmail})
 	mux.Handle(pat.Get("/whoami/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.WhoAmI)})
 
 	// users
 	mux.Handle(pat.Get("/users/"), handlers.Handler{Env: env, Handle: handlers.UserList})
 	mux.Handle(pat.Get("/users/:username/"), handlers.Handler{Env: env, Handle: handlers.UserProfile})
-	mux.Handle(pat.Patch("/users/:username/"), handlers.Handler{Env: env, Handle: handlers.UpdateUser})
+	mux.Handle(pat.Patch("/users/:username/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UpdateUser)})
 
 	// photos
 	mux.Handle(pat.Post("/users/:username/photos/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UploadPhoto)})

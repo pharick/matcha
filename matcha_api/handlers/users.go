@@ -70,6 +70,10 @@ func UpdateUser(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
+	current_user := r.Context().Value(ContextKey("User")).(models.User)
+	if current_user.Username != user.Username {
+		return nil, errors.HttpError{Status: 403, Body: nil}
+	}
 	var d schemas.UpdateUserData
 	err = lib.GetJSONBody(r, &d)
 	if err != nil {

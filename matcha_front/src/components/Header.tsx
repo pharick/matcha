@@ -1,10 +1,11 @@
 'use client';
-import Matcha from '@/images/Matcha.png';
-import Image from 'next/image';
-import Cup from '@/images/cup.png';
-import Link from 'next/link';
-import Profile from '@/images/default_profile_picture.jpg';
 import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+
+import Cup from '@/images/cup.png';
+import Profile from '@/images/default_profile_picture.jpg';
+import Matcha from '@/images/Matcha.png';
 
 const Header = () => {
   const [visible, setVisible] = useState<boolean>(false);

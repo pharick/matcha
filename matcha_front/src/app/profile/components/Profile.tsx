@@ -64,7 +64,7 @@ const Profile: FC = () => {
 
           <div>
             <ChangePasswordForm />
-            <ChangeEmailForm />
+            <ChangeEmailForm user={userContext.user} />
           </div>
         </Tabs>
       )}

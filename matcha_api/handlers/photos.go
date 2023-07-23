@@ -134,7 +134,7 @@ func UpdatePhoto(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Index:  photo.Index,
 		Url:    photo.Url,
 	}
-	return ret, nil
+	return ret, err
 }
 
 func RemovePhoto(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
