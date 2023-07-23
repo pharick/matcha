@@ -15,6 +15,7 @@ type User struct {
 	PasswordHash      string
 	FirstName         string
 	LastName          string
+	BirthDate         string
 	Gender            string
 	GenderPreferences []string
 	Biography         string
@@ -30,15 +31,16 @@ func (m UserModel) Create(
 	passwordHash string,
 	firstName string,
 	lastName string,
+	birthDate string,
 ) (User, error) {
 	var user User
 	var gender sql.NullString
 	var biography sql.NullString
 	err := m.DB.QueryRow(
-		`INSERT INTO users(username, email, password_hash, first_name, last_name) 
-		VALUES($1, $2, $3, $4, $5) 
-		RETURNING id, username, email, active, password_hash, first_name, last_name, gender, biography`,
-		username, email, passwordHash, firstName, lastName,
+		`INSERT INTO users(username, email, password_hash, first_name, last_name, birth_date) 
+		VALUES($1, $2, $3, $4, $5, $6) 
+		RETURNING id, username, email, active, password_hash, first_name, last_name, birth_date, gender, biography`,
+		username, email, passwordHash, firstName, lastName, birthDate,
 	).Scan(
 		&user.Id,
 		&user.Username,
@@ -47,6 +49,7 @@ func (m UserModel) Create(
 		&user.PasswordHash,
 		&user.FirstName,
 		&user.LastName,
+		&user.BirthDate,
 		&gender,
 		&biography,
 	)
@@ -81,7 +84,7 @@ func (m UserModel) Update(
 	query := `UPDATE users SET username = $2, email = $3, active = $4, password_hash = $5, 
 	          first_name = $6, last_name = $7, gender = $8, gender_preferences = $9, biography = $10 
 	          WHERE id = $1
-	          RETURNING id, username, email, active, password_hash, first_name, last_name, gender, gender_preferences, biography`
+	          RETURNING id, username, email, active, password_hash, first_name, last_name, birth_date, gender, gender_preferences, biography`
 
 	var res *sql.Row
 	if len(d.Gender) > 0 {
@@ -104,6 +107,7 @@ func (m UserModel) Update(
 		&user.PasswordHash,
 		&user.FirstName,
 		&user.LastName,
+		&user.BirthDate,
 		&gender,
 		(*pq.StringArray)(&user.GenderPreferences),
 		&biography,
@@ -115,7 +119,7 @@ func (m UserModel) Update(
 
 func (m UserModel) GetAll() ([]User, error) {
 	users := make([]User, 0)
-	rows, err := m.DB.Query("SELECT id, username, email, active, password_hash, first_name, last_name, gender, gender_preferences, biography  FROM users")
+	rows, err := m.DB.Query("SELECT id, username, email, active, password_hash, first_name, last_name, birh_date, gender, gender_preferences, biography  FROM users")
 	if err != nil {
 		return nil, err
 	}
@@ -131,6 +135,7 @@ func (m UserModel) GetAll() ([]User, error) {
 			&user.PasswordHash,
 			&user.FirstName,
 			&user.LastName,
+			&user.BirthDate,
 			&gender,
 			(*pq.StringArray)(&user.GenderPreferences),
 			&biography,
@@ -147,7 +152,7 @@ func (m UserModel) GetAll() ([]User, error) {
 
 func (m UserModel) GetAllActive() ([]User, error) {
 	users := make([]User, 0)
-	rows, err := m.DB.Query("SELECT id, username, email, active, password_hash, first_name, last_name, gender, gender_preferences, biography FROM users WHERE active = true")
+	rows, err := m.DB.Query("SELECT id, username, email, active, password_hash, first_name, last_name, birth_date, gender, gender_preferences, biography FROM users WHERE active = true")
 	if err != nil {
 		return nil, err
 	}
@@ -163,6 +168,7 @@ func (m UserModel) GetAllActive() ([]User, error) {
 			&user.PasswordHash,
 			&user.FirstName,
 			&user.LastName,
+			&user.BirthDate,
 			&gender,
 			(*pq.StringArray)(&user.GenderPreferences),
 			&biography,
@@ -181,7 +187,7 @@ func (m UserModel) GetOneByUsername(username string) (User, error) {
 	var user User
 	var gender sql.NullString
 	var biography sql.NullString
-	err := m.DB.QueryRow("SELECT id, username, email, active, password_hash, first_name, last_name, gender, gender_preferences::text[], biography FROM users WHERE username = $1", username).Scan(
+	err := m.DB.QueryRow("SELECT id, username, email, active, password_hash, first_name, last_name, birth_date, gender, gender_preferences::text[], biography FROM users WHERE username = $1", username).Scan(
 		&user.Id,
 		&user.Username,
 		&user.Email,
@@ -189,6 +195,7 @@ func (m UserModel) GetOneByUsername(username string) (User, error) {
 		&user.PasswordHash,
 		&user.FirstName,
 		&user.LastName,
+		&user.BirthDate,
 		&gender,
 		(*pq.StringArray)(&user.GenderPreferences),
 		&biography,
@@ -202,7 +209,7 @@ func (m UserModel) GetOneActiveByUsername(username string) (User, error) {
 	var user User
 	var gender sql.NullString
 	var biography sql.NullString
-	err := m.DB.QueryRow("SELECT id, username, email, active, password_hash, first_name, last_name, gender, gender_preferences, biography FROM users WHERE username = $1 AND active = true", username).Scan(
+	err := m.DB.QueryRow("SELECT id, username, email, active, password_hash, first_name, last_name, birth_date, gender, gender_preferences, biography FROM users WHERE username = $1 AND active = true", username).Scan(
 		&user.Id,
 		&user.Username,
 		&user.Email,
@@ -210,6 +217,7 @@ func (m UserModel) GetOneActiveByUsername(username string) (User, error) {
 		&user.PasswordHash,
 		&user.FirstName,
 		&user.LastName,
+		&user.BirthDate,
 		&gender,
 		(*pq.StringArray)(&user.GenderPreferences),
 		&biography,
@@ -223,7 +231,7 @@ func (m UserModel) GetOneByEmail(email string) (User, error) {
 	var user User
 	var gender sql.NullString
 	var biography sql.NullString
-	err := m.DB.QueryRow("SELECT id, username, email, active, password_hash, first_name, last_name, gender, gender_preferences, biography FROM users WHERE email = $1", email).Scan(
+	err := m.DB.QueryRow("SELECT id, username, email, active, password_hash, first_name, last_name, birth_date, gender, gender_preferences, biography FROM users WHERE email = $1", email).Scan(
 		&user.Id,
 		&user.Username,
 		&user.Email,
@@ -231,6 +239,7 @@ func (m UserModel) GetOneByEmail(email string) (User, error) {
 		&user.PasswordHash,
 		&user.FirstName,
 		&user.LastName,
+		&user.BirthDate,
 		&gender,
 		(*pq.StringArray)(&user.GenderPreferences),
 		&biography,
@@ -244,7 +253,7 @@ func (m UserModel) GetOneActiveByEmail(email string) (User, error) {
 	var user User
 	var gender sql.NullString
 	var biography sql.NullString
-	err := m.DB.QueryRow("SELECT id, username, email, active, password_hash, first_name, last_name, gender, gender_preferences, biography FROM users WHERE email = $1 AND active = true", email).Scan(
+	err := m.DB.QueryRow("SELECT id, username, email, active, password_hash, first_name, last_name, birth_date, gender, gender_preferences, biography FROM users WHERE email = $1 AND active = true", email).Scan(
 		&user.Id,
 		&user.Username,
 		&user.Email,
@@ -252,6 +261,7 @@ func (m UserModel) GetOneActiveByEmail(email string) (User, error) {
 		&user.PasswordHash,
 		&user.FirstName,
 		&user.LastName,
+		&user.BirthDate,
 		&gender,
 		(*pq.StringArray)(&user.GenderPreferences),
 		&biography,

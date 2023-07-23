@@ -19,6 +19,7 @@ type RegistrationData struct {
 	Password  string `json:"password" validate:"required,min=6,max=36,containsany=abcdefghijklmnopqrstuvwxyz,containsany=ABCDEFGHIJKLMNOPQRSTUVWXYZ,containsany=.#!$%^&*;:{}-_~()"`
 	FirstName string `json:"first_name" validate:"required,alpha,min=2,max=16"`
 	LastName  string `json:"last_name" validate:"required,alpha,min=2,max=16"`
+	BirthDate string `json:"birth_date" validate:"required,datetime=2006-01-02"`
 }
 
 type RegistrationReturn struct {

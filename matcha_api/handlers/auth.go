@@ -30,6 +30,7 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		passwordHash,
 		d.FirstName,
 		d.LastName,
+		d.BirthDate,
 	)
 	if err != nil {
 		return nil, err
@@ -60,6 +61,7 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		Email:     user.Email,
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
+		BirthDate: user.BirthDate,
 	}}
 	return ret, nil
 }
@@ -232,11 +234,15 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		return nil, err
 	}
 	ret := schemas.RegistrationReturn{Token: token, User: schemas.UserReturn{
-		Id:        user.Id,
-		Username:  user.Username,
-		Email:     user.Email,
-		FirstName: user.FirstName,
-		LastName:  user.LastName,
+		Id:                user.Id,
+		Username:          user.Username,
+		Email:             user.Email,
+		FirstName:         user.FirstName,
+		LastName:          user.LastName,
+		BirthDate:         user.BirthDate,
+		Biography:         user.Biography,
+		Gender:            user.Gender,
+		GenderPreferences: user.GenderPreferences,
 	}}
 	return ret, nil
 }

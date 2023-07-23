@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
         password_hash VARCHAR(72) NOT NULL,
         first_name VARCHAR(200) NOT NULL,
         last_name VARCHAR(200) NOT NULL,
+        birth_date DATE NOT NULL,
         active BOOLEAN NOT NULL DEFAULT false,
         gender GENDER,
         gender_preferences GENDER[] DEFAULT '{}',
