@@ -155,44 +155,48 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
                 onChange={(value: string[]) => setFieldValue('tags', value)}
               />
 
-              <div className="mb-3 flex items-center justify-between">
-                <h3 className="font-bold">Gender</h3>
+              <div className="mb-3 ">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold">Gender</h3>
+                  <div className="flex rounded-md border border-brown">
+                    <RadioButton name="gender" value="male">
+                      Male
+                    </RadioButton>
+                    <RadioButton name="gender" value="female">
+                      Female
+                    </RadioButton>
+                    <RadioButton name="gender" value="other">
+                      Other
+                    </RadioButton>
+                  </div>
+                </div>
                 {errors.gender && touched.gender ? (
                   <div className="py-1 text-center text-sm text-pink-800">
                     {errors.gender}
                   </div>
                 ) : null}
-                <div className="flex rounded-md border border-brown">
-                  <RadioButton name="gender" value="male">
-                    Male
-                  </RadioButton>
-                  <RadioButton name="gender" value="female">
-                    Female
-                  </RadioButton>
-                  <RadioButton name="gender" value="other">
-                    Other
-                  </RadioButton>
-                </div>
               </div>
 
-              <div className="mb-3 flex items-center justify-between">
-                <h3 className="font-bold">Gender preferences</h3>
+              <div className="mb-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold">Gender preferences</h3>
+                  <div className="flex">
+                    <Checkbox name="genderPreferences" value="male">
+                      Male
+                    </Checkbox>
+                    <Checkbox name="genderPreferences" value="female">
+                      Female
+                    </Checkbox>
+                    <Checkbox name="genderPreferences" value="other">
+                      Other
+                    </Checkbox>
+                  </div>
+                </div>
                 {errors.genderPreferences && touched.genderPreferences ? (
                   <div className="py-1 text-center text-sm text-pink-800">
                     {errors.genderPreferences}
                   </div>
                 ) : null}
-                <div className="flex">
-                  <Checkbox name="genderPreferences" value="male">
-                    Male
-                  </Checkbox>
-                  <Checkbox name="genderPreferences" value="female">
-                    Female
-                  </Checkbox>
-                  <Checkbox name="genderPreferences" value="other">
-                    Other
-                  </Checkbox>
-                </div>
               </div>
 
               <Button
