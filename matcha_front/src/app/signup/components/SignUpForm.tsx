@@ -13,6 +13,7 @@ interface SignUpFormValues {
   username: string;
   firstName: string;
   lastName: string;
+  birthDate: string;
   email: string;
   password: string;
   confPassword: string;
@@ -41,6 +42,7 @@ const SignUpForm: FC = () => {
       .min(2, 'First name must be between 2 and 16 characters')
       .max(16, 'First name must be between 2 and 16 characters')
       .matches(/^[aA-zZ]*$/, 'Numbers and special characters are not allowed'),
+    birthDate: Yup.date().required('Enter your birth date'),
     email: Yup.string()
       .required("You'll need this when if you ever forgot your password")
       .email('Enter a valid email address'),
@@ -68,11 +70,11 @@ const SignUpForm: FC = () => {
         username: values.username.toLowerCase(),
         first_name: values.firstName,
         last_name: values.lastName,
+        birth_date: values.birthDate,
         email: values.email.toLowerCase(),
         password: values.password,
       }),
     };
-    console.log(requestOptions.body);
     const uri = `/api/register`;
     const res = await fetch(uri, requestOptions);
     if (res.ok) {
@@ -90,6 +92,7 @@ const SignUpForm: FC = () => {
     username: '',
     firstName: '',
     lastName: '',
+    birthDate: '',
     email: '',
     password: '',
     confPassword: '',
@@ -140,6 +143,15 @@ const SignUpForm: FC = () => {
             className="mb-[30px]"
           >
             Email
+          </FieldComponent>
+          <FieldComponent
+            type="date"
+            name="birthDate"
+            errors={errors.birthDate}
+            touched={touched.birthDate}
+            className="mb-[30px]"
+          >
+            Birth Date
           </FieldComponent>
           <FieldComponent
             type="password"

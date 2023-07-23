@@ -32,7 +32,7 @@ const EmailValidationAlert: FC = () => {
       <p>Your email is not validated.</p>
       <button
         onClick={() => void resendEmail()}
-        className="ml-[10px] flex w-fit items-center underline"
+        className="ml-[10px] flex w-fit items-center underline hover:opacity-80"
         disabled={isLoading}
       >
         Resend email

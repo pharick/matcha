@@ -9,7 +9,7 @@ interface FieldProps extends PropsWithChildren {
   errors?: string | string[];
   touched?: boolean;
   className?: string;
-  type: 'text' | 'password' | 'email' | 'textarea';
+  type: 'text' | 'password' | 'email' | 'textarea' | 'date';
   disabled?: boolean;
 }
 
@@ -23,7 +23,8 @@ const FieldComponent: FC<FieldProps> = ({
   type,
   disabled,
 }) => {
-  const [passwordShown, setPasswordShown] = useState<boolean>(false);
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [focused, setFocused] = useState(false);
 
   const togglePassword = () => {
     setPasswordShown(!passwordShown);
@@ -44,6 +45,8 @@ const FieldComponent: FC<FieldProps> = ({
               ? 'text'
               : type == 'password'
               ? 'password'
+              : type == 'date' && !focused
+              ? 'text'
               : type
           }
           id={name}
@@ -52,9 +55,10 @@ const FieldComponent: FC<FieldProps> = ({
           className={`block w-full items-center rounded-[20px] bg-transparent bg-gradient-radial from-green-1/70 to-neutral/30 ${
             type == 'textarea'
               ? 'h-[120px] resize-none p-3 text-left'
-              : 'h-[50px] text-center'
+              : 'h-[50px] px-[16px] text-center leading-[46px]'
           } ${disabled ? 'text-gray-500' : ''}`}
           disabled={disabled}
+          onFocus={() => setFocused(true)}
         />
         {type === 'password' && (
           <button
