@@ -206,7 +206,27 @@ func EmailChange(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		return nil, errors.HttpError{Status: 403, Body: nil}
 	}
 	user.Email = d.Email
+	user.Active = false
 	user, err = env.Users.Update(user)
+	if err != nil {
+		return nil, err
+	}
+	activation_token, err := lib.GenerateActivationJWT(user.Email, env.Settings.JWTSecret)
+	if err != nil {
+		return nil, err
+	}
+	err = lib.SendEmail(
+		env.Settings.SMTPHost,
+		env.Settings.SMTPPort,
+		env.Settings.SMTPEmail,
+		env.Settings.SMTPPassword,
+		user.Email,
+		"Matcha email verification",
+		fmt.Sprintf(
+			"Follow this link to verify your email: %s/activate?token=%s",
+			env.Settings.FrontBaseUrl, activation_token,
+		),
+	)
 	if err != nil {
 		return nil, err
 	}
