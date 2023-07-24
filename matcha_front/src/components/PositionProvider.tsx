@@ -4,12 +4,14 @@ import {
   createContext,
   FC,
   ReactNode,
+  useContext,
   useEffect,
   useMemo,
   useState,
 } from 'react';
 
 import { GeolocationDBResponse, Position } from '@/interfaces';
+import { UserContext } from '@/components/UserProvider';
 
 interface PositionProviderProps {
   children?: ReactNode;
@@ -24,35 +26,42 @@ export const PositionContext = createContext<PositionContextInterface>({
 });
 
 const PositionProvider: FC<PositionProviderProps> = ({ children }) => {
+  const userContext = useContext(UserContext);
+
   const [position, setPosition] = useState<Position>({
     latitude: 0,
     longitude: 0,
   });
 
+  const savePosition = async (pos: Position) => {
+    setPosition(pos);
+  };
+
   const getPosition = async () => {
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setPosition({
+      async (position) => {
+        await savePosition({
           longitude: position.coords.longitude,
           latitude: position.coords.latitude,
         });
       },
-      async (error) => {
-        console.log(error);
-        if (!process.env.NEXT_PUBLIC_GEOLOCATIONDB_KEY) return;
+      async () => {
         const res = await fetch(
           `https://geolocation-db.com/json/${process.env.NEXT_PUBLIC_GEOLOCATIONDB_KEY}`
         );
         if (!res.ok) return;
         const data = (await res.json()) as GeolocationDBResponse;
-        setPosition({ longitude: data.longitude, latitude: data.latitude });
+        await savePosition({
+          longitude: data.longitude,
+          latitude: data.latitude,
+        });
       }
     );
   };
 
   useEffect(() => {
-    void getPosition();
-  }, []);
+    if (userContext.user) void getPosition();
+  }, [userContext.user]);
 
   const value = useMemo(
     () => ({

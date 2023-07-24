@@ -30,3 +30,8 @@ type ChangeEmailData struct {
 	Email    string `json:"email" validate:"required,email,lowercase"`
 	Password string `json:"password" validate:"required"`
 }
+
+type UpdatePositionData struct {
+	Longitude float64 `json:"longitude" validate:"required"`
+	Latitude  float64 `json:"latitude" validate:"required"`
+}

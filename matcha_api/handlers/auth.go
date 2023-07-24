@@ -46,7 +46,10 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		env.Settings.SMTPPassword,
 		user.Email,
 		"Matcha email verification",
-		fmt.Sprintf("Please, use this token to verify your email: %s", activation_token),
+		fmt.Sprintf(
+			"Follow this link to verify your email:\n%s/activate?token=%s",
+			env.Settings.FrontBaseUrl, activation_token,
+		),
 	)
 	if err != nil {
 		return nil, err
@@ -105,7 +108,7 @@ func SendActivationEmail(env *Env, w http.ResponseWriter, r *http.Request) (any,
 		user.Email,
 		"Matcha email verification",
 		fmt.Sprintf(
-			"Follow this link to verify your email: %s/activate?token=%s",
+			"Follow this link to verify your email:\n%s/activate?token=%s",
 			env.Settings.FrontBaseUrl, activation_token,
 		),
 	)
@@ -137,7 +140,7 @@ func SendPasswordResetEmail(env *Env, w http.ResponseWriter, r *http.Request) (a
 		user.Email,
 		"Matcha password reset",
 		fmt.Sprintf(
-			"Follow this link to reset your password: %s/resetpassword?token=%s",
+			"Follow this link to reset your password:\n%s/resetpassword?token=%s",
 			env.Settings.FrontBaseUrl, reset_token,
 		),
 	)
@@ -223,7 +226,7 @@ func EmailChange(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		user.Email,
 		"Matcha email verification",
 		fmt.Sprintf(
-			"Follow this link to verify your email: %s/activate?token=%s",
+			"Follow this link to verify your email:\n%s/activate?token=%s",
 			env.Settings.FrontBaseUrl, activation_token,
 		),
 	)

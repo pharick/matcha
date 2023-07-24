@@ -105,3 +105,16 @@ func UpdateUser(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	}
 	return ret, nil
 }
+
+func UpdatePosition(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	var d schemas.UpdatePositionData
+	err := lib.GetJSONBody(r, &d)
+	if err != nil {
+		return nil, err
+	}
+	user := r.Context().Value(ContextKey("User")).(models.User)
+	user.LastPosition.Longitude = d.Longitude
+	user.LastPosition.Latitude = d.Latitude
+	user, err = env.Users.Update(user)
+	return nil, err
+}

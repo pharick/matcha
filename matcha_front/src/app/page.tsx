@@ -35,6 +35,7 @@ const mapStyle = new Style({
 
 const IndexPage: NextPage = () => {
   const positionContext = useContext(PositionContext);
+
   const map = new Map({
     target: 'map',
   });
