@@ -35,6 +35,13 @@ const PositionProvider: FC<PositionProviderProps> = ({ children }) => {
 
   const savePosition = async (pos: Position) => {
     setPosition(pos);
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    fetch('/api/update_position', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify(pos),
+    });
   };
 
   const getPosition = async () => {
