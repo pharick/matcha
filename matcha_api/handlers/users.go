@@ -26,6 +26,7 @@ func UserList(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 			Gender:            user.Gender,
 			GenderPreferences: user.GenderPreferences,
 			Biography:         user.Biography,
+			BirthDate:         user.BirthDate,
 		}
 	})
 	ret := schemas.UsersReturn{
@@ -56,6 +57,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Gender:            user.Gender,
 		GenderPreferences: user.GenderPreferences,
 		Biography:         user.Biography,
+		BirthDate:         user.BirthDate,
 		Tags:              tags,
 	}
 	return ret, nil
@@ -101,6 +103,7 @@ func UpdateUser(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		Gender:            user.Gender,
 		GenderPreferences: user.GenderPreferences,
 		Biography:         user.Biography,
+		BirthDate:         user.BirthDate,
 		Tags:              tags,
 	}
 	return ret, nil
