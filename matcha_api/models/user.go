@@ -37,8 +37,7 @@ var fields = `
 	gender, gender_preferences::text[], biography, last_position[0], last_position[1]
 `
 
-func scanRow(row interface{ Scan(...any) error }) (*User, error) {
-	var user User
+func scanRow(row interface{ Scan(...any) error }, user *User) error {
 	var gender sql.NullString
 	var biography sql.NullString
 	err := row.Scan(
@@ -57,11 +56,11 @@ func scanRow(row interface{ Scan(...any) error }) (*User, error) {
 		&user.LastPosition.Latitude,
 	)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	user.Gender = gender.String
 	user.Biography = biography.String
-	return &user, nil
+	return nil
 }
 
 func (m UserModel) Create(
@@ -72,6 +71,7 @@ func (m UserModel) Create(
 	lastName string,
 	birthDate string,
 ) (User, error) {
+	var user User
 	row := m.DB.QueryRow(
 		fmt.Sprintf(`
 			INSERT INTO users(username, email, password_hash, first_name, last_name, birth_date)
@@ -80,8 +80,8 @@ func (m UserModel) Create(
 		`, fields),
 		username, email, passwordHash, firstName, lastName, birthDate,
 	)
-	user, err := scanRow(row)
-	return *user, err
+	err := scanRow(row, &user)
+	return user, err
 }
 
 func (m UserModel) CheckConflicts(username string, email string) []errors.ValidationError {
@@ -103,6 +103,7 @@ func (m UserModel) CheckConflicts(username string, email string) []errors.Valida
 func (m UserModel) Update(
 	d User,
 ) (User, error) {
+	var user User
 	query := fmt.Sprintf(`
 		UPDATE users
 		SET username = $2, email = $3, active = $4, password_hash = $5,
@@ -128,11 +129,12 @@ func (m UserModel) Update(
 			d.LastPosition.Longitude, d.LastPosition.Latitude,
 		)
 	}
-	user, err := scanRow(row)
-	return *user, err
+	err := scanRow(row, &user)
+	return user, err
 }
 
 func (m UserModel) GetAll() ([]User, error) {
+	var user User
 	rows, err := m.DB.Query(
 		fmt.Sprintf("SELECT %s FROM users", fields),
 	)
@@ -141,16 +143,17 @@ func (m UserModel) GetAll() ([]User, error) {
 	}
 	users := make([]User, 0)
 	for rows.Next() {
-		user, err := scanRow(rows)
+		err := scanRow(rows, &user)
 		if err != nil {
 			return nil, err
 		}
-		users = append(users, *user)
+		users = append(users, user)
 	}
 	return users, nil
 }
 
 func (m UserModel) GetAllActive() ([]User, error) {
+	var user User
 	rows, err := m.DB.Query(
 		fmt.Sprintf("SELECT %s FROM users WHERE active = true", fields),
 	)
@@ -159,47 +162,51 @@ func (m UserModel) GetAllActive() ([]User, error) {
 	}
 	users := make([]User, 0)
 	for rows.Next() {
-		user, err := scanRow(rows)
+		err := scanRow(rows, &user)
 		if err != nil {
 			return nil, err
 		}
-		users = append(users, *user)
+		users = append(users, user)
 	}
 	return users, nil
 }
 
 func (m UserModel) GetOneByUsername(username string) (User, error) {
+	var user User
 	row := m.DB.QueryRow(
 		fmt.Sprintf("SELECT %s FROM users WHERE username = $1", fields),
 		username,
 	)
-	user, err := scanRow(row)
-	return *user, err
+	err := scanRow(row, &user)
+	return user, err
 }
 
 func (m UserModel) GetOneActiveByUsername(username string) (User, error) {
+	var user User
 	row := m.DB.QueryRow(
 		fmt.Sprintf("SELECT %s FROM users WHERE username = $1 AND active = true", fields),
 		username,
 	)
-	user, err := scanRow(row)
-	return *user, err
+	err := scanRow(row, &user)
+	return user, err
 }
 
 func (m UserModel) GetOneByEmail(email string) (User, error) {
+	var user User
 	row := m.DB.QueryRow(
 		fmt.Sprintf("SELECT %s FROM users WHERE email = $1", fields),
 		email,
 	)
-	user, err := scanRow(row)
-	return *user, err
+	err := scanRow(row, &user)
+	return user, err
 }
 
 func (m UserModel) GetOneActiveByEmail(email string) (User, error) {
+	var user User
 	row := m.DB.QueryRow(
 		fmt.Sprintf("SELECT %s FROM users WHERE email = $1 AND active = true", fields),
 		email,
 	)
-	user, err := scanRow(row)
-	return *user, err
+	err := scanRow(row, &user)
+	return user, err
 }
