@@ -3,12 +3,12 @@ import { NextPage } from 'next';
 import UserProvider from '@/components/UserProvider';
 import PositionProvider from '@/components/PositionProvider';
 
-export const withLogin = (page: NextPage) => {
+export const withLogin = (page: NextPage<any>) => {
   const Page = page;
-  const PageWithLogin = () => (
+  const PageWithLogin = ({ ...props }) => (
     <UserProvider>
       <PositionProvider>
-        <Page />
+        <Page { ...props } />
       </PositionProvider>
     </UserProvider>
   );

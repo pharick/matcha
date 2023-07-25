@@ -16,7 +16,7 @@ const Header = () => {
 
   return (
     <header>
-      <div className="mb-5 flex justify-between">
+      <div className="mb-5 flex justify-between mt-3">
         <div className="flex">
           <Image src={Matcha} width={100} priority alt="logo" />
           <Image src={Cup} width={80} alt="cup" />
@@ -26,17 +26,20 @@ const Header = () => {
           onMouseLeave={() => setVisible(false)}
           className="h-full"
         >
-          <Image
-            src={Profile}
-            width={50}
-            className="mt-2 rounded-full border-2 border-brown"
-            alt="cat"
-          />
+          <figure className="relative h-[60px] w-[60px] rounded-full overflow-hidden">
+            <Image
+              src={Profile}
+              fill={true}
+              className="object-cover"
+              sizes="100px"
+              alt="photo"
+            />
+          </figure>
           {visible && (
-            <div className="absolute right-8 z-50 flex w-[280px] flex-col rounded-xl bg-green-5/50 text-center font-bold [&>*]:mb-2">
-              <Link href="">hello</Link>
-              <Link href="">hello</Link>
-              <Link href="">hello</Link>
+            <div className="absolute right-8 z-50 flex w-[280px] flex-col rounded-xl bg-green-5/50 text-center font-bold [&>*]:mb-2 p-2">
+              <Link href="/profile">Profile</Link>
+              <Link href="">Matches</Link>
+              <Link href="">Messages</Link>
               <Link href="">Log Out</Link>
             </div>
           )}

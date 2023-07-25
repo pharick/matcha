@@ -1,7 +1,8 @@
 import Header from '@/components/Header';
+import { withLogin } from '@/helpers';
+
 import { Metadata, NextPage } from 'next';
 import UserProfile from './components/UserProfile';
-import UserPhoto from './components/UserPhoto';
 
 export const metadata: Metadata = {
   title: 'User',
@@ -15,12 +16,9 @@ const UserPage: NextPage<UserPageProps> = ({ params }) => {
   return (
     <>
       <Header />
-      <div className="flex">
-        <UserProfile username={params.username} />
-        <UserPhoto username={params.username} />
-      </div>
+      <UserProfile username={params.username} />
     </>
   );
 };
 
-export default UserPage;
+export default withLogin(UserPage);

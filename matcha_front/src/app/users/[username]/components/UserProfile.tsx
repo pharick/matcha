@@ -3,6 +3,9 @@
 import { FC, useEffect, useState } from 'react';
 
 import { CurrentUser } from '@/interfaces';
+import UserPhoto from './UserPhoto';
+import UserInfo from './UserInfo';
+import UserBiography from './UserBiography';
 
 interface UserProfileProps {
   username: string;
@@ -29,34 +32,19 @@ const UserProfile: FC<UserProfileProps> = ({ username }) => {
   }, [username]);
 
   return (
-    <div className="mr-5 h-screen w-[400px] rounded-xl border border-none bg-green-5/50 px-5 py-5">
-      <ul className="font-bold [&>*]:mb-5">
-        <li className="flex justify-between">
-          <h1>Username:</h1>
-          <h1>{user?.username}</h1>
-        </li>
-        <li className="flex justify-between">
-          <h1>First Name:</h1>
-          <h1>{user?.first_name}</h1>
-        </li>
-        <li className="flex justify-between">
-          <h1>Last_Name:</h1>
-          <h1>{user?.last_name}</h1>
-        </li>
-        <li className="flex justify-between">
-          <h1>Gender:</h1>
-          <h1>{user?.gender}</h1>
-        </li>
-        <li className="flex justify-between">
-          <h1>Gender Preferences:</h1>
-          <h1>{user?.gender_preferences}</h1>
-        </li>
-        <li className="flex justify-between">
-          <h1>Bio:</h1>
-          <h1>{user?.biography}</h1>
-        </li>
-      </ul>
-    </div>
+    <>
+      <div className="mx-auto mt-10 flex max-w-[700px] flex-wrap justify-center">
+        <div className="h-[400px] w-[400px] p-2">
+          <UserPhoto username={username} />
+        </div>
+        <div className="flex h-[300px] min-w-[300px] flex-1 items-center p-2">
+          {user && <UserInfo user={user} />}
+        </div>
+      </div>
+      <div className="mx-auto max-w-[700px] rounded-lg bg-neutral/50 p-3">
+        {user && <UserBiography user={user} />}
+      </div>
+    </>
   );
 };
 

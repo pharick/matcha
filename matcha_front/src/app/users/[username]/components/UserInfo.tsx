@@ -7,33 +7,13 @@ import {
   PiGenderMaleBold,
 } from 'react-icons/pi';
 import { AiFillHeart } from 'react-icons/ai';
-
 import { CurrentUser } from '@/interfaces';
 
-interface UserProfileProps {
-  username: string;
+interface UserInfoProps {
+  user: CurrentUser;
 }
 
-const QuickInfo: FC<UserProfileProps> = ({ username }) => {
-  const [user, setUser] = useState<CurrentUser | undefined>(undefined);
-
-  useEffect(() => {
-    const userToken = localStorage.getItem('token');
-    if (!userToken) return;
-    const getUser = async () => {
-      const requestOptions = {
-        headers: { Authorization: `Bearer ${userToken}` },
-      };
-      const uri = `/api/users/${username}`;
-      const res = await fetch(uri, requestOptions);
-      if (res.ok) {
-        const user = (await res.json()) as CurrentUser;
-        setUser(user);
-      }
-    };
-    void getUser();
-  }, [username]);
-
+const UserInfo: FC<UserInfoProps> = ({ user }) => {
   return (
     <div className="m-3 text-center font-bold">
       <div className="flex justify-center text-xl">
@@ -50,7 +30,7 @@ const QuickInfo: FC<UserProfileProps> = ({ username }) => {
         {user?.gender_preferences.map((gender) => (
           <ul>
             <li className="mr-2 flex items-center rounded-lg bg-green-2 px-2">
-              <AiFillHeart />
+              <AiFillHeart color='pink'/>
               {gender == 'male' && <PiGenderMaleBold />}
               {gender == 'female' && <PiGenderFemaleBold />}
               {gender == 'other' && <PiGenderIntersexBold />}
@@ -65,9 +45,8 @@ const QuickInfo: FC<UserProfileProps> = ({ username }) => {
           </ul>
         ))}
       </div>
-      <div className="bg-neutral/50 rounded-lg">{user?.biography}</div>
     </div>
   );
 };
 
-export default QuickInfo;
+export default UserInfo;
