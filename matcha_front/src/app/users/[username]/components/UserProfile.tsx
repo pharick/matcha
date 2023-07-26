@@ -32,19 +32,28 @@ const UserProfile: FC<UserProfileProps> = ({ username }) => {
   }, [username]);
 
   return (
-    <>
-      <div className="mx-auto mt-10 flex max-w-[700px] flex-wrap justify-center">
-        <div className="h-[400px] w-[400px] p-2">
+    <div className="mx-auto mt-10 max-w-[700px]">
+      <div className="flex max-w-[700px] flex-wrap justify-center mb-10">
+        <div className="m-right-2 h-[400px] w-[400px]">
           <UserPhoto username={username} />
         </div>
-        <div className="flex h-[300px] min-w-[300px] flex-1 items-center p-2">
+        <div className="flex max-w-[400px] flex-1">
           {user && <UserInfo user={user} />}
         </div>
       </div>
-      <div className="mx-auto max-w-[700px] rounded-lg bg-neutral/50 p-3">
-        {user && <UserBiography user={user} />}
+      <div className="mx-auto max-w-[700px]">
+        <h1 className="text-xl font-bold mb-5 underline">Biography</h1>
+        <div className="rounded-lg bg-neutral/50 p-3 mb-5">{user?.biography}</div>
+        <h1 className="text-xl font-bold mb-5 underline">Interests</h1>
+        <div className="flex flex-wrap">
+          {user?.tags.map((tag) => (
+            <ul>
+              <li className="mb-5 mr-2 rounded-lg bg-green-2 px-2">{tag}</li>
+            </ul>
+          ))}
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

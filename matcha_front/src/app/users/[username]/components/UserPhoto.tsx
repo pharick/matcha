@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { BiRightArrowAlt, BiLeftArrowAlt } from 'react-icons/bi';
 
 import { Photo, UserPhotos } from '@/interfaces';
-import QuickInfo from './UserInfo';
 
 interface UserProfileProps {
   username: string;
@@ -33,45 +32,6 @@ const UserPhoto: FC<UserProfileProps> = ({ username }) => {
     void getUser();
   }, [username]);
 
-  // return (
-  // <div className="flex items-start justify-center py-4">
-  //   <div className="flex h-3/5 items-center">
-  //     {photoId > 0 ? (
-  //       <button className="rounded-xl bg-green-5/50 hover:bg-green-5">
-  //         <BiLeftArrowAlt size={40} onClick={() => setPhotoId(photoId - 1)} />
-  //       </button>
-  //     ) : (
-  //       <div className="w-[40px]"></div>
-  //     )}
-  //   </div>
-  //   <div className="h-[700px] w-2/5  overflow-auto border-2 rounded-lg border-brown">
-  //     <figure className="relative -z-50  h-4/5 overflow-hidden">
-  //       <Image
-  //         src={`http://localhost/${photos[photoId]?.url}`}
-  //         fill={true}
-  //         className="object-cover"
-  //         sizes="250px"
-  //         alt="photo"
-  //       />
-  //     </figure>
-  //     <div className="relative  bg-green-2/50 overflow-hidden">
-  //       <QuickInfo username={username} />
-  //     </div>
-  //   </div>
-  //   <div className="flex h-3/5 items-center">
-  //     {photoId + 1 != Object.keys(photos).length ? (
-  //       <button className="rounded-xl bg-green-5/50 hover:bg-green-5">
-  //         <BiRightArrowAlt
-  //           size={40}
-  //           onClick={() => setPhotoId(photoId + 1)}
-  //         />
-  //       </button>
-  //     ) : (
-  //       <div className="w-[40px]"></div>
-  //     )}
-  //   </div>
-  // </div>
-  // );
   return (
     <div className="h-full w-full overflow-auto border-2 rounded-lg border-brown relative">
       {photoId > 0 && (
