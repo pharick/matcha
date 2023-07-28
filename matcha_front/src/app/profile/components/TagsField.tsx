@@ -5,7 +5,6 @@ import {
   useEffect,
   useState,
 } from 'react';
-
 import { BiX } from 'react-icons/bi';
 
 interface TagsFieldProps {
@@ -27,18 +26,21 @@ const TagsField: FC<TagsFieldProps> = ({
     null
   );
 
-  const findTags = async (value: string) => {
-    if (value.length <= 0) {
+  const findTags = async (v: string) => {
+    if (v.length <= 0) {
       setSuggestions([]);
       return;
     }
-    const resp = await fetch('/api/tags/find', {
-      method: 'POST',
-      body: JSON.stringify({ value }),
-    });
+    const resp = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/tags/find/`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ value: v }),
+      }
+    );
     if (resp.ok) {
       const data = (await resp.json()) as { list: string[] };
-      setSuggestions(data.list);
+      setSuggestions(data.list.filter((tag) => !value.includes(tag)));
     }
   };
 

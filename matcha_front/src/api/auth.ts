@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 export async function getCurrentUser() {
   const token = cookies().get('token')?.value;
   if (!token) return undefined;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/whoami/`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/whoami/`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   if (res.status == 401) return undefined;
@@ -15,7 +15,7 @@ export async function getCurrentUser() {
 }
 
 export async function login(username: string, password: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/login/`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/login/`, {
     method: 'POST',
     body: JSON.stringify({
       username: username,
@@ -31,7 +31,7 @@ export async function login(username: string, password: string) {
 }
 
 export async function signUp(reqData: SignUpData) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register/`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/register/`, {
     method: 'POST',
     body: JSON.stringify(reqData),
     cache: 'no-cache',
@@ -45,10 +45,11 @@ export async function signUp(reqData: SignUpData) {
 
 export async function resetPassword(email: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/send_reset_email/`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/send_reset_email/`,
     {
       method: 'POST',
       body: JSON.stringify({ email }),
+      cache: 'no-cache',
     }
   );
   if (res.status == 400) return false;
@@ -59,10 +60,25 @@ export async function resetPassword(email: string) {
 export async function activate(emailToken: string) {
   const userToken = cookies().get('token')?.value;
   if (!userToken) throw Error('No user token');
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/activate/`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/activate/`, {
     method: 'POST',
     body: JSON.stringify({ token: emailToken }),
     headers: { Authorization: `Bearer ${userToken}` },
+    cache: 'no-cache',
   });
+  if (!res.ok) throw Error('Something went wrong');
+}
+
+export async function sendActivationEmail() {
+  const token = cookies().get('token')?.value;
+  if (!token) return undefined;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/send_activation_email/`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-cache',
+    }
+  );
   if (!res.ok) throw Error('Something went wrong');
 }

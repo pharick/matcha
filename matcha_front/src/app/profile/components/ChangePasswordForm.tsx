@@ -1,3 +1,5 @@
+'use client';
+
 import { Form, Formik, FormikHelpers } from 'formik';
 import { FC, useState } from 'react';
 import * as Yup from 'yup';

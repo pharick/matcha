@@ -1,3 +1,5 @@
+type Gender = 'male' | 'female' | 'other';
+
 type User = {
   username: string;
   id: number;
@@ -5,8 +7,8 @@ type User = {
   last_name: string;
   email: string;
   birth_date: string;
-  gender: 'male' | 'female' | 'other' | '';
-  gender_preferences: ('male' | 'female' | 'other')[];
+  gender: Gender | '';
+  gender_preferences: Gender[];
   biography: string;
   tags: string[];
 };
@@ -26,6 +28,16 @@ type SignUpData = {
   email: string;
   password: string;
 };
+
+type ProfileDataBase = {
+  first_name: string;
+  last_name: string;
+  gender_preferences: Gender[];
+  biography: string;
+  tags: string[];
+};
+
+type ProfileData = ProfileDataBase & { gender: Gender };
 
 type Photo = {
   id: number;

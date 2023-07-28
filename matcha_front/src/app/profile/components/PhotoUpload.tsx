@@ -1,21 +1,15 @@
 'use client';
 
-import Button from '@/components/Button';
+import { ChangeEvent, FC, useRef, useState, useTransition } from 'react';
 import Image from 'next/image';
-import {
-  ChangeEvent,
-  FC,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { Photo, User } from '../../../types';
-import Modal from '@/components/Modal';
-import { useDrag, useDrop } from 'react-dnd';
 import { BiX } from 'react-icons/bi';
+import { useDrag, useDrop } from 'react-dnd';
 import { DndProvider } from '@/imports/react-dnd';
 import { HTML5Backend } from '@/imports/react-dnd';
+
+import Button from '@/components/Button';
+import Modal from '@/components/Modal';
+import { uploadPhoto } from '@/api/profile';
 
 interface PhotoUploadItemProps {
   photo: Photo;
@@ -70,7 +64,7 @@ const PhotoUploadItem: FC<PhotoUploadItemProps> = ({
         <BiX color="white" size={24} />
       </button>
       <Image
-        src={`http://localhost${photo.url}`}
+        src={`${process.env.NEXT_PUBLIC_BASE_URL}${photo.url}`}
         fill={true}
         alt={`Photo ${photo.id}`}
         className="rounded-md object-cover"
@@ -82,23 +76,12 @@ const PhotoUploadItem: FC<PhotoUploadItemProps> = ({
 
 interface PhotoUploadProps {
   user: User;
+  photos: Photo[];
 }
 
-const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
-  const [photos, setPhotos] = useState<Photo[]>([]);
+const PhotoUpload: FC<PhotoUploadProps> = ({ user, photos }) => {
   const [newPhoto, setNewPhoto] = useState<File>();
-
-  const fetchPhotos = useCallback(async () => {
-    const response = await fetch(`/api/users/${user.username}/photos/`);
-    if (response.ok) {
-      const photos = (await response.json()) as { list: Photo[] };
-      setPhotos(photos.list);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    void fetchPhotos();
-  }, [fetchPhotos]);
+  const [isPending, startTransition] = useTransition();
 
   const handleNewPhotoChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -107,53 +90,40 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
   };
 
   const handleNewPhotoUpload = async () => {
-    const userToken = localStorage.getItem('token');
-    if (!userToken || !newPhoto) return;
+    if (!newPhoto) return;
     const formData = new FormData();
     formData.append('photo', newPhoto);
-    const requestOptions = {
-      method: 'POST',
-      body: formData,
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-    };
-    const uri = `/api/users/${user.username}/photos/`;
-    const res = await fetch(uri, requestOptions);
-    if (res.ok) {
-      const photo = (await res.json()) as Photo;
-      setPhotos((photos) => [...photos, photo]);
-      setNewPhoto(undefined);
-    }
+    startTransition(() => void uploadPhoto(user.username, formData));
+    setNewPhoto(undefined);
   };
 
   const handleMove = async (id: number, to: number) => {
-    const userToken = localStorage.getItem('token');
-    if (!userToken) return;
-    const requestOptions = {
-      method: 'PATCH',
-      body: JSON.stringify({ index: to }),
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-    };
-    const uri = `/api/users/${user.username}/photos/${id}`;
-    await fetch(uri, requestOptions);
-    await fetchPhotos();
+    // const userToken = localStorage.getItem('token');
+    // if (!userToken) return;
+    // const requestOptions = {
+    //   method: 'PATCH',
+    //   body: JSON.stringify({ index: to }),
+    //   headers: {
+    //     Authorization: `Bearer ${userToken}`,
+    //   },
+    // };
+    // const uri = `/api/users/${user.username}/photos/${id}`;
+    // await fetch(uri, requestOptions);
+    // await fetchPhotos();
   };
 
   const handleRemove = async (id: number) => {
-    const userToken = localStorage.getItem('token');
-    if (!userToken) return;
-    const requestOptions = {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-    };
-    const uri = `/api/users/${user.username}/photos/${id}`;
-    await fetch(uri, requestOptions);
-    setPhotos((photos) => [...photos.filter((photo) => photo.id != id)]);
+    // const userToken = localStorage.getItem('token');
+    // if (!userToken) return;
+    // const requestOptions = {
+    //   method: 'DELETE',
+    //   headers: {
+    //     Authorization: `Bearer ${userToken}`,
+    //   },
+    // };
+    // const uri = `/api/users/${user.username}/photos/${id}`;
+    // await fetch(uri, requestOptions);
+    // setPhotos((photos) => [...photos.filter((photo) => photo.id != id)]);
   };
 
   return (
