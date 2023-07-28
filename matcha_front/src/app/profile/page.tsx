@@ -1,20 +1,24 @@
 import { NextPage, Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
-import { withLogin } from '@/helpers';
 import Header from '@/components/Header';
 import Profile from './components/Profile';
+import { getCurrentUser } from '@/api/auth';
 
 export const metadata: Metadata = {
   title: 'Profile settings',
 };
 
-const ProfilePage: NextPage = () => {
+const ProfilePage: NextPage = async () => {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) redirect('/login');
+
   return (
     <>
       <Header />
-      <Profile />
+      <Profile user={currentUser} />
     </>
   );
 };
 
-export default withLogin(ProfilePage);
+export default ProfilePage;

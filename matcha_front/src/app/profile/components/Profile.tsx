@@ -54,30 +54,30 @@ const EmailValidationAlert: FC = () => {
   );
 };
 
-const Profile: FC = () => {
-  const userContext = useContext(UserContext);
+interface ProfileProps {
+  user: CurrentUser;
+}
 
+const Profile: FC<ProfileProps> = ({ user }) => {
   return (
     <div className="mx-auto my-[50px] max-w-[700px]">
-      {userContext.user && !userContext.user.active && <EmailValidationAlert />}
+      {!user.active && <EmailValidationAlert />}
 
-      {userContext.user && (
-        <Tabs
-          captions={[
-            'Profile Information',
-            'Manage Photos',
-            'Email and password',
-          ]}
-        >
-          <ProfileForm user={userContext.user} />
-          <PhotoUpload user={userContext.user} />
+      <Tabs
+        captions={[
+          'Profile Information',
+          'Manage Photos',
+          'Email and password',
+        ]}
+      >
+        <ProfileForm user={user} />
+        <PhotoUpload user={user} />
 
-          <div>
-            <ChangePasswordForm />
-            <ChangeEmailForm user={userContext.user} />
-          </div>
-        </Tabs>
-      )}
+        <div>
+          <ChangePasswordForm />
+          <ChangeEmailForm user={user} />
+        </div>
+      </Tabs>
     </div>
   );
 };

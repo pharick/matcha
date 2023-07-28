@@ -22,7 +22,7 @@ const LoginPage: NextPage = async () => {
         <Logo />
         <LoginForm />
         <Link
-          className="font-semi-bold group mb-[20px] flex items-center justify-center rounded-[20px] border-2 border-transparent p-[5px] text-[22px] hover:border-2 hover:border-brown"
+          className="font-semi-bold group my-3 flex items-center justify-center rounded-[20px] border-2 border-transparent p-[5px] text-[22px] hover:border-2 hover:border-brown"
           href="/signup"
         >
           <div className="relative w-fit">

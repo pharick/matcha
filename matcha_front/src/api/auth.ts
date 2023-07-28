@@ -31,7 +31,6 @@ export async function login(username: string, password: string) {
 }
 
 export async function signUp(reqData: SignUpData) {
-  console.log(reqData);
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register/`, {
     method: 'POST',
     body: JSON.stringify(reqData),
@@ -42,4 +41,28 @@ export async function signUp(reqData: SignUpData) {
   const data = (await res.json()) as LoginResponse;
   cookies().set('token', data.token);
   return data.user;
+}
+
+export async function resetPassword(email: string) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/send_reset_email/`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    }
+  );
+  if (res.status == 400) return false;
+  if (!res.ok) throw Error('Something went wrong');
+  return true;
+}
+
+export async function activate(emailToken: string) {
+  const userToken = cookies().get('token')?.value;
+  if (!userToken) throw Error('No user token');
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/activate/`, {
+    method: 'POST',
+    body: JSON.stringify({ token: emailToken }),
+    headers: { Authorization: `Bearer ${userToken}` },
+  });
+  if (!res.ok) throw Error('Something went wrong');
 }

@@ -53,8 +53,9 @@ const LoginForm: FC = () => {
             touched={touched.username}
             className="mb-5"
           >
-            username
+            Username
           </FieldComponent>
+
           <FieldComponent
             type="password"
             name="password"
@@ -62,8 +63,9 @@ const LoginForm: FC = () => {
             touched={touched.password}
             className="mb-5"
           >
-            password
+            Password
           </FieldComponent>
+
           <Button type="submit" loading={isSubmitting} disabled={isSubmitting}>
             Log In
           </Button>

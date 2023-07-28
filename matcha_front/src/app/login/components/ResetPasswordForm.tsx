@@ -2,23 +2,18 @@ import { FC, useState } from 'react';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { sleep } from '@/helpers';
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
 import Alert from '@/components/Alert';
+import { resetPassword } from '@/api/auth';
 
 interface ResetPasswordFormValues {
   email: string;
 }
 
-enum Result {
-  Valid,
-  Invalid,
-}
-
 const ResetPasswordForm: FC = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [result, setResult] = useState<Result>();
+  const [result, setResult] = useState<boolean>();
+
   const initialValues: ResetPasswordFormValues = {
     email: '',
   };
@@ -30,62 +25,51 @@ const ResetPasswordForm: FC = () => {
   });
 
   const handleChangePassword = async (values: ResetPasswordFormValues) => {
-    setIsLoading(true);
-    const requestOptions = {
-      method: 'POST',
-      body: JSON.stringify({
-        email: values.email,
-      }),
-    };
-    const uri = `/api/send_reset_email`;
-    const res = await fetch(uri, requestOptions);
-    await sleep(500);
-    if (res.ok) setResult(Result.Valid);
-    else setResult(Result.Invalid);
-    setIsLoading(false);
+    setResult(await resetPassword(values.email));
   };
+
   return (
-    <>
-      {result == Result.Valid && (
-        <Alert type="success" className="mb-3">
-          Check your email for password reset link
-        </Alert>
+    <Formik
+      validationSchema={validationSchema}
+      initialValues={initialValues}
+      onSubmit={handleChangePassword}
+      validateOnBlur={false}
+      validateOnChange={false}
+    >
+      {({ errors, touched, isSubmitting }) => (
+        <Form>
+          {result == true && (
+            <Alert type="success" className="mb-3">
+              Check your email for password reset link
+            </Alert>
+          )}
+          {result == false && (
+            <Alert type="error" className="mb-3">
+              Invalid email
+            </Alert>
+          )}
+
+          <FieldComponent
+            type="text"
+            name="email"
+            errors={errors.email}
+            touched={touched.email}
+            className="mb-3"
+          >
+            Enter your email
+          </FieldComponent>
+
+          <Button
+            loading={isSubmitting}
+            disabled={isSubmitting}
+            className="m-auto block"
+            type="submit"
+          >
+            Reset
+          </Button>
+        </Form>
       )}
-      {result == Result.Invalid && (
-        <Alert type="error" className="mb-3">
-          Invalid email
-        </Alert>
-      )}
-      <Formik
-        validationSchema={validationSchema}
-        initialValues={initialValues}
-        onSubmit={handleChangePassword}
-        validateOnBlur={false}
-        validateOnChange={false}
-      >
-        {({ errors, touched }) => (
-          <Form>
-            <FieldComponent
-              type="text"
-              name="email"
-              errors={errors.email}
-              touched={touched.email}
-              className="mb-3"
-            >
-              Enter your email
-            </FieldComponent>
-            <Button
-              loading={isLoading}
-              disabled={isLoading}
-              className="m-auto block"
-              type="submit"
-            >
-              Reset
-            </Button>
-          </Form>
-        )}
-      </Formik>
-    </>
+    </Formik>
   );
 };
 
