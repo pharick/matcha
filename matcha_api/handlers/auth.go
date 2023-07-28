@@ -256,7 +256,8 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
-	ret := schemas.RegistrationReturn{Token: token, User: schemas.UserReturn{
+	http.SetCookie(w, &http.Cookie{Name: "token", Value: token})
+	ret := schemas.LoginReturn{Token: token, User: schemas.UserReturn{
 		Id:                user.Id,
 		Username:          user.Username,
 		Email:             user.Email,

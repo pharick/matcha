@@ -1,27 +1,18 @@
 'use client';
-import { useRouter } from 'next/navigation';
+
 import { FC, useState } from 'react';
 import * as Yup from 'yup';
 import { Formik, Form, FormikHelpers } from 'formik';
 
 import FieldComponent from '@/components/FieldComponent';
 import Button from '@/components/Button';
-import { RegistrationResponse } from '@/interfaces';
-import { sleep } from '@/helpers';
+import Alert from '@/components/Alert';
+import { signUp } from '@/api/auth';
 
-interface SignUpFormValues {
-  username: string;
-  firstName: string;
-  lastName: string;
-  birthDate: string;
-  email: string;
-  password: string;
-  confPassword: string;
-}
+type SignUpFormValues = SignUpData & { conf_password: string };
 
 const SignUpForm: FC = () => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isValid, setIsValid] = useState(true);
 
   const passwordRequiremets =
     'Password shoud be at least six characters long and contain at least one number, letter and punctuation mark (such as ! and &)';
@@ -32,17 +23,17 @@ const SignUpForm: FC = () => {
       .min(2, 'Username must be between 2 and 16 characters')
       .max(16, 'Username must be between 2 and 16 characters')
       .matches(/^[aA-zZ]*$/, 'Numbers and special characters are not allowed'),
-    firstName: Yup.string()
+    first_name: Yup.string()
       .required("What's your first name?")
       .min(2, 'First name must be between 2 and 16 characters')
       .max(16, 'First name must be between 2 and 16 characters')
       .matches(/^[aA-zZ]*$/, 'Numbers and special characters are not allowed'),
-    lastName: Yup.string()
+    last_name: Yup.string()
       .required("What's your last name?")
       .min(2, 'First name must be between 2 and 16 characters')
       .max(16, 'First name must be between 2 and 16 characters')
       .matches(/^[aA-zZ]*$/, 'Numbers and special characters are not allowed'),
-    birthDate: Yup.date().required('Enter your birth date'),
+    birth_date: Yup.date().required('Enter your birth date'),
     email: Yup.string()
       .required("You'll need this when if you ever forgot your password")
       .email('Enter a valid email address'),
@@ -54,48 +45,25 @@ const SignUpForm: FC = () => {
       .matches(/[a-z]/, passwordRequiremets)
       .matches(/[A-Z]/, passwordRequiremets)
       .matches(/[.#!$%^&*;:{}\-_~()]/, passwordRequiremets),
-    confPassword: Yup.string()
+    conf_password: Yup.string()
       .required('Confirm your password')
       .oneOf([Yup.ref('password')], 'Passwords does not match'),
   });
 
-  const handleAutorization = async (
-    values: SignUpFormValues,
-    { setFieldError }: FormikHelpers<SignUpFormValues>
-  ) => {
-    setIsLoading(true);
-    const requestOptions = {
-      method: 'POST',
-      body: JSON.stringify({
-        username: values.username.toLowerCase(),
-        first_name: values.firstName,
-        last_name: values.lastName,
-        birth_date: values.birthDate,
-        email: values.email.toLowerCase(),
-        password: values.password,
-      }),
-    };
-    const uri = `/api/register`;
-    const res = await fetch(uri, requestOptions);
-    if (res.ok) {
-      const data = (await res.json()) as RegistrationResponse;
-      localStorage.setItem('token', data.token);
-      router.push('/profile');
-    } else if (res.status == 409) {
-      setFieldError('username', 'This username is already in use');
-    }
-    await sleep(500);
-    setIsLoading(false);
+  const handleAutorization = async (values: SignUpFormValues) => {
+    setIsValid(true);
+    const user = await signUp(values);
+    if (!user) setIsValid(false);
   };
 
   const initialValues: SignUpFormValues = {
     username: '',
-    firstName: '',
-    lastName: '',
-    birthDate: '',
+    first_name: '',
+    last_name: '',
+    birth_date: '',
     email: '',
     password: '',
-    confPassword: '',
+    conf_password: '',
   };
 
   return (
@@ -106,72 +74,90 @@ const SignUpForm: FC = () => {
       validateOnBlur={false}
       validateOnChange={false}
     >
-      {({ errors, touched }) => (
+      {({ errors, touched, isSubmitting }) => (
         <Form>
+          {!isValid && (
+            <Alert type="error" className="mb-5">
+              Username or email is already in use
+            </Alert>
+          )}
+
           <FieldComponent
             type="text"
             name="username"
             errors={errors.username}
             touched={touched.username}
-            className="mb-[30px]"
+            className="mb-5"
           >
             Username
           </FieldComponent>
+
           <FieldComponent
             type="text"
-            name="firstName"
-            errors={errors.firstName}
-            touched={touched.firstName}
-            className="mb-[30px]"
+            name="first_name"
+            errors={errors.first_name}
+            touched={touched.first_name}
+            className="mb-5"
           >
             First Name
           </FieldComponent>
+
           <FieldComponent
             type="text"
-            name="lastName"
-            errors={errors.lastName}
-            touched={touched.lastName}
-            className="mb-[30px]"
+            name="last_name"
+            errors={errors.last_name}
+            touched={touched.last_name}
+            className="mb-5"
           >
             Last Name
           </FieldComponent>
+
           <FieldComponent
             type="text"
             name="email"
             errors={errors.email}
             touched={touched.email}
-            className="mb-[30px]"
+            className="mb-5"
           >
             Email
           </FieldComponent>
+
           <FieldComponent
             type="date"
-            name="birthDate"
-            errors={errors.birthDate}
-            touched={touched.birthDate}
-            className="mb-[30px]"
+            name="birth_date"
+            errors={errors.birth_date}
+            touched={touched.birth_date}
+            className="mb-5"
           >
             Birth Date
           </FieldComponent>
+
           <FieldComponent
             type="password"
             name="password"
             errors={errors.password}
             touched={touched.password}
-            className="mb-[30px]"
+            className="mb-5"
           >
             Password
           </FieldComponent>
+
           <FieldComponent
             type="password"
-            name="confPassword"
-            errors={errors.confPassword}
-            touched={touched.confPassword}
-            className="mb-[30px]"
+            name="conf_password"
+            errors={errors.conf_password}
+            touched={touched.conf_password}
+            className="mb-5"
           >
             Confirm Password
           </FieldComponent>
-          <Button className="mx-auto" type="submit" loading={isLoading}>
+
+          <Button
+            className="mx-auto"
+            type="submit"
+            loading={isSubmitting}
+            disabled={isSubmitting}
+          >
             Confirm
           </Button>
         </Form>

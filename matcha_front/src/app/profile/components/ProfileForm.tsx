@@ -5,7 +5,7 @@ import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'next/navigation';
 
-import { User } from '@/interfaces';
+import { User } from '../../../types';
 import RadioButton from '@/components/RadioButton';
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
@@ -85,9 +85,8 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
       },
     };
     const uri = `/api/users/${user.username}`;
-    const res = await fetch(uri, requestOptions);
+    fetch(uri, requestOptions);
     await sleep(500);
-    if (res.ok) router.push(`/users/${user.username}`);
     setIsLoading(false);
   };
 

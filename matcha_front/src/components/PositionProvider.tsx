@@ -10,7 +10,7 @@ import {
   useState,
 } from 'react';
 
-import { GeolocationDBResponse, Position } from '@/interfaces';
+import { GeolocationDBResponse, Position } from '../types';
 import { UserContext } from '@/components/UserProvider';
 
 interface PositionProviderProps {

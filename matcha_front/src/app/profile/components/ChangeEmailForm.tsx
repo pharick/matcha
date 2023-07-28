@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
-import { User } from '@/interfaces';
+import { User } from '../../../types';
 import Alert from '@/components/Alert';
 import { UserContext } from '@/components/UserProvider';
 

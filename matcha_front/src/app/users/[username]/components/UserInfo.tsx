@@ -9,10 +9,10 @@ import {
 import { AiFillHeart } from 'react-icons/ai';
 import { differenceInYears, parseISO } from 'date-fns';
 
-import { CurrentUser } from '@/interfaces';
+import { User } from '../../../../types';
 
 interface UserInfoProps {
-  user: CurrentUser;
+  user: User;
 }
 
 const UserInfo: FC<UserInfoProps> = ({ user }) => {
@@ -41,24 +41,20 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
         <h2>{user?.last_name}</h2>
       </div>
       <div className="mb-5 flex items-center">
-        {user?.gender_preferences.map((gender, index) => (
-          <ul>
-            <li key={index} className="mr-2 flex items-center rounded-lg bg-green-2 px-2">
+        <ul>
+          {user?.gender_preferences.map((gender, index) => (
+            <li
+              key={index}
+              className="mr-2 flex items-center rounded-lg bg-green-2 px-2"
+            >
               <AiFillHeart color="pink" />
               {gender == 'male' && <PiGenderMaleBold />}
               {gender == 'female' && <PiGenderFemaleBold />}
               {gender == 'other' && <PiGenderIntersexBold />}
             </li>
-          </ul>
-        ))}
+          ))}
+        </ul>
       </div>
-      {/*<div className="mb-5 flex flex-wrap justify-center">
-        {user?.tags.map((tag) => (
-          <ul>
-            <li className="mb-2 mr-2 rounded-lg bg-green-2 px-2">{tag}</li>
-          </ul>
-        ))}
-      </div>  */}
     </div>
   );
 };

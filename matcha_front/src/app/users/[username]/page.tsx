@@ -1,24 +1,37 @@
+import { NextPage } from 'next';
+import { cookies } from 'next/headers';
+
 import Header from '@/components/Header';
-import { withLogin } from '@/helpers';
-
-import { Metadata, NextPage } from 'next';
 import UserProfile from './components/UserProfile';
-
-export const metadata: Metadata = {
-  title: 'User',
-};
+import { User } from '../../../types';
 
 interface UserPageProps {
   params: { username: string };
 }
 
-const UserPage: NextPage<UserPageProps> = ({ params }) => {
+const getUser = async (username: string) => {
+  const cookieStore = cookies();
+  const token = cookieStore.get('token');
+  console.log(token);
+  const requestOptions = {
+    // headers: { Authorization: `Bearer ${userToken}` },
+  };
+  const uri = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${username}/`;
+  const res = await fetch(uri, requestOptions);
+  if (!res.ok) throw Error('hehe');
+  const user = (await res.json()) as User;
+  return user;
+};
+
+const UserPage: NextPage<UserPageProps> = async ({ params: { username } }) => {
+  const user: User = await getUser(username);
+
   return (
     <>
       <Header />
-      <UserProfile username={params.username} />
+      <UserProfile user={user} />
     </>
   );
 };
 
-export default withLogin(UserPage);
+export default UserPage;

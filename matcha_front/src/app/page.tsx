@@ -14,7 +14,6 @@ import { Text, Fill, Style } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
 
 import Header from '@/components/Header';
-import { withLogin } from '@/helpers';
 import { PositionContext } from '@/components/PositionProvider';
 
 useGeographic();
@@ -94,4 +93,4 @@ const IndexPage: NextPage = () => {
   );
 };
 
-export default withLogin(IndexPage);
+export default IndexPage;

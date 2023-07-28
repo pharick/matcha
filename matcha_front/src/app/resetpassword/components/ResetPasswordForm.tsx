@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { RegistrationResponse } from '@/interfaces';
+import { RegistrationResponse } from '../../../types';
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
 

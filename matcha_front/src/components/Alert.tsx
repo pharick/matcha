@@ -13,9 +13,7 @@ const Alert: FC<AlertProps> = ({ children, type, className }) => {
   else colorStyle = 'bg-yellow-300/50';
   return (
     <div
-      className={`mt-[20px] rounded-lg p-2 text-center ${colorStyle} ${
-        className ?? ''
-      }`}
+      className={`rounded-lg p-2 text-center ${colorStyle} ${className ?? ''}`}
     >
       {children}
     </div>

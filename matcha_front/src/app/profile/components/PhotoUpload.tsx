@@ -10,10 +10,12 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Photo, User } from '@/interfaces';
+import { Photo, User } from '../../../types';
 import Modal from '@/components/Modal';
 import { useDrag, useDrop } from 'react-dnd';
 import { BiX } from 'react-icons/bi';
+import { DndProvider } from '@/imports/react-dnd';
+import { HTML5Backend } from '@/imports/react-dnd';
 
 interface PhotoUploadItemProps {
   photo: Photo;
@@ -57,7 +59,7 @@ const PhotoUploadItem: FC<PhotoUploadItemProps> = ({
   return (
     <figure
       ref={ref}
-      className={`group relative m-1 h-[250px] w-[200px] rounded-md border-2 border-brown bg-brown ${
+      className={`group relative m-1 h-[224px] w-[224px] rounded-md border-2 border-brown bg-brown ${
         isOver ? 'translate-y-1 opacity-50' : ''
       } ${isDragging ? 'invisible' : ''}`}
     >
@@ -155,7 +157,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
   };
 
   return (
-    <>
+    <DndProvider backend={HTML5Backend}>
       {photos.length > 0 ? (
         <ul className="flex flex-wrap justify-center">
           {photos
@@ -203,7 +205,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user }) => {
           Upload
         </Button>
       </Modal>
-    </>
+    </DndProvider>
   );
 };
 

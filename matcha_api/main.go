@@ -9,6 +9,7 @@ import (
 	"matcha_api/settings"
 
 	_ "github.com/lib/pq"
+	"github.com/rs/cors"
 	"goji.io"
 	"goji.io/pat"
 )
@@ -25,6 +26,11 @@ func main() {
 	env := handlers.CreateEnv(dbConn, settings)
 
 	mux := goji.NewMux()
+
+	mux.Use(cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowCredentials: true,
+	}).Handler)
 
 	// auth
 	mux.Handle(pat.Post("/register/"), handlers.Handler{Env: env, Handle: handlers.Register})

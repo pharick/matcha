@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { CurrentUser } from '@/interfaces';
+import { CurrentUser } from '../types';
 import { useRouter, usePathname } from 'next/navigation';
 
 interface UserProviderProps {
