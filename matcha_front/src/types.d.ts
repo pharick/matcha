@@ -1,3 +1,8 @@
+type MenuItem = {
+  title: string;
+  url: string;
+};
+
 type Gender = 'male' | 'female' | 'other';
 
 type User = {

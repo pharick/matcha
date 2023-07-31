@@ -1,13 +1,12 @@
 'use client';
 
-import { FC, useContext, useState } from 'react';
+import { FC, useState } from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
 import Alert from '@/components/Alert';
-import { UserContext } from '@/components/UserProvider';
 
 interface ChangeEmailFormProps {
   user: User;
@@ -24,7 +23,6 @@ enum Result {
 }
 
 const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ user }) => {
-  const userContext = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<Result>();
 
@@ -57,7 +55,6 @@ const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ user }) => {
     const res = await fetch(uri, requestOptions);
     setResult(res.ok ? Result.Valid : Result.Invalid);
     setIsLoading(false);
-    if (res.ok && userContext.getUser) userContext.getUser();
     if (res.ok) resetForm();
   };
   return (
