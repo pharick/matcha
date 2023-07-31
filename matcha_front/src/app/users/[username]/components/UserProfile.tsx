@@ -2,7 +2,7 @@
 
 import { FC } from 'react';
 
-import { User } from '../../../../types';
+// import { User } from '@/types';
 import UserPhoto from './UserPhoto';
 import UserInfo from './UserInfo';
 

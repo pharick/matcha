@@ -2,6 +2,7 @@ import { getCurrentUser } from '@/api/auth';
 import Header from '@/components/Header';
 import SecondaryMenu from '@/components/SecondaryMenu';
 import EmailValidationAlert from './components/EmailValidationAlert';
+import { redirect } from 'next/navigation';
 
 export default async function ProfileLayout({
   children,
@@ -9,10 +10,11 @@ export default async function ProfileLayout({
   children: React.ReactNode;
 }) {
   const user = await getCurrentUser();
+  if (!user) redirect('/login');
 
   return (
     <>
-      <Header />
+      <Header user={user} />
 
       <div className="mx-auto my-[50px] max-w-[700px]">
         {!user?.active && <EmailValidationAlert />}

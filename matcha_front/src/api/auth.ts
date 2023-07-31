@@ -119,3 +119,7 @@ export async function changePassword(oldPassword: string, newPassword: string) {
   if (!res.ok) throw Error('Something went wrong');
   return true;
 }
+
+export async function logout() {
+  cookies().delete('token');
+}

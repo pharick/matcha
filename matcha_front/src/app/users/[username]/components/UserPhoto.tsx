@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { FC, useEffect, useState } from 'react';
 import { BiRightArrowAlt, BiLeftArrowAlt } from 'react-icons/bi';
 
-import { Photo, UserPhotos } from '../../../../types';
 import DefaultProfilePicture from '@/images/default_profile_picture.jpg';
 
 interface UserProfileProps {

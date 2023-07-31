@@ -9,8 +9,6 @@ import {
 import { AiFillHeart } from 'react-icons/ai';
 import { differenceInYears, parseISO } from 'date-fns';
 
-import { User } from '../../../../types';
-
 interface UserInfoProps {
   user: User;
 }
@@ -28,7 +26,7 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
   }, [user]);
 
   return (
-    <div className="m-3 font-bold">
+    <div className="m-3 font-bold w-full">
       <div className="flex text-xl">
         <h1 className="mr-2 rounded-lg bg-green-2 px-2">{user?.username}</h1>
         <h1>{currentAge}</h1>

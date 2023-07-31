@@ -1,13 +1,18 @@
 'use client';
-import { useState } from 'react';
-import Image from 'next/image';
+import { FC, useState } from 'react';
+import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 
 import Cup from '@/images/cup.png';
 import DefaultProfilePicture from '@/images/default_profile_picture.jpg';
 import Matcha from '@/images/Matcha.png';
+import { logout } from '@/api/auth';
 
-const Header = () => {
+interface HeaderProps {
+  user: User;
+}
+
+const Header: FC<HeaderProps> = ({ user }) => {
   const [visible, setVisible] = useState<boolean>(false);
 
   return (
@@ -23,20 +28,30 @@ const Header = () => {
           className="h-full"
         >
           <figure className="relative h-[60px] w-[60px] overflow-hidden rounded-full">
-            <Image
-              src={DefaultProfilePicture}
-              fill={true}
-              className="object-cover"
-              sizes="100px"
-              alt="photo"
-            />
+            {user.username ? (
+              <Image
+                src={DefaultProfilePicture} //need to fix to user.avatar url
+                fill={true}
+                className="object-cover"
+                sizes="100px"
+                alt="photo"
+              />
+            ) : (
+              <Image
+                src={DefaultProfilePicture}
+                fill={true}
+                className="object-cover"
+                sizes="100px"
+                alt="photo"
+              />
+            )}
           </figure>
           {visible && (
             <div className="absolute right-8 z-50 flex w-[280px] flex-col rounded-xl bg-green-5/50 p-2 text-center font-bold [&>*]:mb-2">
               <Link href="/profile">Profile</Link>
               <Link href="">Matches</Link>
               <Link href="">Messages</Link>
-              <Link href="">Log Out</Link>
+              <button onClick={() => logout()}>Log Out</button>
             </div>
           )}
         </div>
