@@ -7,6 +7,8 @@ import * as Yup from 'yup';
 import FieldComponent from '@/components/FieldComponent';
 import Button from '@/components/Button';
 import Alert from '@/components/Alert';
+import { changePassword } from '@/api/auth';
+import { isValid } from 'date-fns';
 
 interface ChangePasswordFormValues {
   oldPassword: string;
@@ -14,14 +16,9 @@ interface ChangePasswordFormValues {
   confNewPassword: string;
 }
 
-enum Result {
-  Valid,
-  Invalid,
-}
-
 const ChangePasswordForm: FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<Result>();
+  const [result, setResult] = useState<boolean>(false);
+  const [isValid, setIsValid] = useState<boolean>(false);
 
   const initialValues: ChangePasswordFormValues = {
     oldPassword: '',
@@ -51,34 +48,26 @@ const ChangePasswordForm: FC = () => {
     values: ChangePasswordFormValues,
     { resetForm }: FormikHelpers<ChangePasswordFormValues>
   ) => {
-    setIsLoading(true);
-    const userToken = localStorage.getItem('token');
-    if (!userToken) return;
-    const requestOptions = {
-      method: 'POST',
-      body: JSON.stringify({
-        old_password: values.oldPassword,
-        new_password: values.newPassword,
-      }),
-      headers: { Authorization: `Bearer ${userToken}` },
-    };
-    const uri = `/api/password_change`;
-    const res = await fetch(uri, requestOptions);
-    setResult(res.ok ? Result.Valid : Result.Invalid);
-    if (res.ok) resetForm();
-    setIsLoading(false);
+    const user = await changePassword(values.oldPassword, values.newPassword);
+    setResult(true);
+    if (!user) setIsValid(false);
+    else {
+      setIsValid(true);
+      resetForm();
+    }
   };
+
   return (
     <>
       <h3 className="my-5 border-b-2 border-brown pb-1 text-center text-xl text-brown">
         Change password
       </h3>
-      {result == Result.Valid && (
+      {result && isValid && (
         <Alert type="success" className="mb-3">
           Password is changed
         </Alert>
       )}
-      {result == Result.Invalid && (
+      {result && !isValid && (
         <Alert type="error" className="mb-3">
           Invalid old password
         </Alert>
@@ -90,7 +79,7 @@ const ChangePasswordForm: FC = () => {
         validateOnBlur={false}
         validateOnChange={false}
       >
-        {({ errors, touched }) => (
+        {({ errors, touched, isSubmitting }) => (
           <Form>
             <FieldComponent
               type="password"
@@ -122,8 +111,8 @@ const ChangePasswordForm: FC = () => {
             <Button
               className="ml-auto"
               type="submit"
-              loading={isLoading}
-              disabled={isLoading}
+              loading={isSubmitting}
+              disabled={isSubmitting}
             >
               Confirm
             </Button>

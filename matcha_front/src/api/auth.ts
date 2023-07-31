@@ -95,5 +95,27 @@ export async function changeEmail(password: string, email: string) {
       cache: 'no-cache',
     }
   );
+  if (res.status == 403) return false;
   if (!res.ok) throw Error('Something went wrong');
+  return true;
+}
+
+export async function changePassword(oldPassword: string, newPassword: string) {
+  const token = cookies().get('token')?.value;
+  if (!token) return undefined;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/password_change/`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        old_password: oldPassword,
+        new_password: newPassword,
+      }),
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-cache',
+    }
+  );
+  if (res.status == 401) return false;
+  if (!res.ok) throw Error('Something went wrong');
+  return true;
 }
