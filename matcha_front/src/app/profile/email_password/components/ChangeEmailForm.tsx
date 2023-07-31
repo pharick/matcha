@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
 import Alert from '@/components/Alert';
+import { changeEmail } from '@/api/auth';
 
 interface ChangeEmailFormProps {
   user: User;
@@ -38,24 +39,26 @@ const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ user }) => {
 
   const handleChangeEmail = async (
     values: ChangeEmailFormValues,
-    { resetForm }: FormikHelpers<ChangeEmailFormValues>
+    // { resetForm }: FormikHelpers<ChangeEmailFormValues>
   ) => {
-    const userToken = localStorage.getItem('token');
-    if (!userToken) return;
-    setIsLoading(true);
-    const requestOptions = {
-      method: 'POST',
-      body: JSON.stringify({
-        email: values.email,
-        password: values.password,
-      }),
-      headers: { Authorization: `Bearer ${userToken}` },
-    };
-    const uri = `/api/email_change`;
-    const res = await fetch(uri, requestOptions);
-    setResult(res.ok ? Result.Valid : Result.Invalid);
-    setIsLoading(false);
-    if (res.ok) resetForm();
+    // const userToken = localStorage.getItem('token');
+    // if (!userToken) return;
+    // setIsLoading(true);
+    // const requestOptions = {
+    //   method: 'POST',
+    //   body: JSON.stringify({
+    //     email: values.email,
+    //     password: values.password,
+    //   }),
+    //   headers: { Authorization: `Bearer ${userToken}` },
+    // };
+    // const uri = `/api/email_change`;
+    // const res = await fetch(uri, requestOptions);
+    // setResult(res.ok ? Result.Valid : Result.Invalid);
+    // setIsLoading(false);
+    // if (res.ok && userContext.getUser) userContext.getUser();
+    // if (res.ok) resetForm();
+    setResult(await changeEmail(values.password, values.email))
   };
   return (
     <>
@@ -79,7 +82,7 @@ const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ user }) => {
         validateOnBlur={false}
         validateOnChange={false}
       >
-        {({ errors, touched }) => (
+        {({ errors, touched, isSubmitting }) => (
           <Form>
             <FieldComponent
               type="text"
@@ -102,8 +105,8 @@ const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ user }) => {
             <Button
               className="ml-auto"
               type="submit"
-              loading={isLoading}
-              disabled={isLoading}
+              loading={isSubmitting}
+              disabled={isSubmitting}
             >
               Confirm
             </Button>

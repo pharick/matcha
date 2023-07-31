@@ -82,3 +82,18 @@ export async function sendActivationEmail() {
   );
   if (!res.ok) throw Error('Something went wrong');
 }
+
+export async function changeEmail(password: string, email: string) {
+  const token = cookies().get('token')?.value;
+  if (!token) return undefined;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/email_change/`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ email: email, password: password }),
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-cache',
+    }
+  );
+  if (!res.ok) throw Error('Something went wrong');
+}
