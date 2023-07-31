@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 
 import PhotoUpload from './components/PhotoUpload';
 import { getCurrentUser } from '@/api/auth';
-import { getUserPhotos } from '@/api/profile';
+import { getUserPhotos } from '@/api/photos';
 
 export const metadata: Metadata = {
   title: 'Profile settings',

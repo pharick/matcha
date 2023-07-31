@@ -29,7 +29,9 @@ func main() {
 
 	mux.Use(cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedHeaders:   []string{"Authorization"},
 		AllowCredentials: true,
+		Debug:            true,
 	}).Handler)
 
 	// auth

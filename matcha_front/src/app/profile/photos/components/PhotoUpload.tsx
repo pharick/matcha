@@ -1,6 +1,7 @@
 'use client';
 
-import { ChangeEvent, FC, useRef, useState, useTransition } from 'react';
+import { FC, FormEventHandler, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { BiX } from 'react-icons/bi';
 import { useDrag, useDrop } from 'react-dnd';
@@ -9,7 +10,8 @@ import { HTML5Backend } from '@/imports/react-dnd';
 
 import Button from '@/components/Button';
 import Modal from '@/components/Modal';
-import { uploadPhoto } from '@/api/profile';
+import { uploadPhoto } from '@/api/photoUpload';
+import { movePhoto, removePhoto } from '@/api/photos';
 
 interface PhotoUploadItemProps {
   photo: Photo;
@@ -80,50 +82,18 @@ interface PhotoUploadProps {
 }
 
 const PhotoUpload: FC<PhotoUploadProps> = ({ user, photos }) => {
+  const router = useRouter();
   const [newPhoto, setNewPhoto] = useState<File>();
-  const [isPending, startTransition] = useTransition();
+  const [isUploading, setIsUploading] = useState(false);
 
-  const handleNewPhotoChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    setNewPhoto(e.target.files[0]);
-    e.target.files = null;
-  };
-
-  const handleNewPhotoUpload = async () => {
+  const handleSubmit: FormEventHandler = async (e) => {
+    e.preventDefault();
     if (!newPhoto) return;
-    const formData = new FormData();
-    formData.append('photo', newPhoto);
-    startTransition(() => void uploadPhoto(user.username, formData));
+    setIsUploading(true);
+    await uploadPhoto(user.username, newPhoto);
     setNewPhoto(undefined);
-  };
-
-  const handleMove = async (id: number, to: number) => {
-    // const userToken = localStorage.getItem('token');
-    // if (!userToken) return;
-    // const requestOptions = {
-    //   method: 'PATCH',
-    //   body: JSON.stringify({ index: to }),
-    //   headers: {
-    //     Authorization: `Bearer ${userToken}`,
-    //   },
-    // };
-    // const uri = `/api/users/${user.username}/photos/${id}`;
-    // await fetch(uri, requestOptions);
-    // await fetchPhotos();
-  };
-
-  const handleRemove = async (id: number) => {
-    // const userToken = localStorage.getItem('token');
-    // if (!userToken) return;
-    // const requestOptions = {
-    //   method: 'DELETE',
-    //   headers: {
-    //     Authorization: `Bearer ${userToken}`,
-    //   },
-    // };
-    // const uri = `/api/users/${user.username}/photos/${id}`;
-    // await fetch(uri, requestOptions);
-    // setPhotos((photos) => [...photos.filter((photo) => photo.id != id)]);
+    setIsUploading(false);
+    router.refresh();
   };
 
   return (
@@ -136,8 +106,8 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user, photos }) => {
               <li key={photo.id}>
                 <PhotoUploadItem
                   photo={photo}
-                  handleMove={handleMove}
-                  handleRemove={handleRemove}
+                  handleMove={(id, to) => movePhoto(user.username, id, to)}
+                  handleRemove={() => removePhoto(user.username, photo.id)}
                 />
               </li>
             ))}
@@ -145,7 +115,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user, photos }) => {
       ) : (
         <p className="text-center">No photos in your profile yet</p>
       )}
-      <form className="mt-[20px] text-center">
+      <form className="mt-[20px] text-center" onSubmit={handleSubmit}>
         <label
           htmlFor="new-photo-input"
           className="mx-auto block w-fit cursor-pointer rounded-[20px] border-2 border-brown bg-gradient-radial from-green-2/50 to-green-1/30 px-[20px] py-[5px] text-[24px] font-bold shadow-md hover:bg-gradient-radial hover:from-green-5/70 hover:to-brown/70 active:translate-x-px active:translate-y-px active:shadow-none"
@@ -158,23 +128,28 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user, photos }) => {
           type="file"
           multiple={false}
           accept="image/jpeg,image/png"
-          onChange={handleNewPhotoChange}
+          onChange={(e) => e.target.files && setNewPhoto(e.target.files[0])}
         />
-      </form>
 
-      <Modal isOpen={!!newPhoto} handleClose={() => setNewPhoto(undefined)}>
-        <figure className="relative mb-2 h-[400px] w-full">
-          <Image
-            src={newPhoto ? URL.createObjectURL(newPhoto) : '#'}
-            fill={true}
-            alt="Photo to upload"
-            className="object-contain"
-          />
-        </figure>
-        <Button onClick={() => void handleNewPhotoUpload()} className="mx-auto">
-          Upload
-        </Button>
-      </Modal>
+        <Modal isOpen={!!newPhoto} onClose={() => setNewPhoto(undefined)}>
+          <figure className="relative mb-2 h-[400px] w-full">
+            <Image
+              src={newPhoto ? URL.createObjectURL(newPhoto) : '#'}
+              fill={true}
+              alt="Photo to upload"
+              className="object-contain"
+            />
+          </figure>
+          <Button
+            type="submit"
+            className="mx-auto"
+            loading={isUploading}
+            disabled={isUploading}
+          >
+            Upload
+          </Button>
+        </Modal>
+      </form>
     </DndProvider>
   );
 };
