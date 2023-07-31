@@ -1,3 +1,5 @@
+import { differenceInYears, parseISO } from 'date-fns';
+
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export function findCookie(name: string) {
@@ -6,4 +8,10 @@ export function findCookie(name: string) {
     const [n, v] = cookie.split('=');
     if (name == n) return v;
   }
+}
+
+export function birthdateToAge(birthdate: string) {
+  const date = parseISO(birthdate);
+  const age = differenceInYears(new Date(), date);
+  return age;
 }

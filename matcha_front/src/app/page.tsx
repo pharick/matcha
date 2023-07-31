@@ -87,7 +87,7 @@ const IndexPage: NextPage = () => {
 
   return (
     <>
-      <Header />
+      {/* <Heade user={} /> */}
       <div id="map" className="h-[600px] w-[800px]"></div>
     </>
   );

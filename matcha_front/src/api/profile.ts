@@ -21,14 +21,16 @@ export async function updateProfile(username: string, reqData: ProfileData) {
   return user;
 }
 
-export async function getUserInfo(username: string) {
+export async function getUserProfile(username: string) {
   const token = cookies().get('token')?.value;
   if (!token) return undefined;
-  const requestOptions = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
-  const uri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/`;
-  const res = await fetch(uri, requestOptions);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  if (res.status == 404) return undefined;
   if (!res.ok) throw Error('Something went wrong');
   const user = (await res.json()) as User;
   return user;
