@@ -5,7 +5,7 @@ import { BiRightArrowAlt } from 'react-icons/bi';
 
 import Logo from './components/Logo';
 import LoginForm from './components/LoginForm';
-import ResetPasswordLink from './components/ResetPassordLink';
+import ResetPasswordLink from './components/ResetPasswordLink';
 import { getCurrentUser } from '@/api/auth';
 
 export const metadata: Metadata = {
