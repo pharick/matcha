@@ -1,7 +1,8 @@
 'use client';
 
+import { FC, useEffect } from 'react';
+
 import { updatePosition } from '@/api/position';
-import { FC } from 'react';
 
 async function getPositionByIP() {
   const res = await fetch(
@@ -13,18 +14,20 @@ async function getPositionByIP() {
 }
 
 const PositionUpdater: FC = () => {
-  navigator.geolocation.getCurrentPosition(
-    async (pos) => {
-      await updatePosition({
-        longitude: pos.coords.longitude,
-        latitude: pos.coords.latitude,
-      });
-    },
-    async () => {
-      const pos = await getPositionByIP();
-      await updatePosition(pos);
-    }
-  );
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        await updatePosition({
+          longitude: pos.coords.longitude,
+          latitude: pos.coords.latitude,
+        });
+      },
+      async () => {
+        const pos = await getPositionByIP();
+        await updatePosition(pos);
+      }
+    );
+  }, []);
 
   return <></>;
 };
