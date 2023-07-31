@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { SWRConfig } from 'swr';
 import { Montserrat } from 'next/font/google';
 
 import './globals.css';

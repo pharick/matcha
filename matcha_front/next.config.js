@@ -12,6 +12,15 @@ const nextConfig = {
     experimental: {
       serverActions: true,
     },
+    redirects() {
+      return [
+        {
+          source: '/profile',
+          destination: '/profile/information',
+          permanent: true,
+        },
+      ]
+    }
 }
 
 module.exports = nextConfig
