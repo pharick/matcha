@@ -10,9 +10,6 @@ import {
   useState,
 } from 'react';
 
-import { GeolocationDBResponse, Position } from '../types';
-import { UserContext } from '@/components/UserProvider';
-
 interface PositionProviderProps {
   children?: ReactNode;
 }
@@ -26,8 +23,6 @@ export const PositionContext = createContext<PositionContextInterface>({
 });
 
 const PositionProvider: FC<PositionProviderProps> = ({ children }) => {
-  const userContext = useContext(UserContext);
-
   const [position, setPosition] = useState<Position>({
     latitude: 0,
     longitude: 0,
@@ -57,7 +52,7 @@ const PositionProvider: FC<PositionProviderProps> = ({ children }) => {
           `https://geolocation-db.com/json/${process.env.NEXT_PUBLIC_GEOLOCATIONDB_KEY}`
         );
         if (!res.ok) return;
-        const data = (await res.json()) as GeolocationDBResponse;
+        const data = (await res.json()) as Position;
         await savePosition({
           longitude: data.longitude,
           latitude: data.latitude,
@@ -65,10 +60,6 @@ const PositionProvider: FC<PositionProviderProps> = ({ children }) => {
       }
     );
   };
-
-  useEffect(() => {
-    if (userContext.user) void getPosition();
-  }, [userContext.user]);
 
   const value = useMemo(
     () => ({
