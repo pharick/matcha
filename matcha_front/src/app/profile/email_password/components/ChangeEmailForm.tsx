@@ -18,14 +18,9 @@ interface ChangeEmailFormValues {
   email: string;
 }
 
-enum Result {
-  Valid,
-  Invalid,
-}
-
 const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ user }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<Result>();
+  const [isValid, setIsValid] = useState<boolean>(false);
+  const [result, setResult] = useState<boolean>(false);
 
   const initialValues: ChangeEmailFormValues = {
     email: user.email,
@@ -39,38 +34,28 @@ const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ user }) => {
 
   const handleChangeEmail = async (
     values: ChangeEmailFormValues,
-    // { resetForm }: FormikHelpers<ChangeEmailFormValues>
+    { resetForm }: FormikHelpers<ChangeEmailFormValues>
   ) => {
-    // const userToken = localStorage.getItem('token');
-    // if (!userToken) return;
-    // setIsLoading(true);
-    // const requestOptions = {
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //     email: values.email,
-    //     password: values.password,
-    //   }),
-    //   headers: { Authorization: `Bearer ${userToken}` },
-    // };
-    // const uri = `/api/email_change`;
-    // const res = await fetch(uri, requestOptions);
-    // setResult(res.ok ? Result.Valid : Result.Invalid);
-    // setIsLoading(false);
-    // if (res.ok && userContext.getUser) userContext.getUser();
-    // if (res.ok) resetForm();
-    setResult(await changeEmail(values.password, values.email))
+    const user = await changeEmail(values.password, values.email);
+    setResult(true);
+    if (!user) setIsValid(false);
+    else {
+      setIsValid(true);
+      resetForm();
+    }
   };
+
   return (
     <>
       <h3 className="my-5 border-b-2 border-brown pb-1 text-center text-xl text-brown">
         Change email
       </h3>
-      {result == Result.Valid && (
+      {result && isValid && (
         <Alert type="success" className="mb-3">
           Email is changed
         </Alert>
       )}
-      {result == Result.Invalid && (
+      {!isValid && result && (
         <Alert type="error" className="mb-3">
           Invalid password
         </Alert>
