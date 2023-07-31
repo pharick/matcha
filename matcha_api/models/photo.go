@@ -109,3 +109,18 @@ func (m PhotoModel) GetAllByUserId(userId int) ([]Photo, error) {
 	}
 	return photos, nil
 }
+
+func (m PhotoModel) GetFirstByUserId(userId int) (Photo, error) {
+	var photo Photo
+	row := m.DB.QueryRow(
+		"SELECT id, user_id, index, url FROM photos WHERE user_id = $1 ORDER BY index LIMIT 1",
+		userId,
+	)
+	err := row.Scan(
+		&photo.Id,
+		&photo.UserId,
+		&photo.Index,
+		&photo.Url,
+	)
+	return photo, err
+}

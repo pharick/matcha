@@ -18,7 +18,7 @@ type User = {
   tags: string[];
 };
 
-type CurrentUser = User & { active: boolean };
+type CurrentUser = User & { active: boolean; avatar: string };
 
 type LoginResponse = {
   token: string;

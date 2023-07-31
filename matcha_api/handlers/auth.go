@@ -277,6 +277,14 @@ func WhoAmI(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
+	avatar, err := env.Photos.GetFirstByUserId(user.Id)
+	if err != nil && err != sql.ErrNoRows {
+		return nil, err
+	}
+	var avatar_url string
+	if err != sql.ErrNoRows {
+		avatar_url = avatar.Url
+	}
 	ret := schemas.CurrenUserReturn{
 		Id:                user.Id,
 		Username:          user.Username,
@@ -288,6 +296,7 @@ func WhoAmI(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		GenderPreferences: user.GenderPreferences,
 		Biography:         user.Biography,
 		Tags:              tags,
+		Avatar:            avatar_url,
 	}
 	return ret, nil
 }
