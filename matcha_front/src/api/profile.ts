@@ -23,7 +23,7 @@ export async function updateProfile(username: string, reqData: ProfileData) {
 
 export async function getUserProfile(username: string) {
   const token = cookies().get('token')?.value;
-  if (!token) return undefined;
+  if (!token) throw Error('No user token');
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/`,
     {

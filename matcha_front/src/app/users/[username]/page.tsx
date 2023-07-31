@@ -16,6 +16,8 @@ interface UserPageProps {
 export async function generateMetadata({
   params: { username },
 }: UserPageProps): Promise<Metadata> {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) return {};
   const user = await getUserProfile(username);
   return {
     title: `${user?.first_name} ${user?.last_name}`,
@@ -23,11 +25,10 @@ export async function generateMetadata({
 }
 
 const UserPage: NextPage<UserPageProps> = async ({ params: { username } }) => {
-  const [user, currentUser] = await Promise.all([
-    getUserProfile(username),
-    getCurrentUser(),
-  ]);
+  const currentUser = await getCurrentUser();
   if (!currentUser) redirect('/login');
+
+  const user = await getUserProfile(username);
   if (!user) notFound();
 
   return (
