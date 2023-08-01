@@ -5,16 +5,10 @@ import (
 	"fmt"
 	"log"
 	"matcha_api/errors"
+	"matcha_api/lib"
 	"matcha_api/schemas"
 	"net/http"
 )
-
-func HttpJsonError(w http.ResponseWriter, body any, code int) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.Header().Set("X-Content-Type-Options", "nosniff")
-	w.WriteHeader(code)
-	json.NewEncoder(w).Encode(body)
-}
 
 type Handler struct {
 	Env    *Env
@@ -29,10 +23,10 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			ret := schemas.ValidationErrorReturn{
 				Errors: err.Errors,
 			}
-			HttpJsonError(w, ret, err.Status)
+			lib.HttpJsonError(w, ret, err.Status)
 		case errors.HttpError:
 			if err.Body != nil {
-				HttpJsonError(w, err.Body, err.Status)
+				lib.HttpJsonError(w, err.Body, err.Status)
 			} else {
 				http.Error(w, err.Error(), err.Status)
 			}

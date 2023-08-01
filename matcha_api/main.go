@@ -6,7 +6,6 @@ import (
 
 	"matcha_api/db"
 	"matcha_api/handlers"
-	"matcha_api/lib/sockets"
 	"matcha_api/settings"
 
 	_ "github.com/lib/pq"
@@ -24,10 +23,10 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
 	env := handlers.CreateEnv(dbConn, settings)
 
 	mux := goji.NewMux()
-
 	mux.Use(cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"},
 		AllowedHeaders:   []string{"Authorization"},
@@ -67,12 +66,12 @@ func main() {
 	// --- WEBSOCKETS ---
 
 	// notifications
-	notificationsHub := sockets.NewHub()
-	go notificationsHub.Run()
-
-	mux.Handle(pat.Get("/ws/notifications/"), http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		sockets.ServeWs(notificationsHub, w, r)
-	}))
+	mux.HandleFunc(
+		pat.Get("/ws/notifications/"),
+		func(w http.ResponseWriter, r *http.Request) {
+			handlers.ServeWs(env, w, r)
+		},
+	)
 
 	http.ListenAndServe(":8000", mux)
 }
