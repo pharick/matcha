@@ -32,8 +32,8 @@ const UserProfile: FC<UserProfileProps> = async ({ user, photosPromise }) => {
         <h2 className="my-5 border-b-2 border-brown pb-1 text-xl text-brown">
           Interests
         </h2>
-        <div className="flex flex-wrap">
-          <ul className="flex">
+        <div className="flex">
+          <ul className="flex flex-wrap">
             {user?.tags.map((tag, i) => (
               <li key={i} className="mb-5 mr-2 rounded-lg bg-green-2 px-2">
                 {tag}

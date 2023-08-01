@@ -24,7 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={montserrat.className}>
-      <body className="mx-10">{children}</body>
+      <body className="mx-10 bg-no-repeat bg-cover">{children}</body>
     </html>
   );
 }

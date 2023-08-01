@@ -20,6 +20,8 @@ module.exports = {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'leaf-down': "url('/leaf_down.svg')",
+        'leaf-main': "url('/leaf_main.svg')",
       },
     },
   },

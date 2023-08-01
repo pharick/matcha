@@ -15,8 +15,7 @@
 }
 
 body {
-  background-color: var(--bg-end);
-  background: linear-gradient(var(--bg-start), var(--bg-end)) fixed;
+  background: url("../../public/leaf_main.svg"), linear-gradient(var(--bg-start), var(--bg-end)) fixed;
 }
 
 input::-webkit-credentials-auto-fill-button,
