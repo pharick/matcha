@@ -23,6 +23,7 @@
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "18.2.0",
     "react-icons": "^4.10.1",
+    "react-use-websocket": "^4.3.1",
     "sass": "^1.64.1",
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6",

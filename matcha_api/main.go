@@ -6,6 +6,7 @@ import (
 
 	"matcha_api/db"
 	"matcha_api/handlers"
+	"matcha_api/lib/sockets"
 	"matcha_api/settings"
 
 	_ "github.com/lib/pq"
@@ -34,6 +35,8 @@ func main() {
 		Debug:            true,
 	}).Handler)
 
+	// --- HTTP ---
+
 	// auth
 	mux.Handle(pat.Post("/register/"), handlers.Handler{Env: env, Handle: handlers.Register})
 	mux.Handle(pat.Post("/activate/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.Activate)})
@@ -60,6 +63,16 @@ func main() {
 
 	// tags
 	mux.Handle(pat.Post("/tags/find/"), handlers.Handler{Env: env, Handle: handlers.FindTag})
+
+	// --- WEBSOCKETS ---
+
+	// notifications
+	notificationsHub := sockets.NewHub()
+	go notificationsHub.Run()
+
+	mux.Handle(pat.Get("/ws/notifications/"), http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sockets.ServeWs(notificationsHub, w, r)
+	}))
 
 	http.ListenAndServe(":8000", mux)
 }
