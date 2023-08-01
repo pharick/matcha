@@ -5,14 +5,14 @@ import "log"
 type Hub struct {
 	Clients    map[*Client]bool
 	Users      map[int]*Client
-	Broadcasts chan []byte
+	Broadcasts chan any
 	Register   chan *Client
 	Unregister chan *Client
 }
 
 func NewHub() *Hub {
 	return &Hub{
-		Broadcasts: make(chan []byte),
+		Broadcasts: make(chan any),
 		Register:   make(chan *Client),
 		Unregister: make(chan *Client),
 		Clients:    make(map[*Client]bool),
@@ -26,7 +26,6 @@ func (h *Hub) Run() {
 		case client := <-h.Register:
 			h.Clients[client] = true
 			h.Users[client.UserId] = client
-
 			log.Printf("Connected userId %v", client.UserId)
 		case client := <-h.Unregister:
 			if _, ok := h.Clients[client]; ok {

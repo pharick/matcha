@@ -32,11 +32,10 @@ func ServeWs(env *Env, w http.ResponseWriter, r *http.Request) {
 	client := &sockets.Client{
 		Hub:    env.NotificationsHub,
 		Conn:   conn,
-		Send:   make(chan []byte, 256),
+		Send:   make(chan any, 256),
 		UserId: user.Id,
 	}
 	client.Hub.Register <- client
 
-	go client.ReadPump()
 	go client.WritePump()
 }

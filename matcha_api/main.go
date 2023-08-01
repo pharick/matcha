@@ -63,6 +63,9 @@ func main() {
 	// tags
 	mux.Handle(pat.Post("/tags/find/"), handlers.Handler{Env: env, Handle: handlers.FindTag})
 
+	// profile
+	mux.Handle(pat.Post("/users/:username/visit/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.VisitProfile)})
+
 	// --- WEBSOCKETS ---
 
 	// notifications
