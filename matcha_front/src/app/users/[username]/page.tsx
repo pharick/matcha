@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 
 import Header from '@/components/header/Header';
 import UserProfile from './components/UserProfile';
-import { getUserProfile } from '@/api/profile';
+import { getUserProfile, visitUserProfile } from '@/api/profile';
 import { getCurrentUser } from '@/api/auth';
 import { getUserPhotos } from '@/api/photos';
 
@@ -28,7 +28,10 @@ const UserPage: NextPage<UserPageProps> = async ({ params: { username } }) => {
   const currentUser = await getCurrentUser();
   if (!currentUser) redirect('/login');
 
-  const user = await getUserProfile(username);
+  const [user] = await Promise.all([
+    getUserProfile(username),
+    visitUserProfile(username),
+  ]);
   if (!user) notFound();
 
   return (

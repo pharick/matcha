@@ -21,6 +21,9 @@ func VisitProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error)
 	if err != nil {
 		return nil, err
 	}
+	if visitor.Id == user.Id {
+		return nil, nil
+	}
 	notification := schemas.Notification{
 		Type:     schemas.NotificationVisit,
 		Username: visitor.Username,

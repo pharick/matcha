@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 import UserPhoto from './UserPhoto';
 import UserInfo from './UserInfo';
