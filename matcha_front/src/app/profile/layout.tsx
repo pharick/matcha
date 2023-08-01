@@ -1,5 +1,5 @@
 import { getCurrentUser } from '@/api/auth';
-import Header from '@/components/Header';
+import Header from '@/components/header/Header';
 import SecondaryMenu from '@/components/SecondaryMenu';
 import EmailValidationAlert from './components/EmailValidationAlert';
 import { redirect } from 'next/navigation';

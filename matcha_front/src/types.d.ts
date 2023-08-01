@@ -59,3 +59,8 @@ type Position = {
   longitude: number;
   latitude: number;
 };
+
+type Notification = {
+  type: 'visit' | 'like' | 'dislike';
+  username: string;
+};

@@ -17,6 +17,8 @@ require github.com/google/uuid v1.3.0
 
 require github.com/rs/cors v1.9.0
 
+require github.com/gorilla/websocket v1.5.0 // indirect
+
 require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect

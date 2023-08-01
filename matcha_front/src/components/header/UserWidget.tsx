@@ -1,14 +1,9 @@
-'use client';
-
 import { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import Cup from '@/images/cup.png';
 import DefaultProfilePicture from '@/images/default_profile_picture.jpg';
-import Matcha from '@/images/Matcha.png';
 import { logout } from '@/api/auth';
-import PositionUpdater from './PositionUpdater';
 
 interface UserWidgetProps {
   user: CurrentUser;
@@ -50,56 +45,4 @@ const UserWidget: FC<UserWidgetProps> = ({ user }) => {
   );
 };
 
-interface MainMenuProps {
-  user: CurrentUser;
-}
-
-const MainMenu: FC<MainMenuProps> = ({ user }) => {
-  return (
-    <nav>
-      <ul className="flex">
-        <li>
-          <Link
-            className="border-r border-brown p-2 hover:bg-green-5/50"
-            href={`/search`}
-          >
-            Find love
-          </Link>
-        </li>
-        <li>
-          <Link
-            className="p-2 hover:bg-green-5/50"
-            href={`/users/${user.username}`}
-          >
-            My profile
-          </Link>
-        </li>
-      </ul>
-    </nav>
-  );
-};
-
-interface HeaderProps {
-  user: CurrentUser;
-}
-
-const Header: FC<HeaderProps> = ({ user }) => {
-  return (
-    <header>
-      <div className="mb-5 mt-3 flex justify-between">
-        <div className="flex items-center">
-          <Image src={Matcha} width={100} priority alt="logo" />
-          <Image src={Cup} width={80} alt="cup" className="mr-2" />
-
-          <MainMenu user={user} />
-        </div>
-
-        <UserWidget user={user} />
-      </div>
-
-      <PositionUpdater />
-    </header>
-  );
-};
-
-export default Header;
+export default UserWidget;

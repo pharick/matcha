@@ -23,16 +23,18 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
 	env := handlers.CreateEnv(dbConn, settings)
 
 	mux := goji.NewMux()
-
 	mux.Use(cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"},
 		AllowedHeaders:   []string{"Authorization"},
 		AllowCredentials: true,
 		Debug:            true,
 	}).Handler)
+
+	// --- HTTP ---
 
 	// auth
 	mux.Handle(pat.Post("/register/"), handlers.Handler{Env: env, Handle: handlers.Register})
@@ -60,6 +62,19 @@ func main() {
 
 	// tags
 	mux.Handle(pat.Post("/tags/find/"), handlers.Handler{Env: env, Handle: handlers.FindTag})
+
+	// profile
+	mux.Handle(pat.Post("/users/:username/visit/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.VisitProfile)})
+
+	// --- WEBSOCKETS ---
+
+	// notifications
+	mux.HandleFunc(
+		pat.Get("/ws/notifications/"),
+		func(w http.ResponseWriter, r *http.Request) {
+			handlers.ServeWs(env, w, r)
+		},
+	)
 
 	http.ListenAndServe(":8000", mux)
 }
