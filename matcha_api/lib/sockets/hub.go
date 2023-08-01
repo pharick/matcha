@@ -2,9 +2,15 @@ package sockets
 
 import "log"
 
+type PrivateMessage struct {
+	UserId  int
+	Message any
+}
+
 type Hub struct {
 	Clients    map[*Client]bool
 	Users      map[int]*Client
+	Private    chan PrivateMessage
 	Broadcasts chan any
 	Register   chan *Client
 	Unregister chan *Client
@@ -12,6 +18,7 @@ type Hub struct {
 
 func NewHub() *Hub {
 	return &Hub{
+		Private:    make(chan PrivateMessage),
 		Broadcasts: make(chan any),
 		Register:   make(chan *Client),
 		Unregister: make(chan *Client),
@@ -38,6 +45,18 @@ func (h *Hub) Run() {
 			for client := range h.Clients {
 				select {
 				case client.Send <- message:
+				default:
+					close(client.Send)
+					delete(h.Clients, client)
+					delete(h.Users, client.UserId)
+					log.Printf("Disconnected userId %v", client.UserId)
+				}
+			}
+		case message := <-h.Private:
+			client, ok := h.Users[message.UserId]
+			if ok {
+				select {
+				case client.Send <- message.Message:
 				default:
 					close(client.Send)
 					delete(h.Clients, client)
