@@ -20,11 +20,11 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
 
   const handleClick = () => {
     setClicked(!clicked);
-  }
+  };
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="w-full font-bold flex-1">
+    <div className="flex h-full flex-col">
+      <div className="w-full flex-1 font-bold">
         <h1 className="inline-block w-fit text-2xl">
           {user.first_name} {user.last_name}
         </h1>
@@ -66,12 +66,17 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
       </div>
 
       <div className="font-bold">
-        <button onClick={() => handleClick()} className={`${clicked ? ' bg-green-2 active:bg-green-5' : 'bg-green-5'} flex items-center rounded-lg px-10 py-2 text-xl hover:bg-neutral/50`}>
+        <button
+          onClick={() => handleClick()}
+          className={`${
+            clicked ? ' bg-green-5 active:bg-green-5' : 'bg-green-2'
+          } flex items-center rounded-lg border-2 border-brown px-10 py-2 text-xl shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`}
+        >
           Like
           {clicked ? (
             <BiLike className="ml-2"></BiLike>
           ) : (
-            <BiSolidLike color='#F39BB3' className="ml-2"></BiSolidLike>
+            <BiSolidLike color="#F39BB3" className="ml-2"></BiSolidLike>
           )}
         </button>
       </div>
