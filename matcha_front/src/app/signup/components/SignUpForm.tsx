@@ -16,7 +16,7 @@ const SignUpForm: FC = () => {
   const [isValid, setIsValid] = useState(true);
 
   const passwordRequiremets =
-    'Password shoud be at least six characters long and contain at least one number, letter and punctuation mark (such as ! and &)';
+    'Password shoud be at least six characters long and contain at least one number, lowercase and uppercase letter and punctuation mark (such as ! and &)';
 
   const validationSchema = Yup.object({
     username: Yup.string()
@@ -44,7 +44,7 @@ const SignUpForm: FC = () => {
       .email('Enter a valid email address'),
     password: Yup.string()
       .required(passwordRequiremets)
-      .min(6, 'Password must be atleast 6 characters')
+      .min(6, passwordRequiremets)
       .max(36, "Password can't be more than 36 characters")
       .matches(/[0-9]/, passwordRequiremets)
       .matches(/[a-z]/, passwordRequiremets)
