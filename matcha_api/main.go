@@ -66,13 +66,16 @@ func main() {
 	// profile
 	mux.Handle(pat.Post("/users/:username/visit/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.VisitProfile)})
 
+	// notifications
+	mux.Handle(pat.Post("/notifications/:id/view/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.ViewNotification)})
+
 	// --- WEBSOCKETS ---
 
 	// notifications
 	mux.HandleFunc(
 		pat.Get("/ws/notifications/"),
 		func(w http.ResponseWriter, r *http.Request) {
-			handlers.ServeWs(env, w, r)
+			handlers.ServeNotificationsWs(env, w, r)
 		},
 	)
 

@@ -60,7 +60,10 @@ type Position = {
   latitude: number;
 };
 
-type Notification = {
+type MNotification = {
+  id: int;
   type: 'visit' | 'like' | 'dislike';
   username: string;
+  create_time: string;
+  viewed: boolean;
 };

@@ -2,12 +2,17 @@ package handlers
 
 import (
 	"log"
+	"matcha_api/errors"
 	"matcha_api/lib"
 	"matcha_api/lib/sockets"
+	"matcha_api/models"
 	"net/http"
+	"strconv"
+
+	"goji.io/pat"
 )
 
-func ServeWs(env *Env, w http.ResponseWriter, r *http.Request) {
+func ServeNotificationsWs(env *Env, w http.ResponseWriter, r *http.Request) {
 	tokenCookie, err := r.Cookie("token")
 	if err != nil {
 		lib.HttpJsonError(w, map[string]string{}, 401)
@@ -37,6 +42,23 @@ func ServeWs(env *Env, w http.ResponseWriter, r *http.Request) {
 	}
 	client.Hub.Register <- client
 
+	notifications, err := env.Notifications.GetUnreadByUserId(user.Id)
+	if err == nil {
+		for _, notification := range notifications {
+			client.Send <- notification
+		}
+	}
+
 	go client.WritePump()
 	go client.ReadPump()
+}
+
+func ViewNotification(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	user := r.Context().Value(ContextKey("User")).(models.User)
+	id, err := strconv.Atoi(pat.Param(r, "id"))
+	if err != nil {
+		return nil, errors.HttpError{Status: 404, Body: nil}
+	}
+	_, err = env.Notifications.MarkViewed(id, user.Id)
+	return nil, err
 }

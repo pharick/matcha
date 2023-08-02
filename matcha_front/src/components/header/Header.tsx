@@ -1,5 +1,3 @@
-'use client';
-
 import { FC } from 'react';
 import Image from 'next/image';
 
@@ -25,8 +23,10 @@ const Header: FC<HeaderProps> = ({ user }) => {
           <MainMenu user={user} />
         </div>
 
-        <Notifications />
-        <UserWidget user={user} />
+        <div className="flex items-center">
+          <Notifications className="mr-3" />
+          <UserWidget user={user} />
+        </div>
       </div>
 
       <PositionUpdater />

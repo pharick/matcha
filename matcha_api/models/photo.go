@@ -29,7 +29,7 @@ func (m PhotoModel) Create(
 		return photo, err
 	}
 	err = m.DB.QueryRow(
-		`INSERT INTO photos(user_id, index, url) 
+		`INSERT INTO photos(user_id, index, url)
 		VALUES($1, $2, $3) RETURNING id, user_id, index, url`,
 		user_id, maxIndex+1, url,
 	).Scan(
@@ -90,7 +90,12 @@ func (m PhotoModel) Remove(id int) error {
 
 func (m PhotoModel) GetAllByUserId(userId int) ([]Photo, error) {
 	photos := make([]Photo, 0)
-	rows, err := m.DB.Query("SELECT id, user_id, index, url FROM photos WHERE user_id = $1 ORDER BY index", userId)
+	rows, err := m.DB.Query(
+		`SELECT id, user_id, index, url
+		FROM photos WHERE user_id = $1
+		ORDER BY index`,
+		userId,
+	)
 	if err != nil {
 		return nil, err
 	}

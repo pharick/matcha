@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "node_modules/ol/ol.css";
-
 :root {
   --foreground: #403539;
   --bg-start: #C9E6AC;

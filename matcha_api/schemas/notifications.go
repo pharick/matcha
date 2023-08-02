@@ -1,12 +1,9 @@
 package schemas
 
-const (
-	NotificationVisit  string = "visit"
-	NotificationLike   string = "like"
-	NotificationUnlike string = "unlike"
-)
-
-type Notification struct {
-	Type     string `json:"type"`
-	Username string `json:"username"`
+type NotificationReturn struct {
+	Id         int    `json:"id"`
+	Type       string `json:"type"`
+	Username   string `json:"username"`
+	CreateTime string `json:"create_time"`
+	Viewed     bool   `json:"viewed"`
 }

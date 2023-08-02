@@ -24,13 +24,20 @@ func VisitProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error)
 	if visitor.Id == user.Id {
 		return nil, nil
 	}
-	notification := schemas.Notification{
-		Type:     schemas.NotificationVisit,
-		Username: visitor.Username,
+	notification, err := env.Notifications.Create(models.NotificationVisit, user.Id, visitor.Id)
+	if err != nil {
+		return nil, errors.HttpError{Status: 500, Body: nil}
+	}
+	ret := schemas.NotificationReturn{
+		Id:         notification.Id,
+		Type:       notification.Type,
+		Username:   visitor.Username,
+		CreateTime: notification.CreateTime,
+		Viewed:     notification.Viewed,
 	}
 	env.NotificationsHub.Private <- sockets.PrivateMessage{
 		UserId:  user.Id,
-		Message: notification,
+		Message: ret,
 	}
 	return nil, nil
 }

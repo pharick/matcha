@@ -34,12 +34,14 @@ const UserWidget: FC<UserWidgetProps> = ({ user }) => {
         >
           Profile settings
         </Link>
-        <button
-          className="block w-full rounded-b-xl p-2 hover:bg-brown hover:text-white"
-          onClick={() => logout()}
-        >
-          Log Out
-        </button>
+        <form action={logout}>
+          <button
+            className="block w-full rounded-b-xl p-2 hover:bg-brown hover:text-white"
+            type="submit"
+          >
+            Log Out
+          </button>
+        </form>
       </nav>
     </div>
   );

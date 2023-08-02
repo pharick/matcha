@@ -11,6 +11,7 @@ type Env struct {
 	Users            models.UserModel
 	Photos           models.PhotoModel
 	Tags             models.TagModel
+	Notifications    models.NotificationModel
 	Settings         settings.Settings
 	NotificationsHub *sockets.Hub
 }
@@ -23,6 +24,7 @@ func CreateEnv(dbConn *sql.DB, settings settings.Settings) *Env {
 		Users:            models.UserModel{DB: dbConn},
 		Photos:           models.PhotoModel{DB: dbConn},
 		Tags:             models.TagModel{DB: dbConn},
+		Notifications:    models.NotificationModel{DB: dbConn},
 		Settings:         settings,
 		NotificationsHub: notificationsHub,
 	}
