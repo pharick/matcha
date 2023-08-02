@@ -8,6 +8,7 @@ import FieldComponent from '@/components/FieldComponent';
 import Button from '@/components/Button';
 import Alert from '@/components/Alert';
 import { signUp } from '@/api/auth';
+import { differenceInYears } from 'date-fns';
 
 type SignUpFormValues = SignUpData & { conf_password: string };
 
@@ -33,7 +34,11 @@ const SignUpForm: FC = () => {
       .min(2, 'First name must be between 2 and 16 characters')
       .max(16, 'First name must be between 2 and 16 characters')
       .matches(/^[aA-zZ]*$/, 'Numbers and special characters are not allowed'),
-    birth_date: Yup.date().required('Enter your birth date'),
+    birth_date: Yup.date()
+      // .required('Enter your birth date')
+      .nullable()
+      .test('DOB', 'This website for 18+ only', value => {
+        if (value) return differenceInYears(new Date(), value) >= 18;}),
     email: Yup.string()
       .required("You'll need this when if you ever forgot your password")
       .email('Enter a valid email address'),
