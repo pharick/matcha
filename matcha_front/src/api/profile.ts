@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { revalidateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 
 export async function updateProfile(username: string, reqData: ProfileData) {
   const token = cookies().get('token')?.value;
@@ -14,12 +14,11 @@ export async function updateProfile(username: string, reqData: ProfileData) {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      cache: 'no-cache',
     }
   );
   if (!res.ok) throw Error('Something went wrong');
   const user = (await res.json()) as User;
-  revalidateTag('profile');
+  revalidatePath('/users/[username]');
   return user;
 }
 
@@ -30,7 +29,6 @@ export async function getUserProfile(username: string) {
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/`,
     {
       headers: { Authorization: `Bearer ${token}` },
-      next: { tags: ['profile'] },
     }
   );
   if (res.status == 404) return undefined;

@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useTransition } from 'react';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -21,6 +21,8 @@ type ProfileFormValues = ProfileDataBase & {
 };
 
 const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
+  const [isPending, startTransition] = useTransition();
+
   const initialValues: ProfileFormValues = {
     username: user.username,
     first_name: user.first_name,
@@ -57,15 +59,17 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
   });
 
   const handleSubmitUserFullInformation = async (values: ProfileFormValues) => {
-    if (!values.gender) return;
-    await updateProfile(values.username, {
-      first_name: values.first_name,
-      last_name: values.last_name,
-      gender: values.gender,
-      gender_preferences: values.gender_preferences,
-      biography: values.biography,
-      tags: values.tags,
-    });
+    startTransition(
+      () =>
+        void updateProfile(values.username, {
+          first_name: values.first_name,
+          last_name: values.last_name,
+          gender: values.gender || 'other',
+          gender_preferences: values.gender_preferences,
+          biography: values.biography,
+          tags: values.tags,
+        })
+    );
   };
 
   return (
@@ -77,7 +81,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
       validateOnChange={false}
       enableReinitialize={true}
     >
-      {({ errors, touched, setFieldValue, isSubmitting }) => (
+      {({ errors, touched, setFieldValue }) => (
         <Form className="text-center">
           <FieldComponent
             type="text"
@@ -179,8 +183,8 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
           </div>
 
           <Button
-            loading={isSubmitting}
-            disabled={isSubmitting}
+            loading={isPending}
+            disabled={isPending}
             type="submit"
             className="mx-auto"
           >

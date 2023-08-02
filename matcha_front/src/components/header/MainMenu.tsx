@@ -9,17 +9,17 @@ const MainMenu: FC<MainMenuProps> = ({ user }) => {
   return (
     <nav>
       <ul className="flex">
-        <li>
+        <li className="shrink-0">
           <Link
-            className="border-r border-brown p-2 hover:bg-green-5/50"
+            className="block border-r border-brown p-2 hover:bg-green-5/50"
             href={`/search`}
           >
             Find love
           </Link>
         </li>
-        <li>
+        <li className="shrink-0">
           <Link
-            className="p-2 hover:bg-green-5/50"
+            className="block p-2 hover:bg-green-5/50"
             href={`/users/${user.username}`}
           >
             My profile

@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 
 import UserPhoto from './UserPhoto';
 import UserInfo from './UserInfo';
@@ -12,7 +12,7 @@ const UserProfile: FC<UserProfileProps> = async ({ user, photosPromise }) => {
   const photos = await photosPromise;
 
   return (
-    <main className="mx-auto mt-10 max-w-[700px]">
+    <main className="mx-auto my-5 max-w-[700px]">
       <header className="mb-10 flex max-w-[700px] flex-wrap justify-center">
         <div className="m-right-2 mr-3 h-[400px] w-[400px]">
           <UserPhoto photos={photos} />
