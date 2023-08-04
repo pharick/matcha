@@ -34,6 +34,7 @@ const UserWidget: FC<UserWidgetProps> = ({ user }) => {
         >
           Profile settings
         </Link>
+        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form action={logout}>
           <button
             className="block w-full rounded-b-xl p-2 hover:bg-brown hover:text-white"

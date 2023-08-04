@@ -8,7 +8,6 @@ import FieldComponent from '@/components/FieldComponent';
 import Button from '@/components/Button';
 import Alert from '@/components/Alert';
 import { changePassword } from '@/api/auth';
-import { isValid } from 'date-fns';
 
 interface ChangePasswordFormValues {
   oldPassword: string;

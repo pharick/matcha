@@ -4,7 +4,6 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { RegistrationResponse } from '../../../types';
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
 
@@ -54,7 +53,7 @@ const ResetPasswordForm: FC = () => {
     const uri = `/api/password_reset`;
     const res = await fetch(uri, requestOptions);
     if (res.ok) {
-      const data = (await res.json()) as RegistrationResponse;
+      const data = (await res.json()) as LoginResponse;
       localStorage.setItem('token', data.token);
       router.push('/login');
     }

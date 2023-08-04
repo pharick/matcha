@@ -25,13 +25,12 @@ export async function generateMetadata({
 }
 
 const UserPage: NextPage<UserPageProps> = async ({ params: { username } }) => {
-  const currentUser = await getCurrentUser();
-  if (!currentUser) redirect('/login');
-
-  const [user] = await Promise.all([
+  const [currentUser, user] = await Promise.all([
+    getCurrentUser(),
     getUserProfile(username),
     visitUserProfile(username),
   ]);
+  if (!currentUser) redirect('/login');
   if (!user) notFound();
 
   return (

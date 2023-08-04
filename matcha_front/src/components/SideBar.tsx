@@ -1,10 +1,5 @@
-import ReactSlider from 'react-slider';
-
 const SideBar = () => {
-    return (
-        "hello"
-        // <ReactSlider />
-    )
+  return 'hello';
 };
 
 export default SideBar;

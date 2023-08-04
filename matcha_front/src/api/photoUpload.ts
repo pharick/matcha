@@ -1,4 +1,5 @@
 import { findCookie } from '@/helpers';
+import { revalidateTag } from 'next/cache';
 
 export async function uploadPhoto(username: string, photo: File) {
   const token = findCookie('token');
@@ -13,10 +14,10 @@ export async function uploadPhoto(username: string, photo: File) {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      cache: 'no-cache',
     }
   );
   if (!res.ok) throw Error('Something went wrong');
   const newPhoto = (await res.json()) as Photo;
+  revalidateTag('photos');
   return newPhoto;
 }

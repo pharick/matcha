@@ -16,15 +16,18 @@ async function getPositionByIP() {
 const PositionUpdater: FC = () => {
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        await updatePosition({
+      (pos) => {
+        void updatePosition({
           longitude: pos.coords.longitude,
           latitude: pos.coords.latitude,
         });
       },
-      async () => {
-        const pos = await getPositionByIP();
-        await updatePosition(pos);
+      () => {
+        const updateByIp = async () => {
+          const pos = await getPositionByIP();
+          await updatePosition(pos);
+        };
+        void updateByIp();
       }
     );
   }, []);

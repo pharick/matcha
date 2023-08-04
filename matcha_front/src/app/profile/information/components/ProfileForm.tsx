@@ -58,7 +58,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
       .min(1, 'Choose at least 1 gender preferences'),
   });
 
-  const handleSubmitUserFullInformation = async (values: ProfileFormValues) => {
+  const handleSubmitUserFullInformation = (values: ProfileFormValues) => {
     startTransition(
       () =>
         void updateProfile(values.username, {

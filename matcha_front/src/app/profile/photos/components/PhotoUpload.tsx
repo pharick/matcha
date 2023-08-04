@@ -86,11 +86,11 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user, photos }) => {
   const [newPhoto, setNewPhoto] = useState<File>();
   const [isUploading, setIsUploading] = useState(false);
 
-  const handleSubmit: FormEventHandler = async (e) => {
+  const handleSubmit: FormEventHandler = (e) => {
     e.preventDefault();
     if (!newPhoto) return;
     setIsUploading(true);
-    await uploadPhoto(user.username, newPhoto);
+    void uploadPhoto(user.username, newPhoto);
     setNewPhoto(undefined);
     setIsUploading(false);
     router.refresh();

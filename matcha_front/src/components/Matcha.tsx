@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import SideBar from "@/components/SideBar";
+import SideBar from '@/components/SideBar';
 
 const Matcha: FC = () => {
   return (

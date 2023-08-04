@@ -22,7 +22,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
     if (lastMessage !== null) {
       const notifications = (lastMessage.data as string)
         .split('\n\n')
-        .map((n) => JSON.parse(n));
+        .map((n) => JSON.parse(n) as MNotification);
       setNotifications((n) => [...notifications, ...n]);
     }
   }, [lastMessage]);
@@ -50,7 +50,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
               <li
                 key={n.id}
                 className="border-b border-b-brown/50 p-2 last:border-0"
-                onMouseEnter={() => !n.viewed && markViewed(n.id)}
+                onMouseEnter={() => !n.viewed && void markViewed(n.id)}
               >
                 <div className="mr-2 flex items-center justify-between text-xs text-gray-600">
                   <p>{format(new Date(n.create_time), 'dd.MM.yyyy H:mm')}</p>

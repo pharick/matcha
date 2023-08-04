@@ -2,7 +2,7 @@
 
 import { FC, useState } from 'react';
 import * as Yup from 'yup';
-import { Formik, Form, FormikHelpers } from 'formik';
+import { Formik, Form } from 'formik';
 
 import FieldComponent from '@/components/FieldComponent';
 import Button from '@/components/Button';
@@ -37,8 +37,9 @@ const SignUpForm: FC = () => {
     birth_date: Yup.date()
       // .required('Enter your birth date')
       .nullable()
-      .test('DOB', 'This website for 18+ only', value => {
-        if (value) return differenceInYears(new Date(), value) >= 18;}),
+      .test('DOB', 'This website for 18+ only', (value) => {
+        if (value) return differenceInYears(new Date(), value) >= 18;
+      }),
     email: Yup.string()
       .required("You'll need this when if you ever forgot your password")
       .email('Enter a valid email address'),

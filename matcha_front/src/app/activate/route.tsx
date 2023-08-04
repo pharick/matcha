@@ -6,6 +6,6 @@ import { activate } from '@/api/auth';
 export async function GET(request: NextRequest) {
   const emailToken = request.nextUrl.searchParams.get('token');
   if (!emailToken) throw Error('No email token');
-  activate(emailToken);
+  await activate(emailToken);
   redirect('/');
 }

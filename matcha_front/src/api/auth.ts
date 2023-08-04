@@ -120,6 +120,7 @@ export async function changePassword(oldPassword: string, newPassword: string) {
   return true;
 }
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function logout() {
   cookies().delete('token');
 }
