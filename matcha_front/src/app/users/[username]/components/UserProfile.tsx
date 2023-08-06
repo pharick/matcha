@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 
 import UserPhoto from './UserPhoto';
 import UserInfo from './UserInfo';
+import ProfileVisitor from './ProfileVisitor';
 
 interface UserProfileProps {
   userPromise: Promise<User | undefined>;
@@ -16,10 +17,10 @@ const UserProfile: FC<UserProfileProps> = async ({
   const [user, photos] = await Promise.all([userPromise, photosPromise]);
   if (!user || !photos) notFound();
 
-  // visitUserProfile(username`
-
   return (
     <main className="mx-auto my-5 max-w-[700px]">
+      <ProfileVisitor username={user.username} />
+
       <header className="mb-10 flex flex-wrap justify-center">
         <div className="m-right-2 mr-3 w-[400px] h-[400px]">
           <UserPhoto photos={photos} />
