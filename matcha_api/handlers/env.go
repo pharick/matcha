@@ -12,6 +12,7 @@ type Env struct {
 	Photos           models.PhotoModel
 	Tags             models.TagModel
 	Notifications    models.NotificationModel
+	Visits           models.VisitModel
 	Settings         settings.Settings
 	NotificationsHub *sockets.Hub
 }
@@ -25,6 +26,7 @@ func CreateEnv(dbConn *sql.DB, settings settings.Settings) *Env {
 		Photos:           models.PhotoModel{DB: dbConn},
 		Tags:             models.TagModel{DB: dbConn},
 		Notifications:    models.NotificationModel{DB: dbConn},
+		Visits:           models.VisitModel{DB: dbConn},
 		Settings:         settings,
 		NotificationsHub: notificationsHub,
 	}

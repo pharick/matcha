@@ -24,6 +24,14 @@ func VisitProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error)
 	if visitor.Id == user.Id {
 		return nil, nil
 	}
+	exists, _ := env.Visits.IsExists(user.Id, visitor.Id)
+	if exists {
+		return nil, errors.HttpError{Status: 409, Body: nil}
+	}
+	_, err = env.Visits.Create(user.Id, visitor.Id)
+	if err != nil {
+		return nil, errors.HttpError{Status: 500, Body: nil}
+	}
 	notification, err := env.Notifications.Create(models.NotificationVisit, user.Id, visitor.Id)
 	if err != nil {
 		return nil, errors.HttpError{Status: 500, Body: nil}
