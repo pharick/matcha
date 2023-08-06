@@ -35,7 +35,7 @@ const NotificationsList: FC<NotificationsListProps> = async ({
               {n.type == 'visit'
                 ? 'visited your profile'
                 : n.type == 'like'
-                ? 'like you'
+                ? 'likes you'
                 : "don't like you anymore"}
             </p>
           </li>

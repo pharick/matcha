@@ -17,6 +17,7 @@ type User = {
   biography: string;
   tags: string[];
   me: boolean;
+  liked: boolean;
 };
 
 type CurrentUser = User & { active: boolean; avatar: string };

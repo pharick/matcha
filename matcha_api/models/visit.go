@@ -24,9 +24,13 @@ func (m VisitModel) Create(userId int, fromUserId int) (Visit, error) {
 }
 
 func (m VisitModel) IsExists(userId int, fromUserId int) (bool, error) {
+	var visit Visit
 	err := m.DB.QueryRow(`
-		SELECT * FROM visits WHERE user_id = $1 AND from_user_id = $2
-	`, userId, fromUserId).Scan()
+		SELECT user_id, from_user_id FROM visits WHERE user_id = $1 AND from_user_id = $2
+	`, userId, fromUserId).Scan(
+		&visit.UserId,
+		&visit.FromUserId,
+	)
 	if err == sql.ErrNoRows {
 		return false, nil
 	}

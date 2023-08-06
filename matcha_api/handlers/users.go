@@ -49,6 +49,10 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 	if err != nil {
 		return nil, err
 	}
+	liked, err := env.Likes.IsExists(user.Id, current_user.Id)
+	if err != nil {
+		return nil, err
+	}
 	ret := schemas.UserReturn{
 		Id:                user.Id,
 		Username:          user.Username,
@@ -61,6 +65,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		BirthDate:         user.BirthDate,
 		Tags:              tags,
 		Me:                user.Id == current_user.Id,
+		Liked:             liked,
 	}
 	return ret, nil
 }

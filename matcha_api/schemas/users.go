@@ -12,6 +12,7 @@ type UserReturn struct {
 	Biography         string   `json:"biography"`
 	Tags              []string `json:"tags"`
 	Me                bool     `json:"me"`
+	Liked             bool     `json:"liked"`
 }
 
 type UsersReturn struct {

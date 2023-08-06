@@ -5,7 +5,6 @@ import { cookies } from 'next/headers';
 
 export async function getCurrentUser() {
   const token = cookies().get('token')?.value;
-  console.log(token);
   if (!token) return undefined;
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/whoami/`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -14,7 +13,6 @@ export async function getCurrentUser() {
   if (res.status == 401) return undefined;
   if (!res.ok) throw Error('Something went wrong');
   const user = (await res.json()) as CurrentUser;
-  console.log(user);
   return user;
 }
 

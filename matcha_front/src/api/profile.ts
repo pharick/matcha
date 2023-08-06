@@ -49,3 +49,16 @@ export async function visitUserProfile(username: string) {
     }
   );
 }
+
+export async function setLike(username: string) {
+  const token = cookies().get('token')?.value;
+  await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/like/`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-cache',
+    }
+  );
+  revalidateTag('profile');
+}

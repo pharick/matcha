@@ -47,9 +47,9 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
         )}
       </button>
 
-      <div className="absolute right-0 top-full hidden max-h-[256px] min-w-[270px] overflow-y-auto rounded-xl bg-green-5/90 group-hover:block z-50">
+      <div className="absolute right-0 top-full hidden min-w-[270px] rounded-xl bg-green-5/90 group-hover:block z-50">
         {notifications.length > 0 ? (
-          <ul>
+          <ul className="max-h-[256px] overflow-y-auto">
             {notifications.map((n) => (
               <li
                 key={n.id}
@@ -74,7 +74,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
                   {n.type == 'visit'
                     ? 'visited your profile'
                     : n.type == 'like'
-                    ? 'like you'
+                    ? 'likes you'
                     : "don't like you anymore"}
                 </p>
               </li>

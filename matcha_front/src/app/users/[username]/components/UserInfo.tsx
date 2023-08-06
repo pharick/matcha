@@ -1,5 +1,3 @@
-'use client';
-
 import { FC } from 'react';
 import {
   PiGenderFemaleBold,
@@ -9,17 +7,16 @@ import {
 import { BiLike, BiSolidLike } from 'react-icons/bi';
 import { AiFillHeart } from 'react-icons/ai';
 import { birthdateToAge } from '@/helpers';
-import { useState } from 'react';
+import { setLike } from '@/api/profile';
 
 interface UserInfoProps {
   user: User;
 }
 
 const UserInfo: FC<UserInfoProps> = ({ user }) => {
-  const [clicked, setClicked] = useState<boolean>(false);
-
-  const handleClick = () => {
-    setClicked(!clicked);
+  const handleLike = async () => {
+    'use server';
+    await setLike(user.username);
   };
 
   return (
@@ -66,20 +63,28 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
       </div>
 
       {!user.me && (
-        <div className="font-bold">
-          <button
-            onClick={() => handleClick()}
-            className={`${
-              clicked ? ' bg-green-5 active:bg-green-5' : 'bg-green-2'
-            } flex items-center rounded-lg border-2 border-brown px-10 py-2 text-xl shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`}
-          >
-            Like
-            {clicked ? (
-              <BiLike className="ml-2"></BiLike>
-            ) : (
-              <BiSolidLike color="#F39BB3" className="ml-2"></BiSolidLike>
-            )}
-          </button>
+        <div>
+          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+          <form action={handleLike}>
+            <button
+              type="submit"
+              className={`${
+                user.liked ? ' bg-green-5 active:bg-green-5' : 'bg-green-2'
+              } flex items-center rounded-lg border-2 border-brown px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`}
+            >
+              {!user.liked ? (
+                <>
+                  <BiLike className="mr-1"></BiLike>
+                  Like
+                </>
+              ) : (
+                <>
+                  <BiSolidLike color="#F39BB3" className="mr-1"></BiSolidLike>
+                  Unlike
+                </>
+              )}
+            </button>
+          </form>
         </div>
       )}
     </div>
