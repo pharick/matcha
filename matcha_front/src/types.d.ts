@@ -16,6 +16,7 @@ type User = {
   gender_preferences: Gender[];
   biography: string;
   tags: string[];
+  me: boolean;
 };
 
 type CurrentUser = User & { active: boolean; avatar: string };

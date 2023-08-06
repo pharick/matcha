@@ -11,6 +11,7 @@ type UserReturn struct {
 	GenderPreferences []string `json:"gender_preferences"`
 	Biography         string   `json:"biography"`
 	Tags              []string `json:"tags"`
+	Me                bool     `json:"me"`
 }
 
 type UsersReturn struct {

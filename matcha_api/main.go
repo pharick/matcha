@@ -49,7 +49,7 @@ func main() {
 
 	// users
 	mux.Handle(pat.Get("/users/"), handlers.Handler{Env: env, Handle: handlers.UserList})
-	mux.Handle(pat.Get("/users/:username/"), handlers.Handler{Env: env, Handle: handlers.UserProfile})
+	mux.Handle(pat.Get("/users/:username/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UserProfile)})
 	mux.Handle(pat.Patch("/users/:username/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UpdateUser)})
 	mux.Handle(pat.Post("/update_position/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UpdatePosition)})
 
