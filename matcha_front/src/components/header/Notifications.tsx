@@ -1,6 +1,7 @@
 'use client';
 
 import { FC, useEffect, useState } from 'react';
+import Link from 'next/link';
 import useWebSocket from 'react-use-websocket';
 import { format } from 'date-fns';
 
@@ -62,7 +63,12 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
                   )}{' '}
                 </div>
                 <p>
-                  {n.username}{' '}
+                  <Link
+                    className="underline hover:opacity-80"
+                    href={`/users/${n.username}`}
+                  >
+                    {n.username}
+                  </Link>{' '}
                   {n.type == 'visit'
                     ? 'visited your profile'
                     : n.type == 'like'

@@ -9,5 +9,6 @@ export async function updatePosition(pos: Position) {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}` },
     body: JSON.stringify(pos),
+    cache: 'no-cache',
   });
 }

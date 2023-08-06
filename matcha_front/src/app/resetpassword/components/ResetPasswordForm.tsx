@@ -1,11 +1,13 @@
 'use client';
-import { FC, useState } from 'react';
+
+import { FC } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
+import { resetPassword } from '@/api/auth';
 
 interface ResetPasswordFormValues {
   password: string;
@@ -15,7 +17,6 @@ interface ResetPasswordFormValues {
 const ResetPasswordForm: FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
 
   const initialValues: ResetPasswordFormValues = {
     password: '',
@@ -40,25 +41,12 @@ const ResetPasswordForm: FC = () => {
   });
 
   const handleChangePassword = async (values: ResetPasswordFormValues) => {
-    setIsLoading(true);
-    const emailToken = searchParams.get('token');
-    if (!emailToken) return;
-    const requestOptions = {
-      method: 'POST',
-      body: JSON.stringify({
-        token: emailToken,
-        password: values.password,
-      }),
-    };
-    const uri = `/api/password_reset`;
-    const res = await fetch(uri, requestOptions);
-    if (res.ok) {
-      const data = (await res.json()) as LoginResponse;
-      localStorage.setItem('token', data.token);
-      router.push('/login');
-    }
-    setIsLoading(false);
+    const token = searchParams.get('token');
+    if (!token) return;
+    await resetPassword(token, values.password);
+    router.push('/login');
   };
+
   return (
     <div className="flex h-screen w-full items-center justify-center">
       <Formik
@@ -68,7 +56,7 @@ const ResetPasswordForm: FC = () => {
         validateOnBlur={false}
         validateOnChange={false}
       >
-        {({ errors, touched }) => (
+        {({ errors, touched, isSubmitting }) => (
           <Form className="max-w-[400px] flex-1">
             <h1 className="mb-3 border-b-2 border-brown pb-1 text-center text-xl text-brown">
               Change password
@@ -94,8 +82,8 @@ const ResetPasswordForm: FC = () => {
             <Button
               className="m-auto block"
               type="submit"
-              loading={isLoading}
-              disabled={isLoading}
+              loading={isSubmitting}
+              disabled={isSubmitting}
             >
               Confirm
             </Button>

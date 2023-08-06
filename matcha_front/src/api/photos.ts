@@ -47,6 +47,7 @@ export async function movePhoto(username: string, id: number, to: number) {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+    cache: 'no-cache',
   });
   revalidateTag('photos');
 }

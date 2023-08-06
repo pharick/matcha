@@ -1,7 +1,8 @@
 'use client';
 
 import { FC, useState } from 'react';
-import { Form, Formik, FormikHelpers } from 'formik';
+import { useRouter } from 'next/navigation';
+import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
 import Button from '@/components/Button';
@@ -19,6 +20,7 @@ interface ChangeEmailFormValues {
 }
 
 const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ user }) => {
+  const router = useRouter();
   const [isValid, setIsValid] = useState<boolean>(false);
   const [result, setResult] = useState<boolean>(false);
 
@@ -32,16 +34,13 @@ const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ user }) => {
     password: Yup.string().required('Enter your password'),
   });
 
-  const handleChangeEmail = async (
-    values: ChangeEmailFormValues,
-    { resetForm }: FormikHelpers<ChangeEmailFormValues>
-  ) => {
+  const handleChangeEmail = async (values: ChangeEmailFormValues) => {
     const user = await changeEmail(values.password, values.email);
     setResult(true);
     if (!user) setIsValid(false);
     else {
       setIsValid(true);
-      resetForm();
+      router.refresh();
     }
   };
 

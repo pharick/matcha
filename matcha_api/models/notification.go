@@ -85,3 +85,31 @@ func (m NotificationModel) GetUnreadByUserId(userId int) ([]schemas.Notification
 	}
 	return notifications, nil
 }
+
+func (m NotificationModel) GetAllByUserId(userId int) ([]schemas.NotificationReturn, error) {
+	notifications := make([]schemas.NotificationReturn, 0)
+	rows, err := m.DB.Query(
+		`SELECT notifications.id, type, users.username, create_time, viewed
+		FROM notifications JOIN users ON from_user_id = users.id
+		WHERE user_id = $1 ORDER BY create_time DESC`,
+		userId,
+	)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var notification schemas.NotificationReturn
+		err := rows.Scan(
+			&notification.Id,
+			&notification.Type,
+			&notification.Username,
+			&notification.CreateTime,
+			&notification.Viewed,
+		)
+		if err != nil {
+			return nil, err
+		}
+		notifications = append(notifications, notification)
+	}
+	return notifications, nil
+}

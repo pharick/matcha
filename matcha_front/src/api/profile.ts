@@ -14,6 +14,7 @@ export async function updateProfile(username: string, reqData: ProfileData) {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      cache: 'no-cache',
     }
   );
   if (!res.ok) throw Error('Something went wrong');
@@ -44,6 +45,7 @@ export async function visitUserProfile(username: string) {
     {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-cache',
     }
   );
 }
