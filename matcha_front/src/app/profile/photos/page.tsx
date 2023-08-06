@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 const ProfilePhotosPage: NextPage = async () => {
   const user = await getCurrentUser();
   if (!user) redirect('/login');
-
   const userPhotos = await getUserPhotos(user.username);
+  if (!userPhotos) redirect('/login');
 
   return <PhotoUpload user={user} photos={userPhotos} />;
 };

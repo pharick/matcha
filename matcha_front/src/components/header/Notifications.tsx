@@ -39,11 +39,14 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
 
   return (
     <div className={`group relative flex items-center ${className}`}>
-      <button>
+      <button className="relative">
         <FaBell size={24} />
+        {notifications.some((n) => !n.viewed) && (
+          <div className="w-[10px] h-[10px] rounded-full bg-red-300 absolute top-0 right-0"></div>
+        )}
       </button>
 
-      <div className="absolute right-0 top-full hidden max-h-[256px] min-w-[270px] overflow-y-auto rounded-xl bg-green-5/80 group-hover:block">
+      <div className="absolute right-0 top-full hidden max-h-[256px] min-w-[270px] overflow-y-auto rounded-xl bg-green-5/90 group-hover:block">
         {notifications.length > 0 ? (
           <ul>
             {notifications.map((n) => (
@@ -55,7 +58,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
                 <div className="mr-2 flex items-center justify-between text-xs text-gray-600">
                   <p>{format(new Date(n.create_time), 'dd.MM.yyyy H:mm')}</p>
                   {!n.viewed && (
-                    <div className="mr-1 h-[7px] w-[7px] rounded-full bg-green-200"></div>
+                    <div className="h-[10px] w-[10px] rounded-full bg-red-300"></div>
                   )}{' '}
                 </div>
                 <p>

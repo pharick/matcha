@@ -1,6 +1,5 @@
 import { Metadata, NextPage } from 'next';
 import { Suspense } from 'react';
-import { redirect } from 'next/navigation';
 
 import Header from '@/components/header/Header';
 import UserProfile from './components/UserProfile';
@@ -26,16 +25,14 @@ export async function generateMetadata({
   };
 }
 
-const UserPage: NextPage<UserPageProps> = async ({ params: { username } }) => {
-  const currentUser = await getCurrentUser();
-  if (!currentUser) redirect('/login');
-
+const UserPage: NextPage<UserPageProps> = ({ params: { username } }) => {
+  const currentUserPromise = getCurrentUser();
   const userPromise = getUserProfile(username);
   const photosPromise = getUserPhotos(username);
 
   return (
     <>
-      <Header user={currentUser} />
+      <Header currentUserPromise={currentUserPromise} />
 
       <Suspense fallback={<UserProfileLoader />}>
         <UserProfile userPromise={userPromise} photosPromise={photosPromise} />

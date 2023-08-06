@@ -1,23 +1,27 @@
 import { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 import DefaultProfilePicture from '@/images/default_profile_picture.jpg';
 import { logout } from '@/api/auth';
 
 interface UserWidgetProps {
-  user: CurrentUser;
+  currentUserPromise: Promise<CurrentUser | undefined>;
 }
 
-const UserWidget: FC<UserWidgetProps> = ({ user }) => {
+const UserWidget: FC<UserWidgetProps> = async ({ currentUserPromise }) => {
+  const currentUser = await currentUserPromise;
+  if (!currentUser) redirect('/login');
+
   return (
     <div className="group relative flex cursor-pointer items-center">
-      <p className="mr-1 text-lg">{user.username}</p>
+      <p className="mr-1 text-lg">{currentUser.username}</p>
       <figure className="relative h-[60px] w-[60px] overflow-hidden rounded-full border-2 border-brown">
         <Image
           src={
-            user.avatar
-              ? `${process.env.NEXT_PUBLIC_BASE_URL}${user.avatar}`
+            currentUser.avatar
+              ? `${process.env.NEXT_PUBLIC_BASE_URL}${currentUser.avatar}`
               : DefaultProfilePicture
           }
           fill={true}
@@ -27,7 +31,7 @@ const UserWidget: FC<UserWidgetProps> = ({ user }) => {
         />
       </figure>
 
-      <nav className="absolute right-0 top-full z-50 hidden min-w-max rounded-xl bg-green-5/80 text-center font-bold group-hover:block">
+      <nav className="absolute right-0 top-full z-50 hidden min-w-max rounded-xl bg-green-5/90 text-center font-bold group-hover:block">
         <Link
           className="block rounded-t-xl border-b border-brown/50 p-2 hover:bg-brown hover:text-white"
           href="/profile"
