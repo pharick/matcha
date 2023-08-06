@@ -66,6 +66,7 @@ func main() {
 	// profile
 	mux.Handle(pat.Post("/users/:username/visit/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.VisitProfile)})
 	mux.Handle(pat.Post("/users/:username/like/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.SetLike)})
+	mux.Handle(pat.Post("/users/:username/unlike/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UnsetLike)})
 
 	// notifications
 	mux.Handle(pat.Get("/notifications/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.GetAllNotifications)})

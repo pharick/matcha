@@ -17,6 +17,13 @@ services:
     depends_on:
       - db
 
+  front:
+    build: ./matcha_front
+    restart: always
+    env_file: .env
+    depends_on:
+      - api
+
   nginx:
     build: ./matcha_nginx
     restart: always

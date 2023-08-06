@@ -88,3 +88,39 @@ func SetLike(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	}
 	return nil, nil
 }
+
+func UnsetLike(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	from_user := r.Context().Value(ContextKey("User")).(models.User)
+	username := pat.Param(r, "username")
+	user, err := env.Users.GetOneByUsername(username)
+	if err == sql.ErrNoRows {
+		return nil, errors.HttpError{Status: 404, Body: nil}
+	}
+	if err != nil {
+		return nil, err
+	}
+	exists, _ := env.Likes.IsExists(user.Id, from_user.Id)
+	if !exists {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	err = env.Likes.Delete(user.Id, from_user.Id)
+	if err != nil {
+		return nil, errors.HttpError{Status: 500, Body: nil}
+	}
+	notification, err := env.Notifications.Create(models.NotificationUnlike, user.Id, from_user.Id)
+	if err != nil {
+		return nil, errors.HttpError{Status: 500, Body: nil}
+	}
+	ret := schemas.NotificationReturn{
+		Id:         notification.Id,
+		Type:       notification.Type,
+		Username:   from_user.Username,
+		CreateTime: notification.CreateTime,
+		Viewed:     notification.Viewed,
+	}
+	env.NotificationsHub.Private <- sockets.PrivateMessage{
+		UserId:  user.Id,
+		Message: ret,
+	}
+	return nil, nil
+}

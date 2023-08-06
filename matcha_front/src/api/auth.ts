@@ -5,7 +5,6 @@ import { cookies } from 'next/headers';
 
 export async function getCurrentUser() {
   const token = cookies().get('token')?.value;
-  if (!token) return undefined;
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/whoami/`, {
     headers: { Authorization: `Bearer ${token}` },
     next: { tags: ['current-user'] },
@@ -28,7 +27,6 @@ export async function login(username: string, password: string) {
   if (res.status == 401) return undefined;
   if (!res.ok) throw Error('Something went wrong');
   const data = (await res.json()) as LoginResponse;
-  console.log(data);
   cookies().set('token', data.token);
   return data.user;
 }
@@ -62,7 +60,6 @@ export async function resetPasswordEmail(email: string) {
 
 export async function activate(emailToken: string) {
   const userToken = cookies().get('token')?.value;
-  if (!userToken) throw Error('No user token');
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/activate/`, {
     method: 'POST',
     body: JSON.stringify({ token: emailToken }),
@@ -74,7 +71,6 @@ export async function activate(emailToken: string) {
 
 export async function sendActivationEmail() {
   const token = cookies().get('token')?.value;
-  if (!token) return undefined;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/send_activation_email/`,
     {
@@ -88,7 +84,6 @@ export async function sendActivationEmail() {
 
 export async function changeEmail(password: string, email: string) {
   const token = cookies().get('token')?.value;
-  if (!token) return undefined;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/email_change/`,
     {
@@ -106,7 +101,6 @@ export async function changeEmail(password: string, email: string) {
 
 export async function changePassword(oldPassword: string, newPassword: string) {
   const token = cookies().get('token')?.value;
-  if (!token) return undefined;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/password_change/`,
     {

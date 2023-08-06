@@ -47,7 +47,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
         )}
       </button>
 
-      <div className="absolute right-0 top-full hidden min-w-[270px] rounded-xl bg-green-5/90 group-hover:block z-50">
+      <div className="absolute right-0 top-full hidden min-w-[290px] rounded-xl bg-green-5/90 group-hover:block z-50">
         {notifications.length > 0 ? (
           <ul className="max-h-[256px] overflow-y-auto">
             {notifications.map((n) => (

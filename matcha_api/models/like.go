@@ -26,6 +26,18 @@ func (m LikeModel) Create(userId int, fromUserId int) (Like, error) {
 	return like, err
 }
 
+func (m LikeModel) Delete(userId int, fromUserId int) error {
+	res, err := m.DB.Query(
+		"DELETE FROM likes WHERE user_id = $1 AND from_user_id = $2",
+		userId, fromUserId,
+	)
+	if err != nil {
+		return err
+	}
+	defer res.Close()
+	return nil
+}
+
 func (m LikeModel) IsExists(userId int, fromUserId int) (bool, error) {
 	var like Like
 	log.Printf("%v %v", userId, fromUserId)

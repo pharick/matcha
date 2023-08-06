@@ -78,7 +78,7 @@ func (m PhotoModel) Update(d Photo) (Photo, error) {
 
 func (m PhotoModel) Remove(id int) error {
 	res, err := m.DB.Query(
-		"DELETE FROM photos WHERE id =  $1",
+		"DELETE FROM photos WHERE id = $1",
 		id,
 	)
 	if err != nil {

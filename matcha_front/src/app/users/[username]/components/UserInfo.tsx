@@ -7,16 +7,17 @@ import {
 import { BiLike, BiSolidLike } from 'react-icons/bi';
 import { AiFillHeart } from 'react-icons/ai';
 import { birthdateToAge } from '@/helpers';
-import { setLike } from '@/api/profile';
+import { setLike, unsetLike } from '@/api/profile';
 
 interface UserInfoProps {
   user: User;
 }
 
 const UserInfo: FC<UserInfoProps> = ({ user }) => {
-  const handleLike = async () => {
+  const handle = async () => {
     'use server';
-    await setLike(user.username);
+    if (!user.liked) await setLike(user.username);
+    else await unsetLike(user.username);
   };
 
   return (
@@ -65,7 +66,7 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
       {!user.me && (
         <div>
           {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-          <form action={handleLike}>
+          <form action={handle}>
             <button
               type="submit"
               className={`${

@@ -5,7 +5,6 @@ import { cookies } from 'next/headers';
 
 export async function getUserPhotos(username: string) {
   const token = cookies().get('token')?.value;
-  if (!token) throw Error('No user token');
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/photos/`,
     {
@@ -23,7 +22,6 @@ export async function getUserPhotos(username: string) {
 
 export async function removePhoto(username: string, id: number) {
   const token = cookies().get('token')?.value;
-  if (!token) throw Error('No user token');
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/photos/${id}/`,
     {
@@ -39,7 +37,6 @@ export async function removePhoto(username: string, id: number) {
 
 export async function movePhoto(username: string, id: number, to: number) {
   const token = cookies().get('token')?.value;
-  if (!token) throw Error('No user token');
   const uri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/photos/${id}/`;
   await fetch(uri, {
     method: 'PATCH',

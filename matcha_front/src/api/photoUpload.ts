@@ -3,7 +3,6 @@ import { revalidateTag } from 'next/cache';
 
 export async function uploadPhoto(username: string, photo: File) {
   const token = findCookie('token');
-  if (!token) throw Error('No user token');
   const data = new FormData();
   data.append('photo', photo);
   const res = await fetch(

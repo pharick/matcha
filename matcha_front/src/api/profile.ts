@@ -5,7 +5,6 @@ import { revalidateTag } from 'next/cache';
 
 export async function updateProfile(username: string, reqData: ProfileData) {
   const token = cookies().get('token')?.value;
-  if (!token) throw Error('No user token');
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/`,
     {
@@ -54,6 +53,19 @@ export async function setLike(username: string) {
   const token = cookies().get('token')?.value;
   await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/like/`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-cache',
+    }
+  );
+  revalidateTag('profile');
+}
+
+export async function unsetLike(username: string) {
+  const token = cookies().get('token')?.value;
+  await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/unlike/`,
     {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
