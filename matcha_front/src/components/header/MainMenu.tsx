@@ -14,7 +14,7 @@ const MainMenu: FC<MainMenuProps> = async ({ currentUserPromise }) => {
         <li className="shrink-0">
           <Link
             className="block border-r border-brown p-2 hover:bg-green-5/50"
-            href={`/search`}
+            href="/"
           >
             Find love
           </Link>

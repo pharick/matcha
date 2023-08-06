@@ -74,7 +74,7 @@ const SideBar = () => {
               ariaLabel={['Lower thumb', 'Upper thumb']}
               ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
               renderThumb={(props, state) => (
-                <div key={state.index} {...props}>
+                <div key={props.key} {...props}>
                   {state.valueNow}
                 </div>
               )}
@@ -96,7 +96,7 @@ const SideBar = () => {
               ariaLabel={['Lower thumb', 'Upper thumb']}
               ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
               renderThumb={(props, state) => (
-                <div key={state.index} {...props}>
+                <div key={props.key} {...props}>
                   {state.valueNow}
                 </div>
               )}
@@ -118,7 +118,7 @@ const SideBar = () => {
               ariaLabel={['Lower thumb', 'Upper thumb']}
               ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
               renderThumb={(props, state) => (
-                <div key={state.index} {...props}>
+                <div key={props.key} {...props}>
                   {state.valueNow}
                 </div>
               )}
