@@ -32,7 +32,7 @@ const TagsField: FC<TagsFieldProps> = ({
       return;
     }
     const resp = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/tags/find/`,
+      `${process.env.NEXT_PUBLIC_FRONT_BASE_URL}/api/tags/find/`,
       {
         method: 'POST',
         body: JSON.stringify({ value: v }),

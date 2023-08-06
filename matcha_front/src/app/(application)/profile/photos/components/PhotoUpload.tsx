@@ -66,7 +66,7 @@ const PhotoUploadItem: FC<PhotoUploadItemProps> = ({
         <BiX color="white" size={24} />
       </button>
       <Image
-        src={`${process.env.NEXT_PUBLIC_BASE_URL}${photo.url}`}
+        src={`${process.env.NEXT_PUBLIC_BACK_BASE_URL}${photo.url}`}
         fill={true}
         alt={`Photo ${photo.id}`}
         className="rounded-md object-cover"

@@ -1,6 +1,4 @@
-import { FC } from 'react';
-
-const UserProfileLoader: FC = () => {
+export default function Loading() {
   return (
     <main className="mx-auto my-5 max-w-[700px]">
       <header className="mb-10 flex flex-wrap justify-center">
@@ -24,6 +22,4 @@ const UserProfileLoader: FC = () => {
       </div>
     </main>
   );
-};
-
-export default UserProfileLoader;
+}

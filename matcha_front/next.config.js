@@ -5,6 +5,10 @@ const nextConfig = {
       remotePatterns: [
         {
           protocol: 'http',
+          hostname: 'nginx',
+        },
+        {
+          protocol: 'http',
           hostname: 'localhost',
         },
       ],

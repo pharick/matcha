@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 export async function getUserPhotos(username: string) {
   const token = cookies().get('token')?.value;
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/photos/`,
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/users/${username}/photos/`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -23,7 +23,7 @@ export async function getUserPhotos(username: string) {
 export async function removePhoto(username: string, id: number) {
   const token = cookies().get('token')?.value;
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/photos/${id}/`,
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/users/${username}/photos/${id}/`,
     {
       method: 'DELETE',
       headers: {
@@ -37,7 +37,7 @@ export async function removePhoto(username: string, id: number) {
 
 export async function movePhoto(username: string, id: number, to: number) {
   const token = cookies().get('token')?.value;
-  const uri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/photos/${id}/`;
+  const uri = `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/users/${username}/photos/${id}/`;
   await fetch(uri, {
     method: 'PATCH',
     body: JSON.stringify({ index: to }),

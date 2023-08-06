@@ -6,7 +6,7 @@ export async function uploadPhoto(username: string, photo: File) {
   const data = new FormData();
   data.append('photo', photo);
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/photos/`,
+    `${process.env.NEXT_PUBLIC_FRONT_BASE_URL}/api/users/${username}/photos/`,
     {
       method: 'POST',
       body: data,

@@ -21,7 +21,7 @@ const UserWidget: FC<UserWidgetProps> = async ({ currentUserPromise }) => {
         <Image
           src={
             currentUser.avatar
-              ? `${process.env.NEXT_PUBLIC_BASE_URL}${currentUser.avatar}`
+              ? `${process.env.NEXT_PUBLIC_BACK_BASE_URL}${currentUser.avatar}`
               : DefaultProfilePicture
           }
           fill={true}

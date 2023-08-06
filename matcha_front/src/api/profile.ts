@@ -6,7 +6,7 @@ import { revalidateTag } from 'next/cache';
 export async function updateProfile(username: string, reqData: ProfileData) {
   const token = cookies().get('token')?.value;
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/`,
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/users/${username}/`,
     {
       method: 'PATCH',
       body: JSON.stringify(reqData),
@@ -25,7 +25,7 @@ export async function updateProfile(username: string, reqData: ProfileData) {
 export async function getUserProfile(username: string) {
   const token = cookies().get('token')?.value;
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/`,
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/users/${username}/`,
     {
       headers: { Authorization: `Bearer ${token}` },
       next: { tags: ['profile'] },
@@ -40,7 +40,7 @@ export async function getUserProfile(username: string) {
 export async function visitUserProfile(username: string) {
   const token = cookies().get('token')?.value;
   await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/visit/`,
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/users/${username}/visit/`,
     {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
@@ -52,7 +52,7 @@ export async function visitUserProfile(username: string) {
 export async function setLike(username: string) {
   const token = cookies().get('token')?.value;
   await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/like/`,
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/users/${username}/like/`,
     {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
@@ -65,7 +65,7 @@ export async function setLike(username: string) {
 export async function unsetLike(username: string) {
   const token = cookies().get('token')?.value;
   await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/unlike/`,
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/users/${username}/unlike/`,
     {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },

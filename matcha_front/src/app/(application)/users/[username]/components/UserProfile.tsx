@@ -1,22 +1,15 @@
 import { FC } from 'react';
-import { notFound } from 'next/navigation';
 
 import UserPhoto from './UserPhoto';
 import UserInfo from './UserInfo';
 import ProfileVisitor from './ProfileVisitor';
 
 interface UserProfileProps {
-  userPromise: Promise<User | undefined>;
-  photosPromise: Promise<Photo[] | undefined>;
+  user: User;
+  photos: Photo[];
 }
 
-const UserProfile: FC<UserProfileProps> = async ({
-  userPromise,
-  photosPromise,
-}) => {
-  const [user, photos] = await Promise.all([userPromise, photosPromise]);
-  if (!user || !photos) notFound();
-
+const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
   return (
     <main className="mx-auto my-5 max-w-[700px]">
       <ProfileVisitor username={user.username} />

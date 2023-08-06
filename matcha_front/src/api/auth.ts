@@ -5,10 +5,13 @@ import { cookies } from 'next/headers';
 
 export async function getCurrentUser() {
   const token = cookies().get('token')?.value;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/whoami/`, {
-    headers: { Authorization: `Bearer ${token}` },
-    next: { tags: ['current-user'] },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/whoami/`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+      next: { tags: ['current-user'] },
+    }
+  );
   if (res.status == 401) return undefined;
   if (!res.ok) throw Error('Something went wrong');
   const user = (await res.json()) as CurrentUser;
@@ -16,14 +19,17 @@ export async function getCurrentUser() {
 }
 
 export async function login(username: string, password: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/login/`, {
-    method: 'POST',
-    body: JSON.stringify({
-      username: username,
-      password: password,
-    }),
-    cache: 'no-cache',
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/login/`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+      cache: 'no-cache',
+    }
+  );
   if (res.status == 401) return undefined;
   if (!res.ok) throw Error('Something went wrong');
   const data = (await res.json()) as LoginResponse;
@@ -32,11 +38,14 @@ export async function login(username: string, password: string) {
 }
 
 export async function signUp(reqData: SignUpData) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/register/`, {
-    method: 'POST',
-    body: JSON.stringify(reqData),
-    cache: 'no-cache',
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/register/`,
+    {
+      method: 'POST',
+      body: JSON.stringify(reqData),
+      cache: 'no-cache',
+    }
+  );
   if (res.status == 409) return undefined;
   if (!res.ok) throw Error('Something went wrong');
   const data = (await res.json()) as LoginResponse;
@@ -46,7 +55,7 @@ export async function signUp(reqData: SignUpData) {
 
 export async function resetPasswordEmail(email: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/send_reset_email/`,
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/send_reset_email/`,
     {
       method: 'POST',
       body: JSON.stringify({ email }),
@@ -60,19 +69,22 @@ export async function resetPasswordEmail(email: string) {
 
 export async function activate(emailToken: string) {
   const userToken = cookies().get('token')?.value;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/activate/`, {
-    method: 'POST',
-    body: JSON.stringify({ token: emailToken }),
-    headers: { Authorization: `Bearer ${userToken}` },
-    cache: 'no-cache',
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/activate/`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ token: emailToken }),
+      headers: { Authorization: `Bearer ${userToken}` },
+      cache: 'no-cache',
+    }
+  );
   if (!res.ok) throw Error('Something went wrong');
 }
 
 export async function sendActivationEmail() {
   const token = cookies().get('token')?.value;
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/send_activation_email/`,
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/send_activation_email/`,
     {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
@@ -85,7 +97,7 @@ export async function sendActivationEmail() {
 export async function changeEmail(password: string, email: string) {
   const token = cookies().get('token')?.value;
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/email_change/`,
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/email_change/`,
     {
       method: 'POST',
       body: JSON.stringify({ email: email, password: password }),
@@ -102,7 +114,7 @@ export async function changeEmail(password: string, email: string) {
 export async function changePassword(oldPassword: string, newPassword: string) {
   const token = cookies().get('token')?.value;
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/password_change/`,
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/password_change/`,
     {
       method: 'POST',
       body: JSON.stringify({
@@ -120,7 +132,7 @@ export async function changePassword(oldPassword: string, newPassword: string) {
 
 export async function resetPassword(token: string, password: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/password_reset/`,
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/password_reset/`,
     {
       method: 'POST',
       body: JSON.stringify({

@@ -1,12 +1,10 @@
 import { Metadata, NextPage } from 'next';
-import { Suspense } from 'react';
 
-import Header from '@/components/header/Header';
 import UserProfile from './components/UserProfile';
 import { getUserProfile } from '@/api/profile';
 import { getCurrentUser } from '@/api/auth';
 import { getUserPhotos } from '@/api/photos';
-import UserProfileLoader from './components/UserProfileLoader';
+import { notFound } from 'next/navigation';
 
 interface UserPageProps {
   params: { username: string };
@@ -25,20 +23,14 @@ export async function generateMetadata({
   };
 }
 
-const UserPage: NextPage<UserPageProps> = ({ params: { username } }) => {
-  const currentUserPromise = getCurrentUser();
-  const userPromise = getUserProfile(username);
-  const photosPromise = getUserPhotos(username);
+const UserPage: NextPage<UserPageProps> = async ({ params: { username } }) => {
+  const [user, photos] = await Promise.all([
+    getUserProfile(username),
+    getUserPhotos(username),
+  ]);
+  if (!user || !photos) notFound();
 
-  return (
-    <>
-      <Header currentUserPromise={currentUserPromise} />
-
-      <Suspense fallback={<UserProfileLoader />}>
-        <UserProfile userPromise={userPromise} photosPromise={photosPromise} />
-      </Suspense>
-    </>
-  );
+  return <UserProfile user={user} photos={photos} />;
 };
 
 export default UserPage;

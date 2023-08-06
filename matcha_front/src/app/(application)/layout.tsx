@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
 
-import './globals.css';
+import Header from '@/components/header/Header';
+import { getCurrentUser } from '@/api/auth';
+
+import '@/app/globals.css';
 
 export const metadata: Metadata = {
   title: {
@@ -22,9 +25,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const currentUserPromise = getCurrentUser();
+
   return (
     <html lang="en" className={montserrat.className}>
-      <body className="mx-10 min-h-screen">{children}</body>
+      <body className="mx-10 min-h-screen">
+        <Header currentUserPromise={currentUserPromise} />
+        {children}
+      </body>
     </html>
   );
 }

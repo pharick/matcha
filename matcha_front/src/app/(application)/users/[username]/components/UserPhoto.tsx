@@ -29,7 +29,7 @@ const UserPhoto: FC<UserProfileProps> = ({ photos }) => {
         <Image
           src={
             photos[photoId]
-              ? `${process.env.NEXT_PUBLIC_BASE_URL}${photos[photoId].url}`
+              ? `${process.env.NEXT_PUBLIC_BACK_BASE_URL}${photos[photoId].url}`
               : DefaultProfilePicture
           }
           fill={true}

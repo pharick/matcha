@@ -9,7 +9,7 @@ import RadioButton from '@/components/RadioButton';
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
 import Checkbox from '@/components/CheckBox';
-import TagsField from '../../../../components/TagsField';
+import TagsField from '@/components/TagsField';
 import { updateProfile } from '@/api/profile';
 
 interface ProfileFormProps {
