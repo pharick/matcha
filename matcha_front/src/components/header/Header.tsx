@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import Cup from '@/images/cup.png';
 import Matcha from '@/images/Matcha.png';
@@ -17,8 +18,10 @@ const Header: FC<HeaderProps> = ({ user }) => {
     <header>
       <div className="mb-5 mt-3 flex justify-between">
         <div className="flex items-center">
-          <Image src={Matcha} width={100} priority alt="logo" />
-          <Image src={Cup} width={80} alt="cup" className="mr-2" />
+          <Link href="/" className="flex items-center">
+            <Image src={Matcha} width={100} priority alt="logo" />
+            <Image src={Cup} width={80} alt="cup" className="mr-2" />
+          </Link>
 
           <MainMenu user={user} />
         </div>

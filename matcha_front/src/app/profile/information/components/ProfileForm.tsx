@@ -1,6 +1,7 @@
 'use client';
 
 import { FC, useTransition } from 'react';
+import { revalidateTag } from 'next/cache';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -70,6 +71,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
           tags: values.tags,
         })
     );
+    revalidateTag('profile');
   };
 
   return (

@@ -4,10 +4,18 @@ import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 
 export async function getUserPhotos(username: string) {
+  const token = cookies().get('token')?.value;
+  if (!token) throw Error('No user token');
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${username}/photos/`,
-    { next: { tags: ['photos'] } }
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      next: { tags: ['photos'] },
+    }
   );
+  if (res.status == 404 || res.status == 401) return undefined;
   if (!res.ok) throw Error('Something went wrong');
   const photos = (await res.json()) as { list: Photo[] };
   return photos.list;
