@@ -14,6 +14,7 @@ export async function uploadPhoto(username: string, photo: File) {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      cache: 'no-cache',
     }
   );
   if (!res.ok) throw Error('Something went wrong');

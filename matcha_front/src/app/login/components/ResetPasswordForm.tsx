@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import Button from '@/components/Button';
 import FieldComponent from '@/components/FieldComponent';
 import Alert from '@/components/Alert';
-import { resetPassword } from '@/api/auth';
+import { resetPasswordEmail } from '@/api/auth';
 
 interface ResetPasswordFormValues {
   email: string;
@@ -25,7 +25,7 @@ const ResetPasswordForm: FC = () => {
   });
 
   const handleChangePassword = async (values: ResetPasswordFormValues) => {
-    setResult(await resetPassword(values.email));
+    setResult(await resetPasswordEmail(values.email));
   };
 
   return (

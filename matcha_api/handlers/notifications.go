@@ -62,3 +62,9 @@ func ViewNotification(env *Env, w http.ResponseWriter, r *http.Request) (any, er
 	_, err = env.Notifications.MarkViewed(id, user.Id)
 	return nil, err
 }
+
+func GetAllNotifications(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	user := r.Context().Value(ContextKey("User")).(models.User)
+	notifications, err := env.Notifications.GetAllByUserId(user.Id)
+	return notifications, err
+}

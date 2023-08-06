@@ -1,6 +1,7 @@
 'use client';
 
 import { FC, useEffect, useState } from 'react';
+import Link from 'next/link';
 import useWebSocket from 'react-use-websocket';
 import { format } from 'date-fns';
 
@@ -55,14 +56,21 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
                 className="border-b border-b-brown/50 p-2 last:border-0"
                 onMouseEnter={() => !n.viewed && void markViewed(n.id)}
               >
-                <div className="mr-2 flex items-center justify-between text-xs text-gray-600">
-                  <p>{format(new Date(n.create_time), 'dd.MM.yyyy H:mm')}</p>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-gray-600">
+                    {format(new Date(n.create_time), 'dd.MM.yyyy H:mm')}
+                  </p>
                   {!n.viewed && (
                     <div className="h-[10px] w-[10px] rounded-full bg-red-300"></div>
                   )}{' '}
                 </div>
                 <p>
-                  {n.username}{' '}
+                  <Link
+                    className="underline hover:opacity-80"
+                    href={`/users/${n.username}`}
+                  >
+                    {n.username}
+                  </Link>{' '}
                   {n.type == 'visit'
                     ? 'visited your profile'
                     : n.type == 'like'
@@ -73,8 +81,14 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
             ))}
           </ul>
         ) : (
-          <p className="p-2">No notifications</p>
+          <p className="p-2 text-center">No new notifications</p>
         )}
+        <Link
+          href="/notifications"
+          className="block text-center underline py-2 border-t border-b-brown/50 hover:text-brown/80"
+        >
+          All notifications
+        </Link>
       </div>
     </div>
   );

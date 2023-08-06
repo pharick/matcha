@@ -36,6 +36,7 @@ const TagsField: FC<TagsFieldProps> = ({
       {
         method: 'POST',
         body: JSON.stringify({ value: v }),
+        cache: 'no-cache',
       }
     );
     if (resp.ok) {

@@ -49,7 +49,7 @@ func main() {
 
 	// users
 	mux.Handle(pat.Get("/users/"), handlers.Handler{Env: env, Handle: handlers.UserList})
-	mux.Handle(pat.Get("/users/:username/"), handlers.Handler{Env: env, Handle: handlers.UserProfile})
+	mux.Handle(pat.Get("/users/:username/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UserProfile)})
 	mux.Handle(pat.Patch("/users/:username/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UpdateUser)})
 	mux.Handle(pat.Post("/update_position/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UpdatePosition)})
 
@@ -67,6 +67,7 @@ func main() {
 	mux.Handle(pat.Post("/users/:username/visit/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.VisitProfile)})
 
 	// notifications
+	mux.Handle(pat.Get("/notifications/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.GetAllNotifications)})
 	mux.Handle(pat.Post("/notifications/:id/view/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.ViewNotification)})
 
 	// --- WEBSOCKETS ---

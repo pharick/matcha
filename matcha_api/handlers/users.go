@@ -36,6 +36,7 @@ func UserList(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 }
 
 func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	current_user := r.Context().Value(ContextKey("User")).(models.User)
 	username := pat.Param(r, "username")
 	user, err := env.Users.GetOneByUsername(username)
 	if err == sql.ErrNoRows {
@@ -59,6 +60,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Biography:         user.Biography,
 		BirthDate:         user.BirthDate,
 		Tags:              tags,
+		Me:                user.Id == current_user.Id,
 	}
 	return ret, nil
 }

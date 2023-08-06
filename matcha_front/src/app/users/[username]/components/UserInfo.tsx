@@ -65,21 +65,23 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
         </div>
       </div>
 
-      <div className="font-bold">
-        <button
-          onClick={() => handleClick()}
-          className={`${
-            clicked ? ' bg-green-5 active:bg-green-5' : 'bg-green-2'
-          } flex items-center rounded-lg border-2 border-brown px-10 py-2 text-xl shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`}
-        >
-          Like
-          {clicked ? (
-            <BiLike className="ml-2"></BiLike>
-          ) : (
-            <BiSolidLike color="#F39BB3" className="ml-2"></BiSolidLike>
-          )}
-        </button>
-      </div>
+      {!user.me && (
+        <div className="font-bold">
+          <button
+            onClick={() => handleClick()}
+            className={`${
+              clicked ? ' bg-green-5 active:bg-green-5' : 'bg-green-2'
+            } flex items-center rounded-lg border-2 border-brown px-10 py-2 text-xl shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`}
+          >
+            Like
+            {clicked ? (
+              <BiLike className="ml-2"></BiLike>
+            ) : (
+              <BiSolidLike color="#F39BB3" className="ml-2"></BiSolidLike>
+            )}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
