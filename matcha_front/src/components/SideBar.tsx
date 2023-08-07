@@ -32,7 +32,7 @@ const SideBar = () => {
     <div
       key={state.index}
       {...props}
-      className={`absolute top-0 bottom-0 left-0 right-full rounded-xl ${
+      className={`absolute bottom-0 left-0 right-full top-0 rounded-xl ${
         state.index === 2
           ? 'bg-neutral/50'
           : state.index === 1
@@ -62,11 +62,11 @@ const SideBar = () => {
       >
         {({ setFieldValue }) => (
           <Form className="text-center">
-            <div className="mb-5 border-b-2 border-brown font-bold pb-1">
+            <div className="mb-5 border-b-2 border-brown pb-1 font-bold">
               Age
             </div>
             <ReactSlider
-              className="h-[10px] w-full flex items-center"
+              className="flex h-[10px] w-full items-center"
               thumbClassName="bg-brown rounded-full text-xs text-neutral h-[30px] w-[30px] flex items-center justify-center"
               renderTrack={Track}
               defaultValue={[18, 100]}
@@ -84,11 +84,11 @@ const SideBar = () => {
                 void setFieldValue('ageRange', valueNow)
               }
             />
-            <div className="mb-5 mt-10 border-b-2 border-brown font-bold pb-1">
+            <div className="mb-5 mt-10 border-b-2 border-brown pb-1 font-bold">
               Fame Rating
             </div>
             <ReactSlider
-              className="h-[10px] w-full flex items-center"
+              className="flex h-[10px] w-full items-center"
               thumbClassName="bg-brown rounded-full text-xs text-neutral h-[30px] w-[30px] flex items-center justify-center"
               renderTrack={Track}
               defaultValue={[0, 5]}
@@ -106,11 +106,11 @@ const SideBar = () => {
                 void setFieldValue('fameRatingRange', valueNow)
               }
             />
-            <div className="mb-5 mt-10 border-b-2 border-brown font-bold pb-1">
+            <div className="mb-5 mt-10 border-b-2 border-brown pb-1 font-bold">
               Location
             </div>
             <ReactSlider
-              className="h-[10px] w-full flex items-center"
+              className="flex h-[10px] w-full items-center"
               thumbClassName="bg-brown rounded-full text-xs text-neutral h-[30px] w-[30px] flex items-center justify-center"
               renderTrack={Track}
               defaultValue={[0, 100]}
@@ -128,7 +128,7 @@ const SideBar = () => {
                 void setFieldValue('locationRange', valueNow)
               }
             />
-            <div className="mb-5 mt-10 border-b-2 border-brown font-bold pb-1">
+            <div className="mb-5 mt-10 border-b-2 border-brown pb-1 font-bold">
               Interests
             </div>
             <Field

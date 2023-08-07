@@ -1,4 +1,4 @@
-import { FC, Suspense } from 'react';
+import { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -10,10 +10,10 @@ import MainMenu from './MainMenu';
 import Notifications from './Notifications';
 
 interface HeaderProps {
-  currentUserPromise: Promise<CurrentUser | undefined>;
+  currentUser: CurrentUser;
 }
 
-const Header: FC<HeaderProps> = ({ currentUserPromise }) => {
+const Header: FC<HeaderProps> = ({ currentUser }) => {
   return (
     <header>
       <div className="mb-5 mt-3 flex justify-between">
@@ -23,17 +23,13 @@ const Header: FC<HeaderProps> = ({ currentUserPromise }) => {
             <Image src={Cup} width={80} alt="cup" className="mr-2" />
           </Link>
 
-          <Suspense fallback={<p>Loading</p>}>
-            <MainMenu currentUserPromise={currentUserPromise} />
-          </Suspense>
+          <MainMenu currentUser={currentUser} />
         </div>
 
         <div className="flex items-center">
           <Notifications className="mr-3" />
 
-          <Suspense fallback={<p>Loading</p>}>
-            <UserWidget currentUserPromise={currentUserPromise} />
-          </Suspense>
+          <UserWidget currentUser={currentUser} />
         </div>
       </div>
 

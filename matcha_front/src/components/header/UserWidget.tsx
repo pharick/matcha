@@ -1,19 +1,15 @@
 import { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 
 import DefaultProfilePicture from '@/images/default_profile_picture.jpg';
 import { logout } from '@/api/auth';
 
 interface UserWidgetProps {
-  currentUserPromise: Promise<CurrentUser | undefined>;
+  currentUser: CurrentUser;
 }
 
-const UserWidget: FC<UserWidgetProps> = async ({ currentUserPromise }) => {
-  const currentUser = await currentUserPromise;
-  if (!currentUser) redirect('/login');
-
+const UserWidget: FC<UserWidgetProps> = ({ currentUser }) => {
   return (
     <div className="group relative flex cursor-pointer items-center">
       <p className="mr-1 text-lg">{currentUser.username}</p>

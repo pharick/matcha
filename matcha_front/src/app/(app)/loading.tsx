@@ -1,5 +1,5 @@
 export default function Loading() {
   return (
-    <div className="w-[70px] h-[70px] border-8 border-neutral border-r-brown animate-spin rounded-full my-10 mx-auto"></div>
+    <div className="mx-auto my-10 h-[70px] w-[70px] animate-spin rounded-full border-8 border-neutral border-r-brown"></div>
   );
 }

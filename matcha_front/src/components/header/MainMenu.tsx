@@ -2,12 +2,10 @@ import { FC } from 'react';
 import Link from 'next/link';
 
 interface MainMenuProps {
-  currentUserPromise: Promise<CurrentUser | undefined>;
+  currentUser: CurrentUser;
 }
 
-const MainMenu: FC<MainMenuProps> = async ({ currentUserPromise }) => {
-  const user = await currentUserPromise;
-
+const MainMenu: FC<MainMenuProps> = ({ currentUser }) => {
   return (
     <nav>
       <ul className="flex">
@@ -22,7 +20,7 @@ const MainMenu: FC<MainMenuProps> = async ({ currentUserPromise }) => {
         <li className="shrink-0">
           <Link
             className="block p-2 hover:bg-green-5/50"
-            href={`/users/${user?.username}`}
+            href={`/users/${currentUser.username}`}
           >
             My profile
           </Link>

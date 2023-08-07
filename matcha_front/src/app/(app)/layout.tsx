@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
+import { redirect } from 'next/navigation';
 
 import Header from '@/components/header/Header';
 import { getCurrentUser } from '@/api/auth';
@@ -20,17 +21,18 @@ const montserrat = Montserrat({
   display: 'swap',
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const currentUserPromise = getCurrentUser();
+  const currentUser = await getCurrentUser();
+  if (!currentUser) redirect('/login');
 
   return (
     <html lang="en" className={montserrat.className}>
       <body className="mx-10 min-h-screen">
-        <Header currentUserPromise={currentUserPromise} />
+        <Header currentUser={currentUser} />
         {children}
       </body>
     </html>

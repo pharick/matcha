@@ -43,11 +43,11 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
       <button className="relative">
         <FaBell size={24} />
         {notifications.some((n) => !n.viewed) && (
-          <div className="w-[10px] h-[10px] rounded-full bg-red-300 absolute top-0 right-0"></div>
+          <div className="absolute right-0 top-0 h-[10px] w-[10px] rounded-full bg-red-300"></div>
         )}
       </button>
 
-      <div className="absolute right-0 top-full hidden min-w-[290px] rounded-xl bg-green-5/90 group-hover:block z-50">
+      <div className="absolute right-0 top-full z-50 hidden min-w-[290px] rounded-xl bg-green-5/90 group-hover:block">
         {notifications.length > 0 ? (
           <ul className="max-h-[256px] overflow-y-auto">
             {notifications.map((n) => (
@@ -85,7 +85,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
         )}
         <Link
           href="/notifications"
-          className="block text-center underline py-2 border-t border-b-brown/50 hover:text-brown/80"
+          className="block border-t border-b-brown/50 py-2 text-center underline hover:text-brown/80"
         >
           All notifications
         </Link>

@@ -6,6 +6,7 @@ import (
 
 	"matcha_api/db"
 	"matcha_api/handlers"
+	"matcha_api/lib"
 	"matcha_api/settings"
 
 	_ "github.com/lib/pq"
@@ -26,12 +27,17 @@ func main() {
 
 	env := handlers.CreateEnv(dbConn, settings)
 
+	// Mock
+	err = lib.GenerateUsers(&env.Users, 5)
+	if err != nil {
+		log.Println(err)
+	}
+
 	mux := goji.NewMux()
 	mux.Use(cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"},
 		AllowedHeaders:   []string{"Authorization"},
 		AllowCredentials: true,
-		Debug:            true,
 	}).Handler)
 
 	// --- HTTP ---
