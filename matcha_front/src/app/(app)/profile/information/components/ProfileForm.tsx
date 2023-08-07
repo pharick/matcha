@@ -47,8 +47,8 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
       .max(16, 'Last name must be between 2 and 16 characters')
       .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed '),
     biography: Yup.string().max(
-      200,
-      'Biography must be not more than 200 characters'
+      1024,
+      'Biography must be not more than 1024 characters'
     ),
     tags: Yup.array().of(Yup.string()),
     gender: Yup.string()

@@ -4,7 +4,7 @@ import ReactSlider from 'react-slider';
 import TagsField from './TagsField';
 import { Field, Form, Formik } from 'formik';
 import Button from './Button';
-import { ClassAttributes, HTMLAttributes, JSX } from 'react';
+import { ClassAttributes, FC, HTMLAttributes, JSX } from 'react';
 
 interface SideBarValue {
   ageRange: number[];
@@ -13,14 +13,18 @@ interface SideBarValue {
   tags: string[];
 }
 
-const SideBar = () => {
+interface SideBarProps {
+  currentUser: User;
+}
+
+const SideBar: FC<SideBarProps> = ({ currentUser }) => {
   // const [isPending, startTransition] = useTransition();
 
   const initialValue: SideBarValue = {
     ageRange: [18, 100],
     fameRatingRange: [0, 5],
     locationRange: [],
-    tags: [],
+    tags: currentUser.tags,
   };
 
   const Track = (
