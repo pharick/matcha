@@ -19,7 +19,7 @@ const UserPhoto: FC<UserProfileProps> = ({ user, photos }) => {
     <div className="relative h-full w-full rounded-lg border-2 border-brown bg-brown">
       {photoId > 0 && (
         <button
-          className="group absolute left-0 top-0 z-30 block h-full px-1 hover:bg-green-5/50"
+          className="group absolute left-0 top-0 z-40 block h-full px-1 hover:bg-green-5/50"
           onClick={() => setPhotoId(photoId - 1)}
         >
           <div className="rounded bg-green-5/50 group-hover:bg-transparent">
@@ -42,7 +42,7 @@ const UserPhoto: FC<UserProfileProps> = ({ user, photos }) => {
       </figure>
       {photoId + 1 < photos.length && (
         <button
-          className="group absolute right-0 top-0 z-30 block h-full px-1 hover:bg-green-5/50"
+          className="group absolute right-0 top-0 z-40 block h-full px-1 hover:bg-green-5/50"
           onClick={() => setPhotoId(photoId + 1)}
         >
           <div className="rounded bg-green-5/50 group-hover:bg-transparent">
@@ -51,7 +51,7 @@ const UserPhoto: FC<UserProfileProps> = ({ user, photos }) => {
         </button>
       )}
 
-      <div className="absolute bottom-0 left-0 right-0 z-40 rounded-b-lg p-3 shadow-[inset_0_-100px_60px_20px_rgba(255,255,255,0.4)]">
+      <div className="absolute bottom-0 left-0 right-0 top-0 z-30 flex flex-col justify-end rounded-b-lg p-3 shadow-[inset_0_-200px_80px_-100px_rgba(255,255,255,0.6)]">
         <UserInfo user={user} />
       </div>
     </div>
