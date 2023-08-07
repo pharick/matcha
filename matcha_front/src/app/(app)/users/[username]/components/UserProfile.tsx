@@ -1,8 +1,9 @@
 import { FC } from 'react';
+import { BiLike, BiSolidLike } from 'react-icons/bi';
 
 import UserPhoto from './UserPhoto';
-import UserInfo from './UserInfo';
 import ProfileVisitor from './ProfileVisitor';
+import { setLike, unsetLike } from '@/api/profile';
 
 interface UserProfileProps {
   user: User;
@@ -10,34 +11,66 @@ interface UserProfileProps {
 }
 
 const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
+  const handleLike = async () => {
+    'use server';
+    if (!user.liked) await setLike(user.username);
+    else await unsetLike(user.username);
+  };
+
   return (
-    <main className="mx-auto my-5 max-w-[700px]">
+    <main className="mx-auto my-5 flex flex-wrap justify-center">
       <ProfileVisitor username={user.username} />
 
-      <header className="mb-10 flex flex-wrap justify-center">
-        <div className="m-right-2 mr-3 h-[400px] w-[400px]">
-          <UserPhoto photos={photos} />
+      <div className="mr-5 w-[500px]">
+        <div className="mb-2 h-[500px]">
+          <UserPhoto user={user} photos={photos} />
         </div>
-        <div className="flex-1 pt-2">
-          <UserInfo user={user} />
-        </div>
-      </header>
 
-      <div className="mx-auto max-w-[700px]">
-        <h2 className="my-5 border-b-2 border-brown pb-1 text-xl text-brown">
+        {!user.me && (
+          <div className="mb-5 flex justify-end">
+            {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+            <form action={handleLike}>
+              <button
+                type="submit"
+                className={`${
+                  user.liked ? ' bg-green-5 active:bg-green-5' : 'bg-green-2'
+                } flex items-center rounded-lg border-2 border-brown px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`}
+              >
+                {!user.liked ? (
+                  <>
+                    <BiLike className="mr-1"></BiLike>
+                    Like
+                  </>
+                ) : (
+                  <>
+                    <BiSolidLike color="#F39BB3" className="mr-1"></BiSolidLike>
+                    Unlike
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
+        )}
+      </div>
+
+      <div className="min-w-[500px] flex-1">
+        <h2 className="mb-5 border-b-2 border-brown pb-1 text-xl text-brown">
           Biography
         </h2>
         <div className="mb-5 rounded-lg bg-neutral/50 p-3">
           {user?.biography || 'No bio available'}
         </div>
-        <h2 className="my-5 border-b-2 border-brown pb-1 text-xl text-brown">
+        <h2 className="mb-5 border-b-2 border-brown pb-1 text-xl text-brown">
           Interests
         </h2>
         {user?.tags.length > 0 ? (
           <div>
             <ul className="flex flex-wrap">
               {user?.tags.map((tag, i) => (
-                <li key={i} className="mb-5 mr-2 rounded-lg bg-green-2 px-2">
+                <li
+                  key={i}
+                  className="mb-5 mr-2 rounded-lg bg-green-2 px-2 text-white"
+                >
                   {tag}
                 </li>
               ))}
