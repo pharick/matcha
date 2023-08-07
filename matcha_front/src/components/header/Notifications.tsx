@@ -14,6 +14,7 @@ interface NotificationsProps {
 }
 
 const Notifications: FC<NotificationsProps> = ({ className }) => {
+  const [firstMessages, setFirstMessages] = useState(true);
   const { lastMessage } = useWebSocket(
     `${process.env.NEXT_PUBLIC_WS_BASE_URL}/api/ws/notifications/`
   );
@@ -31,14 +32,15 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
   };
 
   useEffect(() => {
-    if (lastMessage !== null) {
+    if (lastMessage !== null && !firstMessages) {
       const notifications = (lastMessage.data as string)
         .split('\n\n')
         .map((n) => JSON.parse(n) as MNotification);
       setNotifications((n) => [...notifications, ...n]);
       notifications.forEach((n) => void notify(n));
     }
-  }, [lastMessage]);
+    if (firstMessages) setFirstMessages(false);
+  }, [lastMessage, firstMessages]);
 
   const markViewed = async (id: number) => {
     await viewNotification(id);
