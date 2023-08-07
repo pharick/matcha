@@ -22,7 +22,6 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
   const [notifications, setNotifications] = useState<MNotification[]>([]);
 
   const notify = async (n: MNotification) => {
-    console.log(Notification.permission);
     if (Notification.permission == 'denied') return;
     if (Notification.permission != 'granted') {
       const permission = await Notification.requestPermission();
@@ -32,14 +31,13 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
   };
 
   useEffect(() => {
-    if (lastMessage !== null && !firstMessages) {
-      const notifications = (lastMessage.data as string)
-        .split('\n\n')
-        .map((n) => JSON.parse(n) as MNotification);
-      setNotifications((n) => [...notifications, ...n]);
-      notifications.forEach((n) => void notify(n));
-    }
-    if (firstMessages) setFirstMessages(false);
+    if (lastMessage == null) return;
+    const notifications = (lastMessage.data as string)
+      .split('\n\n')
+      .map((n) => JSON.parse(n) as MNotification);
+    setNotifications((n) => [...notifications, ...n]);
+    if (!firstMessages) notifications.forEach((n) => void notify(n));
+    else setFirstMessages(false);
   }, [lastMessage, firstMessages]);
 
   const markViewed = async (id: number) => {
