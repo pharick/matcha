@@ -15,7 +15,7 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
       <ProfileVisitor username={user.username} />
 
       <header className="mb-10 flex flex-wrap justify-center">
-        <div className="m-right-2 mr-3 w-[400px] h-[400px]">
+        <div className="m-right-2 mr-3 h-[400px] w-[400px]">
           <UserPhoto photos={photos} />
         </div>
         <div className="flex-1 pt-2">
