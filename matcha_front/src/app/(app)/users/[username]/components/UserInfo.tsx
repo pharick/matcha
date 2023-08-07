@@ -15,7 +15,7 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
   return (
     <>
       <div className="mb-1 flex items-baseline justify-end">
-        <h1 className="mr-2 text-right text-2xl">
+        <h1 className="mr-2 text-right text-2xl font-bold">
           {user.first_name} {user.last_name}
         </h1>
         <div className="flex items-center text-xl">
