@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 
 import { FaBell } from 'react-icons/fa6';
 import { viewNotification } from '@/api/notifications';
+import { getNotificationMessage } from '@/helpers';
 
 interface NotificationsProps {
   className?: string;
@@ -19,12 +20,23 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
 
   const [notifications, setNotifications] = useState<MNotification[]>([]);
 
+  const notify = async (n: MNotification) => {
+    console.log(Notification.permission);
+    if (Notification.permission == 'denied') return;
+    if (Notification.permission != 'granted') {
+      const permission = await Notification.requestPermission();
+      if (permission != 'granted') return;
+    }
+    new Notification(`${n.username} ${getNotificationMessage(n)}`);
+  };
+
   useEffect(() => {
     if (lastMessage !== null) {
       const notifications = (lastMessage.data as string)
         .split('\n\n')
         .map((n) => JSON.parse(n) as MNotification);
       setNotifications((n) => [...notifications, ...n]);
+      notifications.forEach((n) => void notify(n));
     }
   }, [lastMessage]);
 
@@ -71,11 +83,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
                   >
                     {n.username}
                   </Link>{' '}
-                  {n.type == 'visit'
-                    ? 'visited your profile'
-                    : n.type == 'like'
-                    ? 'likes you'
-                    : "don't like you anymore"}
+                  {getNotificationMessage(n)}
                 </p>
               </li>
             ))}

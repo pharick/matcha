@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { FC } from 'react';
 import { format } from 'date-fns';
 
+import { getNotificationMessage } from '@/helpers';
+
 interface NotificationsListProps {
   notificationsPromise: Promise<MNotification[]>;
 }
@@ -33,11 +35,7 @@ const NotificationsList: FC<NotificationsListProps> = async ({
                 >
                   {n.username}
                 </Link>{' '}
-                {n.type == 'visit'
-                  ? 'visited your profile'
-                  : n.type == 'like'
-                  ? 'likes you'
-                  : "don't like you anymore"}
+                {getNotificationMessage(n)}
               </p>
             </li>
           ))}

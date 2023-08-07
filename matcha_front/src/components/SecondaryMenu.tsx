@@ -17,7 +17,7 @@ const SecondaryMenu: FC<SecondaryMenuProps> = ({ items }) => {
         <li key={i} className="flex-1 border-r border-brown/30 last:border-r-0">
           <Link
             href={url}
-            className={`block w-full bg-green-1 p-2 text-center font-bold ${
+            className={`block h-full w-full bg-green-1 p-2 text-center font-bold ${
               pathname.startsWith(url) ? 'bg-green-2/50' : 'hover:bg-neutral/50'
             }`}
           >

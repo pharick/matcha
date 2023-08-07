@@ -15,3 +15,9 @@ export function birthdateToAge(birthdate: string) {
   const age = differenceInYears(new Date(), date);
   return age;
 }
+
+export function getNotificationMessage(n: MNotification) {
+  if (n.type == 'visit') return 'visited your profile';
+  if (n.type == 'like') return 'likes you';
+  return "don't like you anymore";
+}
