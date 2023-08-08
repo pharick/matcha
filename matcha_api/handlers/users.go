@@ -11,8 +11,8 @@ import (
 	"goji.io/pat"
 )
 
-func UserList(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
-	users, err := env.Users.GetAll()
+func UserSearch(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	users, err := env.Users.Search()
 	if err != nil {
 		return nil, err
 	}

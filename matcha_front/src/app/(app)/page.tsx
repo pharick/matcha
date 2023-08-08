@@ -5,6 +5,7 @@ import { getCurrentUser } from '@/api/auth';
 import { redirect } from 'next/navigation';
 import { parseIntSearchParam } from '@/helpers';
 import { FiltersValues } from '@/components/FiltersSideBar';
+import { search } from '@/api/search';
 
 interface SearchPageProps {
   searchParams: {
@@ -19,8 +20,10 @@ interface SearchPageProps {
 }
 
 const SearchPage: NextPage<SearchPageProps> = async ({ searchParams }) => {
-  const currentUser = await getCurrentUser();
+  const [currentUser, users] = await Promise.all([getCurrentUser(), search()]);
   if (!currentUser) redirect('/login');
+
+  console.log(users);
 
   const ageFrom = parseIntSearchParam(searchParams.ageFrom);
   const ageTo = parseIntSearchParam(searchParams.ageTo);

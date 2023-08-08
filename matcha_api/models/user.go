@@ -133,29 +133,10 @@ func (m UserModel) Update(
 	return user, err
 }
 
-func (m UserModel) GetAll() ([]User, error) {
+func (m UserModel) Search() ([]User, error) {
 	var user User
 	rows, err := m.DB.Query(
 		fmt.Sprintf("SELECT %s FROM users", fields),
-	)
-	if err != nil {
-		return nil, err
-	}
-	users := make([]User, 0)
-	for rows.Next() {
-		err := scanRow(rows, &user)
-		if err != nil {
-			return nil, err
-		}
-		users = append(users, user)
-	}
-	return users, nil
-}
-
-func (m UserModel) GetAllActive() ([]User, error) {
-	var user User
-	rows, err := m.DB.Query(
-		fmt.Sprintf("SELECT %s FROM users WHERE active = true", fields),
 	)
 	if err != nil {
 		return nil, err
@@ -181,30 +162,10 @@ func (m UserModel) GetOneByUsername(username string) (User, error) {
 	return user, err
 }
 
-func (m UserModel) GetOneActiveByUsername(username string) (User, error) {
-	var user User
-	row := m.DB.QueryRow(
-		fmt.Sprintf("SELECT %s FROM users WHERE username = $1 AND active = true", fields),
-		username,
-	)
-	err := scanRow(row, &user)
-	return user, err
-}
-
 func (m UserModel) GetOneByEmail(email string) (User, error) {
 	var user User
 	row := m.DB.QueryRow(
 		fmt.Sprintf("SELECT %s FROM users WHERE email = $1", fields),
-		email,
-	)
-	err := scanRow(row, &user)
-	return user, err
-}
-
-func (m UserModel) GetOneActiveByEmail(email string) (User, error) {
-	var user User
-	row := m.DB.QueryRow(
-		fmt.Sprintf("SELECT %s FROM users WHERE email = $1 AND active = true", fields),
 		email,
 	)
 	err := scanRow(row, &user)
