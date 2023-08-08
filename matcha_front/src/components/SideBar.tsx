@@ -1,10 +1,11 @@
 'use client';
 
-import ReactSlider from 'react-slider';
-import TagsField from './TagsField';
+import { FC } from 'react';
 import { Field, Form, Formik } from 'formik';
+import ReactSlider from 'react-slider';
+
+import TagsField from './TagsField';
 import Button from './Button';
-import { ClassAttributes, FC, HTMLAttributes, JSX } from 'react';
 
 interface SideBarValue {
   ageRange: number[];
@@ -15,11 +16,10 @@ interface SideBarValue {
 
 interface SideBarProps {
   currentUser: User;
+  className?: string;
 }
 
-const SideBar: FC<SideBarProps> = ({ currentUser }) => {
-  // const [isPending, startTransition] = useTransition();
-
+const SideBar: FC<SideBarProps> = ({ currentUser, className }) => {
   const initialValue: SideBarValue = {
     ageRange: [18, 100],
     fameRatingRange: [0, 5],
@@ -28,30 +28,53 @@ const SideBar: FC<SideBarProps> = ({ currentUser }) => {
   };
 
   const Track = (
-    props: JSX.IntrinsicAttributes &
-      ClassAttributes<HTMLDivElement> &
-      HTMLAttributes<HTMLDivElement>,
+    props: HTMLPropsWithRefCallback<HTMLDivElement>,
     state: { index: number; value: number[] }
-  ) => (
-    <div
-      key={state.index}
-      {...props}
-      className={`absolute bottom-0 left-0 right-full top-0 rounded-xl ${
-        state.index === 2
-          ? 'bg-neutral/50'
-          : state.index === 1
-          ? 'bg-brown'
-          : 'bg-neutral/50'
-      }`}
-    ></div>
-  );
+  ) => {
+    const { key, ...rest } =
+      props as HTMLPropsWithRefCallback<HTMLDivElement> & { key: string };
+    return (
+      <div
+        key={key}
+        {...rest}
+        className={`absolute bottom-0 left-0 right-full top-0 rounded-xl ${
+          state.index === 2
+            ? 'bg-neutral/50'
+            : state.index === 1
+            ? 'bg-brown'
+            : 'bg-neutral/50'
+        }`}
+      ></div>
+    );
+  };
+
+  const Thumb = (
+    props: HTMLPropsWithRefCallback<HTMLDivElement>,
+    state: {
+      index: number;
+      value: number[];
+      valueNow: number;
+    }
+  ) => {
+    const { key, ...rest } =
+      props as HTMLPropsWithRefCallback<HTMLDivElement> & { key: string };
+    return (
+      <div
+        key={key}
+        {...rest}
+        className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-brown text-xs text-neutral"
+      >
+        {state.valueNow}
+      </div>
+    );
+  };
 
   // const handleSearchUsers = () => {
   //   console.log(props);
   // };
 
   return (
-    <div className="w-full p-4 text-center">
+    <div className={`p-4 text-center ${className}`}>
       <Formik
         initialValues={initialValue}
         onSubmit={(values, actions) => {
@@ -71,19 +94,14 @@ const SideBar: FC<SideBarProps> = ({ currentUser }) => {
             </div>
             <ReactSlider
               className="flex h-[10px] w-full items-center"
-              thumbClassName="bg-brown rounded-full text-xs text-neutral h-[30px] w-[30px] flex items-center justify-center"
               renderTrack={Track}
+              renderThumb={Thumb}
               defaultValue={[18, 100]}
               min={18}
               ariaLabel={['Lower thumb', 'Upper thumb']}
               ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
-              renderThumb={(props, state) => (
-                <div key={props.key} {...props}>
-                  {state.valueNow}
-                </div>
-              )}
-              pearling
-              minDistance={1}
+              pearling={true}
+              minDistance={0}
               onAfterChange={(valueNow: number[]) =>
                 void setFieldValue('ageRange', valueNow)
               }
@@ -95,17 +113,13 @@ const SideBar: FC<SideBarProps> = ({ currentUser }) => {
               className="flex h-[10px] w-full items-center"
               thumbClassName="bg-brown rounded-full text-xs text-neutral h-[30px] w-[30px] flex items-center justify-center"
               renderTrack={Track}
+              renderThumb={Thumb}
               defaultValue={[0, 5]}
               max={5}
               ariaLabel={['Lower thumb', 'Upper thumb']}
               ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
-              renderThumb={(props, state) => (
-                <div key={props.key} {...props}>
-                  {state.valueNow}
-                </div>
-              )}
-              pearling
-              minDistance={1}
+              pearling={true}
+              minDistance={0}
               onAfterChange={(valueNow: number[]) =>
                 void setFieldValue('fameRatingRange', valueNow)
               }
@@ -117,17 +131,13 @@ const SideBar: FC<SideBarProps> = ({ currentUser }) => {
               className="flex h-[10px] w-full items-center"
               thumbClassName="bg-brown rounded-full text-xs text-neutral h-[30px] w-[30px] flex items-center justify-center"
               renderTrack={Track}
+              renderThumb={Thumb}
               defaultValue={[0, 100]}
               max={100}
               ariaLabel={['Lower thumb', 'Upper thumb']}
               ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
-              renderThumb={(props, state) => (
-                <div key={props.key} {...props}>
-                  {state.valueNow}
-                </div>
-              )}
-              pearling
-              minDistance={1}
+              pearling={true}
+              minDistance={0}
               onAfterChange={(valueNow: number[]) =>
                 void setFieldValue('locationRange', valueNow)
               }

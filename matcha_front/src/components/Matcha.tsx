@@ -13,16 +13,12 @@ interface MatchaProps {
 const Matcha: FC<MatchaProps> = ({ currentUser }) => {
   const [hidden, setHidden] = useState(true);
 
-  const changeHiddenState = () => {
-    setHidden(!hidden);
-  };
-
   return (
-    <div className="flex flex-1">
-      <aside className="w-full bg-green-5/70 md:hidden rounded-lg px-2">
+    <div className="flex">
+      <aside className="w-full rounded-lg bg-green-5/70 px-2 md:w-[400px]">
         <button
-          onClick={changeHiddenState}
-          className="h-[50px] flex items-center justify-end font-bold w-full"
+          onClick={() => setHidden((h) => !h)}
+          className="flex h-[50px] w-full items-center justify-end font-bold md:hidden"
         >
           Filter
           {hidden ? (
@@ -31,16 +27,13 @@ const Matcha: FC<MatchaProps> = ({ currentUser }) => {
             <GrClose color="#403539" className="ml-2" />
           )}
         </button>
-        {!hidden && (
-          <div className="">
-            <SideBar currentUser={currentUser} />
-          </div>
-        )}
+        <SideBar
+          className={`${hidden && 'hidden'} md:block`}
+          currentUser={currentUser}
+        />
       </aside>
-      <aside className="w-[400px] rounded-lg bg-green-5/70 hidden md:block">
-        <SideBar currentUser={currentUser} />
-      </aside>
-      <main className="flex-1 ">{/* TODO */}</main>
+
+      <main className="flex-1">{/* TODO */}</main>
     </div>
   );
 };

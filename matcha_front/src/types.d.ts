@@ -1,3 +1,7 @@
+interface HTMLPropsWithRefCallback<T> extends HTMLProps<T> {
+  ref: RefCallback<T>;
+}
+
 type MenuItem = {
   title: string;
   url: string;
