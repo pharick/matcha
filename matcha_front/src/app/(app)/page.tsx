@@ -46,7 +46,7 @@ const SearchPage: NextPage<SearchPageProps> = async ({ searchParams }) => {
 
   return (
     <div className="min-h-screen">
-      <Matcha filtersValues={filtersValues} />
+      <Matcha filtersValues={filtersValues} usersList={users} />
     </div>
   );
 };

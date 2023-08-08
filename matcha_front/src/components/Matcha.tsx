@@ -8,9 +8,10 @@ import FiltersSideBar, { FiltersValues } from '@/components/FiltersSideBar';
 
 interface MatchaProps {
   filtersValues: FiltersValues;
+  usersList: User[];
 }
 
-const Matcha: FC<MatchaProps> = ({ filtersValues }) => {
+const Matcha: FC<MatchaProps> = ({ filtersValues, usersList }) => {
   const [hidden, setHidden] = useState(true);
 
   return (
@@ -33,7 +34,15 @@ const Matcha: FC<MatchaProps> = ({ filtersValues }) => {
         />
       </aside>
 
-      <main className="flex-1">{/* TODO */}</main>
+      <main className="flex-1">
+        <ul className="flex flex-wrap">
+          {usersList.map((user, index) => (
+            <li className="m-auto h-[250px] w-[250px] p-3" key={index}>
+              {user.username}
+            </li>
+          ))}
+        </ul>
+      </main>
     </div>
   );
 };

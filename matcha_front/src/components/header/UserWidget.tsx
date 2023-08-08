@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import DefaultProfilePicture from '@/images/default_profile_picture.jpg';
+import DefaultProfilePicture from '@/images/default_profile_picture.svg';
 import { logout } from '@/api/auth';
 
 interface UserWidgetProps {

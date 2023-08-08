@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { FC, useState } from 'react';
 import { BiRightArrowAlt, BiLeftArrowAlt } from 'react-icons/bi';
 
-import DefaultProfilePicture from '@/images/default_profile_picture.jpg';
+import DefaultProfilePicture from '@/images/default_profile_picture.svg';
 import UserInfo from './UserInfo';
 
 interface UserProfileProps {
