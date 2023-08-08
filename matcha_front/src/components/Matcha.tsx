@@ -4,13 +4,13 @@ import { FC, useState } from 'react';
 import { FiFilter } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
 
-import SideBar from '@/components/SideBar';
+import FiltersSideBar, { FiltersValues } from '@/components/FiltersSideBar';
 
 interface MatchaProps {
-  currentUser: CurrentUser;
+  filtersValues: FiltersValues;
 }
 
-const Matcha: FC<MatchaProps> = ({ currentUser }) => {
+const Matcha: FC<MatchaProps> = ({ filtersValues }) => {
   const [hidden, setHidden] = useState(true);
 
   return (
@@ -20,16 +20,16 @@ const Matcha: FC<MatchaProps> = ({ currentUser }) => {
           onClick={() => setHidden((h) => !h)}
           className="flex h-[50px] w-full items-center justify-end font-bold md:hidden"
         >
-          Filter
+          Filters
           {hidden ? (
             <FiFilter color="#403539" className="ml-2" />
           ) : (
             <GrClose color="#403539" className="ml-2" />
           )}
         </button>
-        <SideBar
+        <FiltersSideBar
           className={`${hidden && 'hidden'} md:block`}
-          currentUser={currentUser}
+          initialValues={filtersValues}
         />
       </aside>
 

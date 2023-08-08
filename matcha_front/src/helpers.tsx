@@ -21,3 +21,9 @@ export function getNotificationMessage(n: MNotification) {
   if (n.type == 'like') return 'likes you';
   return "don't like you anymore";
 }
+
+export function parseIntSearchParam(v?: string) {
+  const n = parseInt(v ?? '');
+  if (isNaN(n)) return undefined;
+  return n;
+}
