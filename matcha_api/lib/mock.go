@@ -2,7 +2,6 @@ package lib
 
 import (
 	"encoding/json"
-	"log"
 	"matcha_api/models"
 	"net/http"
 	"strconv"
@@ -50,7 +49,6 @@ func GenerateUser(users *models.UserModel) (*MockUser, error) {
 func GenerateUsers(users *models.UserModel, n int) error {
 	for i := 0; i < n; i++ {
 		mockUser, err := GenerateUser(users)
-		log.Println(mockUser)
 		if err != nil {
 			return err
 		}
@@ -81,6 +79,7 @@ func GenerateUsers(users *models.UserModel, n int) error {
 			Longitude: longitude,
 			Latitude:  latitude,
 		}
+		user.Gender = mockUser.Gender
 		user, err = users.Update(user)
 		if err != nil {
 			return err

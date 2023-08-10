@@ -28,10 +28,8 @@ func main() {
 	env := handlers.CreateEnv(dbConn, settings)
 
 	// Mock
-	err = lib.GenerateUsers(&env.Users, 5)
-	if err != nil {
-		log.Println(err)
-	}
+	usersCount, _ := env.Users.Count()
+	go lib.GenerateUsers(&env.Users, 100-usersCount)
 
 	mux := goji.NewMux()
 	mux.Use(cors.New(cors.Options{

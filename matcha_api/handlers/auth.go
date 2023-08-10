@@ -39,7 +39,7 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = lib.SendEmail(
+	go lib.SendEmail(
 		env.Settings.SMTPHost,
 		env.Settings.SMTPPort,
 		env.Settings.SMTPEmail,
@@ -51,9 +51,6 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 			env.Settings.FrontBaseUrl, activation_token,
 		),
 	)
-	if err != nil {
-		return nil, err
-	}
 	token, err := lib.GenerateAuthJWT(d.Username, env.Settings.JWTSecret)
 	if err != nil {
 		return nil, err
@@ -100,7 +97,7 @@ func SendActivationEmail(env *Env, w http.ResponseWriter, r *http.Request) (any,
 	if err != nil {
 		return nil, err
 	}
-	err = lib.SendEmail(
+	go lib.SendEmail(
 		env.Settings.SMTPHost,
 		env.Settings.SMTPPort,
 		env.Settings.SMTPEmail,
@@ -112,9 +109,6 @@ func SendActivationEmail(env *Env, w http.ResponseWriter, r *http.Request) (any,
 			env.Settings.FrontBaseUrl, activation_token,
 		),
 	)
-	if err != nil {
-		return nil, err
-	}
 	return nil, nil
 }
 
@@ -132,7 +126,7 @@ func SendPasswordResetEmail(env *Env, w http.ResponseWriter, r *http.Request) (a
 	if err != nil {
 		return nil, err
 	}
-	err = lib.SendEmail(
+	go lib.SendEmail(
 		env.Settings.SMTPHost,
 		env.Settings.SMTPPort,
 		env.Settings.SMTPEmail,
@@ -218,7 +212,7 @@ func EmailChange(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 	if err != nil {
 		return nil, err
 	}
-	err = lib.SendEmail(
+	go lib.SendEmail(
 		env.Settings.SMTPHost,
 		env.Settings.SMTPPort,
 		env.Settings.SMTPEmail,

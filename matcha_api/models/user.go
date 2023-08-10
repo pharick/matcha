@@ -171,3 +171,9 @@ func (m UserModel) GetOneByEmail(email string) (User, error) {
 	err := scanRow(row, &user)
 	return user, err
 }
+
+func (m UserModel) Count() (int, error) {
+	var n int
+	err := m.DB.QueryRow("SELECT COUNT(1) FROM users").Scan(&n)
+	return n, err
+}
