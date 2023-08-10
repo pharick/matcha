@@ -5,7 +5,7 @@ import { FC, useState } from 'react';
 import { BiRightArrowAlt, BiLeftArrowAlt } from 'react-icons/bi';
 
 import DefaultProfilePicture from '@/images/default_profile_picture.svg';
-import UserInfo from './UserInfo';
+import UserInfo from '../../../../../components/UserInfo';
 
 interface UserProfileProps {
   user: User;

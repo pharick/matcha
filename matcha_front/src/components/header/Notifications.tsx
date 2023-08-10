@@ -38,7 +38,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
     setNotifications((n) => [...notifications, ...n]);
     if (!firstMessages) notifications.forEach((n) => void notify(n));
     else setFirstMessages(false);
-  }, [lastMessage, firstMessages]);
+  }, [lastMessage]);
 
   const markViewed = async (id: number) => {
     await viewNotification(id);
@@ -49,6 +49,8 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
       })
     );
   };
+
+  console.log(notifications);
 
   return (
     <div className={`group relative flex items-center ${className}`}>

@@ -22,6 +22,7 @@ type User = {
   tags: string[];
   me: boolean;
   liked: boolean;
+  avatar: string;
 };
 
 type CurrentUser = User & { active: boolean; avatar: string };

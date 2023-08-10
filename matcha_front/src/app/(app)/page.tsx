@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import Image from 'next/image';
 
 import Matcha from '@/components/Matcha';
 import { getCurrentUser } from '@/api/auth';
@@ -6,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { parseIntSearchParam } from '@/helpers';
 import { FiltersValues } from '@/components/FiltersSideBar';
 import { search } from '@/api/search';
+import Match from '@/images/Match.svg';
 
 interface SearchPageProps {
   searchParams: {
@@ -45,6 +47,9 @@ const SearchPage: NextPage<SearchPageProps> = async ({ searchParams }) => {
   return (
     <div className="min-h-screen">
       <Matcha filtersValues={filtersValues} usersList={users} />
+      {/* <div className="absolute top-0 z-40 flex h-full w-full items-center justify-center">
+        <Image src={Match} alt="match" />
+      </div> */}
     </div>
   );
 };
