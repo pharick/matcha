@@ -38,7 +38,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
     setNotifications((n) => [...notifications, ...n]);
     if (!firstMessages) notifications.forEach((n) => void notify(n));
     else setFirstMessages(false);
-  }, [lastMessage, firstMessages]);
+  }, [lastMessage]);
 
   const markViewed = async (id: number) => {
     await viewNotification(id);
@@ -59,7 +59,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
         )}
       </button>
 
-      <div className="absolute right-0 top-full z-50 hidden min-w-[290px] rounded-xl bg-green-5/90 group-hover:block">
+      <div className="absolute right-0 top-full z-50 hidden min-w-[290px] overflow-hidden rounded-xl bg-green-5/90 group-hover:block">
         {notifications.length > 0 ? (
           <ul className="max-h-[256px] overflow-y-auto">
             {notifications.map((n) => (
