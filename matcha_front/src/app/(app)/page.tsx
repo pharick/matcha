@@ -23,8 +23,6 @@ const SearchPage: NextPage<SearchPageProps> = async ({ searchParams }) => {
   const [currentUser, users] = await Promise.all([getCurrentUser(), search()]);
   if (!currentUser) redirect('/login');
 
-  console.log(users);
-
   const ageFrom = parseIntSearchParam(searchParams.ageFrom);
   const ageTo = parseIntSearchParam(searchParams.ageTo);
   const fameFrom = parseIntSearchParam(searchParams.fameFrom);

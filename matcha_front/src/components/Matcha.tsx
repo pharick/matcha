@@ -15,7 +15,7 @@ const Matcha: FC<MatchaProps> = ({ filtersValues, usersList }) => {
   const [hidden, setHidden] = useState(true);
 
   return (
-    <div className="flex">
+    <div className="flex flex-wrap">
       <aside className="w-full rounded-lg bg-green-5/70 px-2 md:w-[400px]">
         <button
           onClick={() => setHidden((h) => !h)}
@@ -35,9 +35,9 @@ const Matcha: FC<MatchaProps> = ({ filtersValues, usersList }) => {
       </aside>
 
       <main className="flex-1">
-        <ul className="flex flex-wrap">
+        <ul className="flex flex-wrap justify-center">
           {usersList.map((user, index) => (
-            <li className="m-auto h-[250px] w-[250px] p-3" key={index}>
+            <li className="h-[250px] w-[250px] p-3" key={index}>
               {user.username}
             </li>
           ))}

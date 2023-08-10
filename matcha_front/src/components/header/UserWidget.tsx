@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 
 import DefaultProfilePicture from '@/images/default_profile_picture.svg';
@@ -18,7 +18,7 @@ const UserWidget: FC<UserWidgetProps> = ({ currentUser }) => {
           src={
             currentUser.avatar
               ? `${process.env.NEXT_PUBLIC_BACK_BASE_URL}${currentUser.avatar}`
-              : DefaultProfilePicture
+              : (DefaultProfilePicture as StaticImageData)
           }
           fill={true}
           className="object-cover"

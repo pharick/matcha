@@ -13,7 +13,7 @@
 }
 
 body {
-  background: url("../../public/leaf_main.svg") center/cover no-repeat, linear-gradient(var(--bg-start), var(--bg-end)) fixed;
+  background: url("../../public/leaf_main.svg") center/cover no-repeat fixed, linear-gradient(var(--bg-start), var(--bg-end)) fixed;
 }
 
 input::-webkit-credentials-auto-fill-button,

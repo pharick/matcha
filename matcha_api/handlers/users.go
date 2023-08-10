@@ -16,8 +16,17 @@ func UserSearch(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
-	usersRet := lib.Map(users, func(user models.User) schemas.UserReturn {
-		return schemas.UserReturn{
+	usersRet := make([]schemas.UserReturn, 0, len(users))
+	for _, user := range users {
+		avatar, err := env.Photos.GetFirstByUserId(user.Id)
+		if err != nil && err != sql.ErrNoRows {
+			return nil, err
+		}
+		var avatar_url string
+		if err != sql.ErrNoRows {
+			avatar_url = avatar.Url
+		}
+		usersRet = append(usersRet, schemas.UserReturn{
 			Id:                user.Id,
 			Username:          user.Username,
 			Email:             user.Email,
@@ -27,8 +36,9 @@ func UserSearch(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 			GenderPreferences: user.GenderPreferences,
 			Biography:         user.Biography,
 			BirthDate:         user.BirthDate,
-		}
-	})
+			Avatar:            avatar_url,
+		})
+	}
 	ret := schemas.UsersReturn{
 		List: usersRet,
 	}
@@ -53,6 +63,14 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 	if err != nil {
 		return nil, err
 	}
+	avatar, err := env.Photos.GetFirstByUserId(user.Id)
+	if err != nil && err != sql.ErrNoRows {
+		return nil, err
+	}
+	var avatar_url string
+	if err != sql.ErrNoRows {
+		avatar_url = avatar.Url
+	}
 	ret := schemas.UserReturn{
 		Id:                user.Id,
 		Username:          user.Username,
@@ -66,6 +84,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Tags:              tags,
 		Me:                user.Id == current_user.Id,
 		Liked:             liked,
+		Avatar:            avatar_url,
 	}
 	return ret, nil
 }

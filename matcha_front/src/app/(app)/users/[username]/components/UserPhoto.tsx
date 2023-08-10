@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import { FC, useState } from 'react';
 import { BiRightArrowAlt, BiLeftArrowAlt } from 'react-icons/bi';
 
@@ -32,7 +32,7 @@ const UserPhoto: FC<UserProfileProps> = ({ user, photos }) => {
           src={
             photos[photoId]
               ? `${process.env.NEXT_PUBLIC_BACK_BASE_URL}${photos[photoId].url}`
-              : DefaultProfilePicture
+              : (DefaultProfilePicture as StaticImageData)
           }
           fill={true}
           className="rounded-lg object-cover"
