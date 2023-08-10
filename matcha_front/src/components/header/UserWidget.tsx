@@ -16,7 +16,9 @@ const UserWidget: FC<UserWidgetProps> = ({ currentUser }) => {
       <figure className="relative h-[60px] w-[60px] overflow-hidden rounded-full border-2 border-brown">
         <Image
           src={
-            currentUser.avatar
+            currentUser.avatar && currentUser.avatar.startsWith('http')
+              ? currentUser.avatar
+              : currentUser.avatar
               ? `${process.env.NEXT_PUBLIC_BACK_BASE_URL}${currentUser.avatar}`
               : (DefaultProfilePicture as StaticImageData)
           }

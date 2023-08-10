@@ -172,20 +172,25 @@ func (m UserModel) GetOneByEmail(email string) (User, error) {
 	return user, err
 }
 
-// func (m UserModel) GetFameRating(userId int) (int, error) {
-// 	var likes, visits, matches int
-// 	err := m.DB.QueryRow(`
-// 		SELECT
-// 		(SELECT COUNT(1) FROM visits WHERE user_id = $1),
-// 		(SELECT COUNT(1) FROM likes WHERE user_id = $1),
-// 		(SELECT COUNT(1) FROM visits WHERE user_id = $1)
-// 	`, userId).Scan(&visits, &likes, &matches)
-// 	if err != nil {
-// 		return 0, err
-// 	}
-// 	err = m.DB.QueryRow("", userId).Scan(&visits)
-// 	return ((likes+1)/(visits+1) - 1) * 5, err
-// }
+func (m UserModel) GetFameRating(userId int) (int, error) {
+	var visits, likes, matches int
+	err := m.DB.QueryRow(`
+		SELECT
+		(SELECT COUNT(1) FROM visits WHERE user_id = $1),
+		(SELECT COUNT(1) FROM likes WHERE user_id = $1),
+		(
+			SELECT COUNT(1) FROM likes t1
+			JOIN likes t2
+			ON t1.from_user_id = t2.user_id
+			WHERE t1.user_id = $1 and t2.from_user_id = $1
+		)
+	`, userId).Scan(&visits, &likes, &matches)
+	if err != nil {
+		return 0, err
+	}
+	err = m.DB.QueryRow("", userId).Scan(&visits)
+	return (visits*1 + likes*3 + matches*5), err
+}
 
 func (m UserModel) Count() (int, error) {
 	var n int

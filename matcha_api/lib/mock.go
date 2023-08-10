@@ -26,6 +26,9 @@ type MockUser struct {
 			Latitude  string `json:"latitude"`
 		} `json:"coordinates"`
 	} `json:"location"`
+	Picture struct {
+		Large string `json:"large"`
+	} `json:"picture"`
 }
 
 type RandomUserResponse struct {
@@ -88,7 +91,7 @@ func GenerateUsers(
 		if err != nil {
 			return err
 		}
-		_, err = photos.Create(user.Id, "https://thispersondoesnotexist.com")
+		_, err = photos.Create(user.Id, mockUser.Picture.Large)
 		if err != nil {
 			return err
 		}
