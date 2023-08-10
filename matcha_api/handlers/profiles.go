@@ -32,6 +32,8 @@ func VisitProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error)
 	if err != nil {
 		return nil, errors.HttpError{Status: 500, Body: nil}
 	}
+	go env.Users.UpdateFameRating(user.Id)
+	go env.Users.UpdateFameRating(visitor.Id)
 	notification, err := env.Notifications.Create(models.NotificationVisit, user.Id, visitor.Id)
 	if err != nil {
 		return nil, errors.HttpError{Status: 500, Body: nil}
@@ -71,6 +73,8 @@ func SetLike(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, errors.HttpError{Status: 500, Body: nil}
 	}
+	go env.Users.UpdateFameRating(user.Id)
+	go env.Users.UpdateFameRating(from_user.Id)
 	notification, err := env.Notifications.Create(models.NotificationLike, user.Id, from_user.Id)
 	if err != nil {
 		return nil, errors.HttpError{Status: 500, Body: nil}
@@ -107,6 +111,8 @@ func UnsetLike(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, errors.HttpError{Status: 500, Body: nil}
 	}
+	go env.Users.UpdateFameRating(user.Id)
+	go env.Users.UpdateFameRating(from_user.Id)
 	notification, err := env.Notifications.Create(models.NotificationUnlike, user.Id, from_user.Id)
 	if err != nil {
 		return nil, errors.HttpError{Status: 500, Body: nil}

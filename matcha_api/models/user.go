@@ -172,24 +172,23 @@ func (m UserModel) GetOneByEmail(email string) (User, error) {
 	return user, err
 }
 
-func (m UserModel) GetFameRating(userId int) (int, error) {
-	var visits, likes, matches int
+func (m UserModel) UpdateFameRating(userId int) (int, error) {
+	var rating int
 	err := m.DB.QueryRow(`
-		SELECT
-		(SELECT COUNT(1) FROM visits WHERE user_id = $1),
-		(SELECT COUNT(1) FROM likes WHERE user_id = $1),
-		(
-			SELECT COUNT(1) FROM likes t1
-			JOIN likes t2
-			ON t1.from_user_id = t2.user_id
-			WHERE t1.user_id = $1 and t2.from_user_id = $1
+		WITH newRating AS (
+			SELECT
+			(SELECT COUNT(1) FROM visits WHERE user_id = $1) * 1 +
+			(SELECT COUNT(1) FROM likes WHERE user_id = $1) * 3 +
+			(
+				SELECT COUNT(1) FROM likes t1
+				JOIN likes t2
+				ON t1.from_user_id = t2.user_id
+				WHERE t1.user_id = $1 and t2.from_user_id = $1
+			) * 5
 		)
-	`, userId).Scan(&visits, &likes, &matches)
-	if err != nil {
-		return 0, err
-	}
-	err = m.DB.QueryRow("", userId).Scan(&visits)
-	return (visits*1 + likes*3 + matches*5), err
+		UPDATE users SET rating = (SELECT * FROM newRating) WHERE id = $1 RETURNING rating;
+	`, userId).Scan(&rating)
+	return rating, err
 }
 
 func (m UserModel) Count() (int, error) {
