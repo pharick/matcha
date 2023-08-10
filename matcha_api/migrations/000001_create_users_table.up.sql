@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS users (
         gender GENDER,
         gender_preferences GENDER[] NOT NULL DEFAULT '{}',
         last_position POINT NOT NULL DEFAULT '(0,0)',
-        biography TEXT
+        biography TEXT,
+        rating INTEGER
 );
 
 CREATE INDEX users_username_idx ON users (username);

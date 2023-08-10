@@ -2,7 +2,6 @@ package models
 
 import (
 	"database/sql"
-	"log"
 )
 
 type Like struct {
@@ -40,7 +39,6 @@ func (m LikeModel) Delete(userId int, fromUserId int) error {
 
 func (m LikeModel) IsExists(userId int, fromUserId int) (bool, error) {
 	var like Like
-	log.Printf("%v %v", userId, fromUserId)
 	err := m.DB.QueryRow(`
 		SELECT user_id, from_user_id FROM likes WHERE user_id = $1 AND from_user_id = $2
 	`, userId, fromUserId).Scan(
