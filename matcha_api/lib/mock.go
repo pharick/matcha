@@ -46,7 +46,11 @@ func GenerateUser(users *models.UserModel) (*MockUser, error) {
 	return &data.Results[0], err
 }
 
-func GenerateUsers(users *models.UserModel, n int) error {
+func GenerateUsers(
+	users *models.UserModel,
+	photos *models.PhotoModel,
+	n int,
+) error {
 	for i := 0; i < n; i++ {
 		mockUser, err := GenerateUser(users)
 		if err != nil {
@@ -81,6 +85,10 @@ func GenerateUsers(users *models.UserModel, n int) error {
 		}
 		user.Gender = mockUser.Gender
 		user, err = users.Update(user)
+		if err != nil {
+			return err
+		}
+		_, err = photos.Create(user.Id, "https://thispersondoesnotexist.com")
 		if err != nil {
 			return err
 		}

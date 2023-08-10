@@ -3,4 +3,4 @@ CREATE TABLE IF NOT EXISTS tags (
         name VARCHAR(100) UNIQUE NOT NULL
 );
 
-CREATE UNIQUE INDEX tags_name_idx ON tags (name);
+CREATE INDEX tags_name_idx ON tags (name);

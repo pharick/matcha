@@ -15,6 +15,6 @@ CREATE TABLE IF NOT EXISTS users (
         biography TEXT
 );
 
-CREATE UNIQUE INDEX users_username_idx ON users (username);
-CREATE UNIQUE INDEX users_email_idx ON users (email);
-CREATE UNIQUE INDEX users_gender_idx ON users (gender);
+CREATE INDEX users_username_idx ON users (username);
+CREATE INDEX users_email_idx ON users (email);
+CREATE INDEX users_gender_idx ON users (gender);

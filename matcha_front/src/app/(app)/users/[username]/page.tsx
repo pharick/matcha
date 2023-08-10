@@ -29,7 +29,7 @@ const UserPage: NextPage<UserPageProps> = async ({ params: { username } }) => {
     getUserPhotos(username),
   ]);
   if (!user || !photos) notFound();
-
+  console.log(user);
   return <UserProfile user={user} photos={photos} />;
 };
 

@@ -71,6 +71,10 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 	if err != sql.ErrNoRows {
 		avatar_url = avatar.Url
 	}
+	// rating, err := env.Users.GetFameRating(user.Id)
+	// if err != nil {
+	// 	return nil, err
+	// }
 	ret := schemas.UserReturn{
 		Id:                user.Id,
 		Username:          user.Username,
@@ -85,6 +89,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Me:                user.Id == current_user.Id,
 		Liked:             liked,
 		Avatar:            avatar_url,
+		// Rating:            rating,
 	}
 	return ret, nil
 }

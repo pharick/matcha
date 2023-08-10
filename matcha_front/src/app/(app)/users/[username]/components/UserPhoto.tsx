@@ -30,7 +30,9 @@ const UserPhoto: FC<UserProfileProps> = ({ user, photos }) => {
       <figure className="relative z-20 h-full overflow-hidden">
         <Image
           src={
-            photos[photoId]
+            photos[photoId] && photos[photoId].url.startsWith('http')
+              ? photos[photoId].url
+              : photos[photoId]
               ? `${process.env.NEXT_PUBLIC_BACK_BASE_URL}${photos[photoId].url}`
               : (DefaultProfilePicture as StaticImageData)
           }
