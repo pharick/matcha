@@ -1,7 +1,6 @@
-import { FC, ReactNode } from 'react';
+import { FC, PropsWithChildren } from 'react';
 
-interface AlertProps {
-  children: ReactNode;
+interface AlertProps extends PropsWithChildren {
   type: 'success' | 'warning' | 'error';
   className?: string;
 }
