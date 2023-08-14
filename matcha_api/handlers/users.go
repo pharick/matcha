@@ -63,6 +63,10 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 	if err != nil {
 		return nil, err
 	}
+	match, err := env.Likes.IsMatch(user.Id, current_user.Id)
+	if err != nil {
+		return nil, err
+	}
 	avatar, err := env.Photos.GetFirstByUserId(user.Id)
 	if err != nil && err != sql.ErrNoRows {
 		return nil, err
@@ -94,6 +98,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Tags:              tags,
 		Me:                user.Id == current_user.Id,
 		Liked:             liked,
+		Match:             match,
 		Avatar:            avatar_url,
 		Rating:            rating,
 	}

@@ -28,7 +28,7 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
           <UserPhoto user={user} photos={photos} />
         </div>
 
-        <div className="mb-5 flex justify-end">
+        <div className="mb-5 flex items-center justify-end">
           {user.me ? (
             <Link
               href="/profile"
@@ -38,27 +38,33 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
               Edit profile
             </Link>
           ) : (
-            /* eslint-disable-next-line @typescript-eslint/no-misused-promises */
-            <form action={handleLike}>
-              <button
-                type="submit"
-                className={`${
-                  user.liked ? 'bg-green-5 active:bg-green-5' : 'bg-green-2'
-                } flex items-center rounded-lg border-2 border-brown px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`}
-              >
-                {!user.liked ? (
-                  <>
-                    <BiLike className="mr-1"></BiLike>
-                    Like
-                  </>
-                ) : (
-                  <>
-                    <BiSolidLike color="#F39BB3" className="mr-1"></BiSolidLike>
-                    Unlike
-                  </>
-                )}
-              </button>
-            </form>
+            <>
+              {user.match && <p className="mr-1">Match</p>}
+              {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+              <form action={handleLike}>
+                <button
+                  type="submit"
+                  className={`${
+                    user.liked ? 'bg-green-5 active:bg-green-5' : 'bg-green-2'
+                  } flex items-center rounded-lg border-2 border-brown px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`}
+                >
+                  {!user.liked ? (
+                    <>
+                      <BiLike className="mr-1"></BiLike>
+                      Like
+                    </>
+                  ) : (
+                    <>
+                      <BiSolidLike
+                        color="#F39BB3"
+                        className="mr-1"
+                      ></BiSolidLike>
+                      Unlike
+                    </>
+                  )}
+                </button>
+              </form>
+            </>
           )}
         </div>
       </div>

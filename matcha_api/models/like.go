@@ -50,3 +50,14 @@ func (m LikeModel) IsExists(userId int, fromUserId int) (bool, error) {
 	}
 	return true, err
 }
+
+func (m LikeModel) IsMatch(userId1 int, userId2 int) (bool, error) {
+	var count int
+	err := m.DB.QueryRow(`
+		SELECT COUNT(1) FROM likes t1
+		JOIN likes t2
+		ON t1.from_user_id = t2.user_id
+		WHERE t1.user_id = $1 AND t1.from_user_id = $2 AND t2.from_user_id = $1
+	`, userId1, userId2).Scan(&count)
+	return count > 0, err
+}

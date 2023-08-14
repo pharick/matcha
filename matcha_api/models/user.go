@@ -187,7 +187,7 @@ func (m UserModel) UpdateFameRating(userId int) (int, error) {
 				SELECT COUNT(1) FROM likes t1
 				JOIN likes t2
 				ON t1.from_user_id = t2.user_id
-				WHERE t1.user_id = $1 and t2.from_user_id = $1
+				WHERE t1.user_id = $1 AND t2.from_user_id = $1
 			) * 5
 		)
 		UPDATE users SET rating = (SELECT * FROM newRating) WHERE id = $1 RETURNING rating;

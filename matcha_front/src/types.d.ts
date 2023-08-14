@@ -22,6 +22,7 @@ type User = {
   tags: string[];
   me: boolean;
   liked: boolean;
+  match: boolean;
   avatar: string;
   rating: number;
 };
