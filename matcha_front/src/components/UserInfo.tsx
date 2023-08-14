@@ -3,6 +3,7 @@ import {
   PiGenderFemaleBold,
   PiGenderIntersexBold,
   PiGenderMaleBold,
+  PiStarFill,
 } from 'react-icons/pi';
 import { AiFillHeart } from 'react-icons/ai';
 import { birthdateToAge } from '@/helpers';
@@ -31,14 +32,17 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
       </div>
 
       <div className="flex items-center justify-end">
-        <p className="ml-auto w-fit rounded-lg bg-neutral px-2">
-          {user.username}
-        </p>
+        <p className="rounded-lg bg-neutral px-2">{user.username}</p>
+        {user.rating > 0 && (
+          <p className="ml-1 flex items-center rounded-lg bg-neutral px-2">
+            <PiStarFill className="mr-1" /> {user.rating}
+          </p>
+        )}
         <ul className="flex">
           {user?.gender_preferences.map((gender, index) => (
             <li
               key={index}
-              className="ml-2 flex items-center rounded-lg bg-green-2 px-2 py-1"
+              className="ml-1 flex items-center rounded-lg bg-green-2 px-2 py-1"
             >
               <AiFillHeart color="pink" />
               {gender == 'male' ? (

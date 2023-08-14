@@ -25,6 +25,7 @@ type User struct {
 	Gender            string
 	GenderPreferences []string
 	Biography         string
+	Rating            int
 	LastPosition      Position
 }
 
@@ -34,12 +35,13 @@ type UserModel struct {
 
 var fields = `
 	id, username, email, active, password_hash, first_name, last_name, birth_date,
-	gender, gender_preferences::text[], biography, last_position[0], last_position[1]
+	gender, gender_preferences::text[], biography, rating, last_position[0], last_position[1]
 `
 
 func scanRow(row interface{ Scan(...any) error }, user *User) error {
 	var gender sql.NullString
 	var biography sql.NullString
+	var rating sql.NullInt32
 	err := row.Scan(
 		&user.Id,
 		&user.Username,
@@ -52,6 +54,7 @@ func scanRow(row interface{ Scan(...any) error }, user *User) error {
 		&gender,
 		(*pq.StringArray)(&user.GenderPreferences),
 		&biography,
+		&rating,
 		&user.LastPosition.Longitude,
 		&user.LastPosition.Latitude,
 	)
@@ -60,6 +63,7 @@ func scanRow(row interface{ Scan(...any) error }, user *User) error {
 	}
 	user.Gender = gender.String
 	user.Biography = biography.String
+	user.Rating = int(rating.Int32)
 	return nil
 }
 
@@ -189,6 +193,12 @@ func (m UserModel) UpdateFameRating(userId int) (int, error) {
 		UPDATE users SET rating = (SELECT * FROM newRating) WHERE id = $1 RETURNING rating;
 	`, userId).Scan(&rating)
 	return rating, err
+}
+
+func (m UserModel) GetMaxRating() (int, error) {
+	var maxRating sql.NullInt32
+	err := m.DB.QueryRow("SELECT MAX(rating) FROM users").Scan(&maxRating)
+	return int(maxRating.Int32), err
 }
 
 func (m UserModel) Count() (int, error) {

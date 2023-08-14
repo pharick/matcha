@@ -14,7 +14,7 @@ type UserReturn struct {
 	Me                bool     `json:"me"`
 	Liked             bool     `json:"liked"`
 	Avatar            string   `json:"avatar"`
-	Rating            int      `json:"rating"`
+	Rating            float64  `json:"rating"`
 }
 
 type UsersReturn struct {
