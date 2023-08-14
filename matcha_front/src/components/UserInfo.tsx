@@ -35,7 +35,7 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
         <p className="rounded-lg bg-neutral px-2">{user.username}</p>
         {user.rating > 0 && (
           <p className="ml-1 flex items-center rounded-lg bg-neutral px-2">
-            <PiStarFill className="mr-1" /> {user.rating}
+            <PiStarFill className="mr-1" /> {user.rating.toFixed(1)}
           </p>
         )}
         <ul className="flex">
