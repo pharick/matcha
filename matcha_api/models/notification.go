@@ -9,6 +9,7 @@ const (
 	NotificationVisit  string = "visit"
 	NotificationLike   string = "like"
 	NotificationUnlike string = "unlike"
+	NotificationMatch  string = "match"
 )
 
 type Notification struct {

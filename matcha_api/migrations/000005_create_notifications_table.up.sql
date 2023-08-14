@@ -1,4 +1,4 @@
-CREATE TYPE NOTIFICATION_TYPE AS ENUM ('visit', 'like', 'unlike');
+CREATE TYPE NOTIFICATION_TYPE AS ENUM ('visit', 'like', 'unlike', 'match');
 
 CREATE TABLE IF NOT EXISTS notifications (
         id SERIAL PRIMARY KEY,

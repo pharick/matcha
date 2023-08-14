@@ -19,6 +19,7 @@ export function birthdateToAge(birthdate: string) {
 export function getNotificationMessage(n: MNotification) {
   if (n.type == 'visit') return 'visited your profile';
   if (n.type == 'like') return 'likes you';
+  if (n.type == 'match') return 'is your new match!';
   return "don't like you anymore";
 }
 

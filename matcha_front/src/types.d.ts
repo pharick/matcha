@@ -71,7 +71,7 @@ type Position = {
 
 type MNotification = {
   id: number;
-  type: 'visit' | 'like' | 'dislike';
+  type: 'visit' | 'like' | 'dislike' | 'match';
   username: string;
   create_time: string;
   viewed: boolean;
