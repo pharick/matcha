@@ -41,7 +41,7 @@ const Matcha: FC<MatchaProps> = ({ filtersValues, usersList }) => {
       <main className="flex-1">
         <ul className="flex flex-wrap justify-center">
           {usersList.map((user, index) => (
-            <li className="h-[500px] w-[500px] p-3" key={index}>
+            <li className="h-[450px] w-[450px] p-3" key={index}>
               <UserCard user={user} avatar={user.avatar} />
             </li>
           ))}

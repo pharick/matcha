@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import Image from 'next/image';
+// import Image from 'next/image';
 
 import Matcha from '@/components/Matcha';
 import { getCurrentUser } from '@/api/auth';
@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 import { parseIntSearchParam } from '@/helpers';
 import { FiltersValues } from '@/components/FiltersSideBar';
 import { search } from '@/api/search';
-import Match from '@/images/Match.svg';
+// import Match from '@/images/Match.svg';
 
 interface SearchPageProps {
   searchParams: {

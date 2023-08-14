@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import Image, { StaticImageData } from 'next/image';
 
 import DefaultProfilePicture from '@/images/default_profile_picture.svg';
@@ -11,18 +11,8 @@ interface UserCardProps {
 }
 
 const UserCard: FC<UserCardProps> = ({ user, avatar }) => {
-  const [hovered, setHovered] = useState<boolean>(false);
-
-  // const handleOpenUserProfile = () => {
-
-  // }
-
   return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="relative h-full w-full cursor-pointer rounded-lg border-2 border-brown bg-brown"
-    >
+    <div className="group relative h-full w-full cursor-pointer rounded-lg border-2 border-brown bg-brown hover:-translate-x-px hover:-translate-y-px hover:shadow-lg">
       <figure className="relative z-20 h-full overflow-hidden">
         <Image
           src={
@@ -34,19 +24,17 @@ const UserCard: FC<UserCardProps> = ({ user, avatar }) => {
           }
           fill={true}
           className="rounded-lg object-cover"
-          sizes="300px"
+          sizes="500px"
           alt="photo"
         />
       </figure>
 
-      {hovered && (
-        <Link
-          href={`/users/${user.username}`}
-          className="absolute top-0 z-40 flex h-full w-full items-center justify-center rounded-lg bg-white/30 font-bold"
-        >
-          See more
-        </Link>
-      )}
+      <Link
+        href={`/users/${user.username}`}
+        className="absolute top-0 z-40 hidden h-full w-full items-center justify-center rounded-lg bg-white/30 font-bold group-hover:flex"
+      >
+        See more
+      </Link>
 
       <div className="absolute bottom-0 left-0 right-0 top-0 z-30 flex flex-col justify-end rounded-b-lg p-3 shadow-[inset_0_-200px_80px_-100px_rgba(255,255,255,0.6)]">
         <UserInfo user={user} />

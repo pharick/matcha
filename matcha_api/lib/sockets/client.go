@@ -51,7 +51,6 @@ func (c *Client) WritePump() {
 
 			n := len(c.Send)
 			for i := 0; i < n; i++ {
-				w.Write([]byte{'\n'})
 				json.NewEncoder(w).Encode(<-c.Send)
 			}
 			if err := w.Close(); err != nil {

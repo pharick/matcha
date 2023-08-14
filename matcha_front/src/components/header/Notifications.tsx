@@ -14,31 +14,31 @@ interface NotificationsProps {
 }
 
 const Notifications: FC<NotificationsProps> = ({ className }) => {
-  const [firstMessages, setFirstMessages] = useState(true);
-  const { lastMessage } = useWebSocket(
+  const { lastJsonMessage } = useWebSocket(
     `${process.env.NEXT_PUBLIC_WS_BASE_URL}/api/ws/notifications/`
   );
 
   const [notifications, setNotifications] = useState<MNotification[]>([]);
 
-  const notify = async (n: MNotification) => {
-    if (Notification.permission == 'denied') return;
-    if (Notification.permission != 'granted') {
-      const permission = await Notification.requestPermission();
-      if (permission != 'granted') return;
-    }
-    new Notification(`${n.username} ${getNotificationMessage(n)}`);
-  };
+  // const notify = async (n: MNotification) => {
+  //   if (Notification.permission == 'denied') return;
+  //   if (Notification.permission != 'granted') {
+  //     const permission = await Notification.requestPermission();
+  //     if (permission != 'granted') return;
+  //   }
+  //   new Notification(`${n.username} ${getNotificationMessage(n)}`);
+  // };
 
   useEffect(() => {
-    if (lastMessage == null) return;
-    const notifications = (lastMessage.data as string)
-      .split('\n\n')
-      .map((n) => JSON.parse(n) as MNotification);
-    setNotifications((n) => [...notifications, ...n]);
-    if (!firstMessages) notifications.forEach((n) => void notify(n));
-    else setFirstMessages(false);
-  }, [lastMessage]);
+    console.log(lastJsonMessage);
+    // if (lastMessage == null) return;
+    // const notifications = (lastMessage.data as string)
+    //   .split('\n\n')
+    //   .map((n) => JSON.parse(n) as MNotification);
+    // setNotifications((n) => [...notifications, ...n]);
+    // if (!firstMessages) notifications.forEach((n) => void notify(n));
+    // else setFirstMessages(false);
+  }, [lastJsonMessage]);
 
   const markViewed = async (id: number) => {
     await viewNotification(id);
@@ -49,8 +49,6 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
       })
     );
   };
-
-  console.log(notifications);
 
   return (
     <div className={`group relative flex items-center ${className}`}>
