@@ -74,6 +74,7 @@ func main() {
 
 	// notifications
 	mux.Handle(pat.Get("/notifications/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.GetAllNotifications)})
+	mux.Handle(pat.Get("/notifications/unread/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.GetUnreadNotifications)})
 	mux.Handle(pat.Post("/notifications/:id/view/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.ViewNotification)})
 
 	// --- WEBSOCKETS ---

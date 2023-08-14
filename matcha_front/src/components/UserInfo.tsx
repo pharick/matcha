@@ -31,14 +31,14 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
       </div>
 
       <div className="flex items-center justify-end">
-        <p className="ml-auto mr-2 w-fit rounded-lg bg-neutral px-2">
+        <p className="ml-auto w-fit rounded-lg bg-neutral px-2">
           {user.username}
         </p>
         <ul className="flex">
           {user?.gender_preferences.map((gender, index) => (
             <li
               key={index}
-              className="mr-2 flex items-center rounded-lg bg-green-2 px-2 py-1"
+              className="ml-2 flex items-center rounded-lg bg-green-2 px-2 py-1"
             >
               <AiFillHeart color="pink" />
               {gender == 'male' ? (

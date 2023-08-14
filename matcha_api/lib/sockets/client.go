@@ -1,7 +1,6 @@
 package sockets
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 	"time"
@@ -43,18 +42,17 @@ func (c *Client) WritePump() {
 				c.Conn.WriteMessage(websocket.CloseMessage, []byte{})
 				return
 			}
-			w, err := c.Conn.NextWriter(websocket.TextMessage)
+			err := c.Conn.WriteJSON(message)
 			if err != nil {
 				return
 			}
-			json.NewEncoder(w).Encode(message)
 
 			n := len(c.Send)
 			for i := 0; i < n; i++ {
-				json.NewEncoder(w).Encode(<-c.Send)
-			}
-			if err := w.Close(); err != nil {
-				return
+				err := c.Conn.WriteJSON(message)
+				if err != nil {
+					return
+				}
 			}
 		case <-ticker.C:
 			c.Conn.SetWriteDeadline(time.Now().Add(writeWait))

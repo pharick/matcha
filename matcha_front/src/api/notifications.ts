@@ -12,6 +12,16 @@ export async function getAllNotifications() {
   return (await res.json()) as MNotification[];
 }
 
+export async function getUnreadNotifications() {
+  const token = cookies().get('token')?.value;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/notifications/unread/`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  if (!res.ok) throw Error('Something went wrong');
+  return (await res.json()) as MNotification[];
+}
+
 export async function viewNotification(id: number) {
   const token = cookies().get('token')?.value;
   const res = await fetch(

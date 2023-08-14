@@ -6,7 +6,7 @@ import useWebSocket from 'react-use-websocket';
 import { format } from 'date-fns';
 
 import { FaBell } from 'react-icons/fa6';
-import { viewNotification } from '@/api/notifications';
+import { getUnreadNotifications, viewNotification } from '@/api/notifications';
 import { getNotificationMessage } from '@/helpers';
 
 interface NotificationsProps {
@@ -20,24 +20,28 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
 
   const [notifications, setNotifications] = useState<MNotification[]>([]);
 
-  // const notify = async (n: MNotification) => {
-  //   if (Notification.permission == 'denied') return;
-  //   if (Notification.permission != 'granted') {
-  //     const permission = await Notification.requestPermission();
-  //     if (permission != 'granted') return;
-  //   }
-  //   new Notification(`${n.username} ${getNotificationMessage(n)}`);
-  // };
+  const notify = async (n: MNotification) => {
+    if (Notification.permission == 'denied') return;
+    if (Notification.permission != 'granted') {
+      const permission = await Notification.requestPermission();
+      if (permission != 'granted') return;
+    }
+    new Notification(`${n.username} ${getNotificationMessage(n)}`);
+  };
 
   useEffect(() => {
-    console.log(lastJsonMessage);
-    // if (lastMessage == null) return;
-    // const notifications = (lastMessage.data as string)
-    //   .split('\n\n')
-    //   .map((n) => JSON.parse(n) as MNotification);
-    // setNotifications((n) => [...notifications, ...n]);
-    // if (!firstMessages) notifications.forEach((n) => void notify(n));
-    // else setFirstMessages(false);
+    const getUnread = async () => {
+      const notifications = await getUnreadNotifications();
+      setNotifications(notifications);
+    };
+    void getUnread();
+  }, []);
+
+  useEffect(() => {
+    if (lastJsonMessage == null) return;
+    const notification = lastJsonMessage as MNotification;
+    setNotifications((n) => [notification, ...n]);
+    void notify(notification);
   }, [lastJsonMessage]);
 
   const markViewed = async (id: number) => {

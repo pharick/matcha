@@ -42,13 +42,6 @@ func ServeNotificationsWs(env *Env, w http.ResponseWriter, r *http.Request) {
 	}
 	client.Hub.Register <- client
 
-	notifications, err := env.Notifications.GetUnreadByUserId(user.Id)
-	if err == nil {
-		for _, notification := range notifications {
-			client.Send <- notification
-		}
-	}
-
 	go client.WritePump()
 	go client.ReadPump()
 }
@@ -66,5 +59,11 @@ func ViewNotification(env *Env, w http.ResponseWriter, r *http.Request) (any, er
 func GetAllNotifications(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	user := r.Context().Value(ContextKey("User")).(models.User)
 	notifications, err := env.Notifications.GetAllByUserId(user.Id)
+	return notifications, err
+}
+
+func GetUnreadNotifications(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	user := r.Context().Value(ContextKey("User")).(models.User)
+	notifications, err := env.Notifications.GetUnreadByUserId(user.Id)
 	return notifications, err
 }

@@ -14,7 +14,6 @@ interface MatchaProps {
 
 const Matcha: FC<MatchaProps> = ({ filtersValues, usersList }) => {
   const [hidden, setHidden] = useState(true);
-  console.log(usersList);
 
   return (
     <div className="flex flex-wrap">
