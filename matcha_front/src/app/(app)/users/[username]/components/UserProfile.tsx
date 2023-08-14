@@ -1,5 +1,7 @@
 import { FC } from 'react';
+import Link from 'next/link';
 import { BiLike, BiSolidLike } from 'react-icons/bi';
+import { FaUserEdit } from 'react-icons/fa';
 
 import UserPhoto from './UserPhoto';
 import ProfileVisitor from './ProfileVisitor';
@@ -26,14 +28,22 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
           <UserPhoto user={user} photos={photos} />
         </div>
 
-        {!user.me && (
-          <div className="mb-5 flex justify-end">
-            {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+        <div className="mb-5 flex justify-end">
+          {user.me ? (
+            <Link
+              href="/profile"
+              className="flex items-center rounded-lg border-2 border-brown px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+            >
+              <FaUserEdit className="mr-1" />
+              Edit profile
+            </Link>
+          ) : (
+            /* eslint-disable-next-line @typescript-eslint/no-misused-promises */
             <form action={handleLike}>
               <button
                 type="submit"
                 className={`${
-                  user.liked ? ' bg-green-5 active:bg-green-5' : 'bg-green-2'
+                  user.liked ? 'bg-green-5 active:bg-green-5' : 'bg-green-2'
                 } flex items-center rounded-lg border-2 border-brown px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`}
               >
                 {!user.liked ? (
@@ -49,8 +59,8 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
                 )}
               </button>
             </form>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       <div className="min-w-[500px] flex-1">
