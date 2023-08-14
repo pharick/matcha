@@ -4,6 +4,7 @@ import (
 	"context"
 	"matcha_api/errors"
 	"matcha_api/lib"
+	"matcha_api/models"
 	"net/http"
 	"strings"
 )
@@ -34,4 +35,18 @@ func AuthRequired(
 		return inner(env, w, r.WithContext(ctx))
 	}
 	return mw
+}
+
+func FullProfileRequired(
+	inner func(env *Env, w http.ResponseWriter, r *http.Request) (any, error),
+) func(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	mw := func(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+		user := r.Context().Value(ContextKey("User")).(models.User)
+		_, err := env.Photos.GetFirstByUserId(user.Id)
+		if !user.Active || user.Gender == "" || len(user.GenderPreferences) <= 0 || err != nil {
+			return nil, errors.HttpError{Status: 403, Body: nil}
+		}
+		return inner(env, w, r)
+	}
+	return AuthRequired(mw)
 }

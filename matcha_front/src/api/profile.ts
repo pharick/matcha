@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { revalidateTag } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 export async function updateProfile(username: string, reqData: ProfileData) {
   const token = cookies().get('token')?.value;
@@ -32,6 +33,7 @@ export async function getUserProfile(username: string) {
     }
   );
   if (res.status == 404 || res.status == 401) return undefined;
+  if (res.status == 403) redirect('/profile');
   if (!res.ok) throw Error('Something went wrong');
   const user = (await res.json()) as User;
   return user;

@@ -52,30 +52,30 @@ func main() {
 	mux.Handle(pat.Get("/whoami/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.WhoAmI)})
 
 	// users
-	mux.Handle(pat.Post("/search/"), handlers.Handler{Env: env, Handle: handlers.UserSearch})
-	mux.Handle(pat.Get("/users/:username/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UserProfile)})
+	mux.Handle(pat.Post("/search/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.UserSearch)})
+	mux.Handle(pat.Get("/users/:username/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.UserProfile)})
 	mux.Handle(pat.Patch("/users/:username/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UpdateUser)})
 	mux.Handle(pat.Post("/update_position/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UpdatePosition)})
 
 	// photos
 	mux.Handle(pat.Post("/users/:username/photos/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UploadPhoto)})
-	mux.Handle(pat.Get("/users/:username/photos/"), handlers.Handler{Env: env, Handle: handlers.PhotoList})
-	mux.Handle(pat.Get("/users/:username/photos/:id/"), handlers.Handler{Env: env, Handle: handlers.GetPhoto})
+	mux.Handle(pat.Get("/users/:username/photos/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.PhotoList)})
+	mux.Handle(pat.Get("/users/:username/photos/:id/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.GetPhoto)})
 	mux.Handle(pat.Patch("/users/:username/photos/:id/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UpdatePhoto)})
 	mux.Handle(pat.Delete("/users/:username/photos/:id/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.RemovePhoto)})
 
 	// tags
-	mux.Handle(pat.Post("/tags/find/"), handlers.Handler{Env: env, Handle: handlers.FindTag})
+	mux.Handle(pat.Post("/tags/find/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.FindTag)})
 
 	// profile
-	mux.Handle(pat.Post("/users/:username/visit/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.VisitProfile)})
-	mux.Handle(pat.Post("/users/:username/like/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.SetLike)})
-	mux.Handle(pat.Post("/users/:username/unlike/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UnsetLike)})
+	mux.Handle(pat.Post("/users/:username/visit/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.VisitProfile)})
+	mux.Handle(pat.Post("/users/:username/like/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.SetLike)})
+	mux.Handle(pat.Post("/users/:username/unlike/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.UnsetLike)})
 
 	// notifications
-	mux.Handle(pat.Get("/notifications/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.GetAllNotifications)})
-	mux.Handle(pat.Get("/notifications/unread/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.GetUnreadNotifications)})
-	mux.Handle(pat.Post("/notifications/:id/view/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.ViewNotification)})
+	mux.Handle(pat.Get("/notifications/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.GetAllNotifications)})
+	mux.Handle(pat.Get("/notifications/unread/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.GetUnreadNotifications)})
+	mux.Handle(pat.Post("/notifications/:id/view/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.ViewNotification)})
 
 	// --- WEBSOCKETS ---
 

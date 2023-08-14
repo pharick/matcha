@@ -1,6 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export async function getAllNotifications() {
   const token = cookies().get('token')?.value;
@@ -8,6 +9,7 @@ export async function getAllNotifications() {
     `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/notifications/`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
+  if (res.status == 403) redirect('/profile');
   if (!res.ok) throw Error('Something went wrong');
   return (await res.json()) as MNotification[];
 }
@@ -18,6 +20,7 @@ export async function getUnreadNotifications() {
     `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/notifications/unread/`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
+  if (res.status == 403) return [];
   if (!res.ok) throw Error('Something went wrong');
   return (await res.json()) as MNotification[];
 }
