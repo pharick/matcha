@@ -2,11 +2,12 @@
 
 <style type="text/css"><![CDATA[
     #Match{
-        animation: match 1s;
+        transform-origin: 50% 50%;
+        animation: match 5s alternate ease-in-out;
     }
 
-    @-webkit-keyframes match{
-        0%   {-webkit-transform: translateX(10px) rotate(10deg) translateY(5px);
+    @keyframes match{
+        100% {transform: rotate(3600deg)};
     }
     ]]></style>
 <text id="Match" fill="#F39BB3" stroke="#403539" xml:space="preserve" style="white-space: pre" font-family="Amsterdam" font-size="96" letter-spacing="0em"><tspan x="6" y="180.512">Match</tspan></text>
