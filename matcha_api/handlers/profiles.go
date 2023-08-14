@@ -67,9 +67,6 @@ func SetLike(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	go env.Users.UpdateFameRating(user.Id)
 	go env.Users.UpdateFameRating(fromUser.Id)
 	match, _ := env.Likes.IsExists(fromUser.Id, user.Id)
-	if exists {
-		return nil, errors.HttpError{Status: 409, Body: nil}
-	}
 	var notificationType string
 	if match {
 		notificationType = models.NotificationMatch
