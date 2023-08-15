@@ -40,3 +40,13 @@ type UpdatePositionData struct {
 	Longitude float64 `json:"longitude" validate:"required"`
 	Latitude  float64 `json:"latitude" validate:"required"`
 }
+
+type SearchData struct {
+	AgeFrom      int      `json:"age_from" validate:"required"`
+	AgeTo        int      `json:"age_to" validate:"required"`
+	FameFrom     int      `json:"fame_from" validate:"required"`
+	FameTo       int      `json:"fame_to" validate:"required"`
+	DistanceFrom int      `json:"distance_from" validate:"required"`
+	DistanceTo   int      `json:"distance_to" validate:"required"`
+	Tags         []string `json:"tags" validate:"required"`
+}

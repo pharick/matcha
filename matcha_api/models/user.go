@@ -137,10 +137,15 @@ func (m UserModel) Update(
 	return user, err
 }
 
-func (m UserModel) Search() ([]User, error) {
+func (m UserModel) Search(currentUserId int, ageFrom int, ageTo int) ([]User, error) {
 	var user User
 	rows, err := m.DB.Query(
-		fmt.Sprintf("SELECT %s FROM users", fields),
+		fmt.Sprintf(`
+			SELECT %s FROM users
+			WHERE id <> $1 AND
+			date_part('year', age(birth_date)) >= $2 AND date_part('year', age(birth_date)) <= $3
+		`, fields),
+		currentUserId, ageFrom, ageTo,
 	)
 	if err != nil {
 		return nil, err
