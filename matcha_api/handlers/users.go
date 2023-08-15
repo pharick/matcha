@@ -48,7 +48,7 @@ func UserSearch(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	current_user := r.Context().Value(ContextKey("User")).(models.User)
 	username := pat.Param(r, "username")
-	user, err := env.Users.GetOneByUsername(username)
+	user, err := env.Users.GetOneActiveByUsername(username)
 	if err == sql.ErrNoRows {
 		return nil, errors.HttpError{Status: 404, Body: nil}
 	}

@@ -23,7 +23,7 @@ const ProfileEmailPasswordPage: NextPage = async () => {
         user.gender_preferences.length <= 0) && (
         <Alert type="warning" className="mb-3">
           Please, complete your profile. You shoud fill at least your gender,
-          gender preferences and add at least one photo.
+          gender&nbsp;preferences and add at least one photo.
         </Alert>
       )}
       <ChangePasswordForm />

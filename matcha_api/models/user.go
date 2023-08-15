@@ -34,7 +34,7 @@ type UserModel struct {
 }
 
 var fields = `
-	id, username, email, active, password_hash, first_name, last_name, birth_date,
+	users.id, username, email, active, password_hash, first_name, last_name, birth_date,
 	gender, gender_preferences::text[], biography, rating, last_position[0], last_position[1]
 `
 
@@ -160,6 +160,21 @@ func (m UserModel) GetOneByUsername(username string) (User, error) {
 	var user User
 	row := m.DB.QueryRow(
 		fmt.Sprintf("SELECT %s FROM users WHERE username = $1", fields),
+		username,
+	)
+	err := scanRow(row, &user)
+	return user, err
+}
+
+func (m UserModel) GetOneActiveByUsername(username string) (User, error) {
+	var user User
+	row := m.DB.QueryRow(
+		fmt.Sprintf(`
+			SELECT %s FROM users
+			JOIN photos ON users.id = photos.user_id
+			WHERE username = $1 AND active = true AND
+			gender IS NOT NULL AND array_length(gender_preferences, 1) > 0
+		`, fields),
 		username,
 	)
 	err := scanRow(row, &user)
