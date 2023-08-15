@@ -23,6 +23,15 @@ module.exports = {
         'leaf-down': "url('/leaf_down.svg')",
         'leaf-main': "url('/leaf_main.svg')",
       },
+      keyframes: {
+        info: {
+          'from': {transform: 'translate(100%)'},
+          'to': {transform: '-translate-x-full'},
+        }
+      },
+      animation: {
+        // info: 'info 10s infinite easy-in-out',
+      },
     },
   },
   plugins: [],
