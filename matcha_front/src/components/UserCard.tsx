@@ -12,7 +12,7 @@ interface UserCardProps {
 
 const UserCard: FC<UserCardProps> = ({ user, avatar }) => {
   return (
-    <div className="group relative h-full w-full cursor-pointer rounded-lg border-2 border-brown bg-brown hover:-translate-x-px hover:-translate-y-px hover:shadow-lg">
+    <div className="group relative h-full w-full cursor-pointer overflow-hidden rounded-lg border-2 border-brown bg-brown hover:-translate-x-px hover:-translate-y-px hover:shadow-lg">
       <figure className="relative z-20 h-full overflow-hidden">
         <Image
           src={
@@ -23,7 +23,7 @@ const UserCard: FC<UserCardProps> = ({ user, avatar }) => {
               : (DefaultProfilePicture as StaticImageData)
           }
           fill={true}
-          className="rounded-lg object-cover"
+          className="object-cover"
           sizes="500px"
           alt="photo"
         />

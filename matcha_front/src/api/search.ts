@@ -3,13 +3,30 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-export async function search() {
+export async function search(
+  ageFrom: number,
+  ageTo: number,
+  fameFrom: number,
+  fameTo: number,
+  distanceFrom: number,
+  distanceTo: number,
+  tags: string[]
+) {
   const token = cookies().get('token')?.value;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/search/`,
     {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify({
+        age_from: ageFrom,
+        age_to: ageTo,
+        fame_from: fameFrom,
+        fame_to: fameTo,
+        distance_from: distanceFrom,
+        distance_to: distanceTo,
+        tags,
+      }),
       next: { tags: ['profile'] },
     }
   );

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"database/sql"
+	"log"
 	"matcha_api/errors"
 	"matcha_api/lib"
 	"matcha_api/models"
@@ -12,7 +13,11 @@ import (
 )
 
 func UserSearch(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
-	users, err := env.Users.Search()
+	currentUser := r.Context().Value(ContextKey("User")).(models.User)
+	var d schemas.SearchData
+	lib.GetJSONBody(r, &d)
+	log.Println(d)
+	users, err := env.Users.Search(currentUser.Id, d.AgeFrom, d.AgeTo)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +51,7 @@ func UserSearch(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 }
 
 func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
-	current_user := r.Context().Value(ContextKey("User")).(models.User)
+	currentUser := r.Context().Value(ContextKey("User")).(models.User)
 	username := pat.Param(r, "username")
 	user, err := env.Users.GetOneActiveByUsername(username)
 	if err == sql.ErrNoRows {
@@ -59,11 +64,11 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 	if err != nil {
 		return nil, err
 	}
-	liked, err := env.Likes.IsExists(user.Id, current_user.Id)
+	liked, err := env.Likes.IsExists(user.Id, currentUser.Id)
 	if err != nil {
 		return nil, err
 	}
-	match, err := env.Likes.IsMatch(user.Id, current_user.Id)
+	match, err := env.Likes.IsMatch(user.Id, currentUser.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +101,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Biography:         user.Biography,
 		BirthDate:         user.BirthDate,
 		Tags:              tags,
-		Me:                user.Id == current_user.Id,
+		Me:                user.Id == currentUser.Id,
 		Liked:             liked,
 		Match:             match,
 		Avatar:            avatar_url,
@@ -114,8 +119,8 @@ func UpdateUser(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
-	current_user := r.Context().Value(ContextKey("User")).(models.User)
-	if current_user.Username != user.Username {
+	currentUser := r.Context().Value(ContextKey("User")).(models.User)
+	if currentUser.Username != user.Username {
 		return nil, errors.HttpError{Status: 403, Body: nil}
 	}
 	var d schemas.UpdateUserData
