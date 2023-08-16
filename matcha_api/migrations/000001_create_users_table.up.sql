@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
         birth_date DATE NOT NULL,
         active BOOLEAN NOT NULL DEFAULT false,
         gender GENDER,
-        gender_preferences GENDER[] NOT NULL DEFAULT '{}',
+        gender_preferences GENDER[] NOT NULL DEFAULT '{"male", "female", "other"}',
         last_position POINT NOT NULL DEFAULT '(0,0)',
         biography TEXT,
         rating INTEGER

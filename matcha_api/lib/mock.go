@@ -88,7 +88,6 @@ func GenerateUsers(
 		}
 		user.Gender = mockUser.Gender
 		user.Active = true
-		user.GenderPreferences = []string{"female"}
 		user, err = users.Update(user)
 		if err != nil {
 			return err
