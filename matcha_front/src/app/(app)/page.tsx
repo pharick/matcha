@@ -35,11 +35,7 @@ const SearchPage: NextPage<SearchPageProps> = async ({ searchParams }) => {
       : searchParams.tag,
   };
 
-  return (
-    <div className="mb-2 min-h-screen">
-      <Matcha searchParams={params} />
-    </div>
-  );
+  return <Matcha searchParams={params} />;
 };
 
 export default SearchPage;

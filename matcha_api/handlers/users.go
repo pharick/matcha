@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"database/sql"
-	"log"
 	"matcha_api/errors"
 	"matcha_api/lib"
 	"matcha_api/models"
@@ -16,7 +15,6 @@ func UserSearch(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	currentUser := r.Context().Value(ContextKey("User")).(models.User)
 	var d schemas.SearchData
 	lib.GetJSONBody(r, &d)
-	log.Println(d)
 	users, err := env.Users.Search(currentUser, d.AgeFrom, d.AgeTo)
 	if err != nil {
 		return nil, err
