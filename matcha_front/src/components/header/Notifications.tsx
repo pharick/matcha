@@ -59,7 +59,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
   return (
     <>
       {notifications.some((n) => n.type == 'match' && !n.viewed) && (
-        <div className="flex-1 overflow-hidden mx-10">
+        <div className="mx-10 flex-1 overflow-hidden">
           <div className="flex flex-1 animate-[info_10s_ease-in-out_infinite] items-center">
             <Image
               src={Match as StaticImageData}
@@ -68,8 +68,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
               className="m-5"
             />
             <p className="text-lg font-bold">
-              {' '}
-              Hurry up! Don't miss your chance!!!
+              Hurry up! Don&apos;t miss your chance!!!
             </p>
           </div>
         </div>

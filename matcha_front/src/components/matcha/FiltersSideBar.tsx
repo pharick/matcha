@@ -10,7 +10,7 @@ import { GrClose } from 'react-icons/gr';
 import TagsField from '../TagsField';
 import Button from '../Button';
 
-export interface FiltersValues {
+interface FiltersValues {
   ageRange: number[];
   fameRange: number[];
   distanceRange: number[];
@@ -18,12 +18,19 @@ export interface FiltersValues {
 }
 
 interface FiltersSideBarProps {
-  initialValues: FiltersValues;
+  searchParams: SearchParams;
 }
 
-const FiltersSideBar: FC<FiltersSideBarProps> = ({ initialValues }) => {
+const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
   const router = useRouter();
   const [hidden, setHidden] = useState(true);
+
+  const initialValues: FiltersValues = {
+    ageRange: [searchParams.ageFrom, searchParams.ageTo],
+    fameRange: [searchParams.fameFrom, searchParams.fameTo],
+    distanceRange: [searchParams.distanceFrom, searchParams.distanceTo],
+    tags: searchParams.tags,
+  };
 
   const Track = (
     props: HTMLPropsWithRefCallback<HTMLDivElement>,

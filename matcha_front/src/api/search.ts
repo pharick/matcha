@@ -3,15 +3,15 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-export async function search(
-  ageFrom: number,
-  ageTo: number,
-  fameFrom: number,
-  fameTo: number,
-  distanceFrom: number,
-  distanceTo: number,
-  tags: string[]
-) {
+export async function search({
+  ageFrom,
+  ageTo,
+  fameFrom,
+  fameTo,
+  distanceFrom,
+  distanceTo,
+  tags,
+}: SearchParams) {
   const token = cookies().get('token')?.value;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/search/`,

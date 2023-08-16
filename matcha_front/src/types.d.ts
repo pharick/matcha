@@ -76,3 +76,13 @@ type MNotification = {
   create_time: string;
   viewed: boolean;
 };
+
+interface SearchParams {
+  ageFrom: number;
+  ageTo: number;
+  fameFrom: number;
+  fameTo: number;
+  distanceFrom: number;
+  distanceTo: number;
+  tags: string[];
+}
