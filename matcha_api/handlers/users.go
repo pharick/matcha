@@ -40,6 +40,7 @@ func UserSearch(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 			Biography:         user.Biography,
 			BirthDate:         user.BirthDate,
 			Avatar:            avatar_url,
+			Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
 		})
 	}
 	ret := schemas.UsersReturn{
