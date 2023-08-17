@@ -25,6 +25,7 @@ type User = {
   match: boolean;
   avatar: string;
   rating: number;
+  distance: number;
 };
 
 type CurrentUser = User & { active: boolean; avatar: string };

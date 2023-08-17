@@ -104,6 +104,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Match:             match,
 		Avatar:            avatar_url,
 		Rating:            rating,
+		Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
 	}
 	return ret, nil
 }

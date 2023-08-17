@@ -16,6 +16,7 @@ type UserReturn struct {
 	Match             bool     `json:"match"`
 	Avatar            string   `json:"avatar"`
 	Rating            float64  `json:"rating"`
+	Distance          float64  `json:"distance"`
 }
 
 type UsersReturn struct {

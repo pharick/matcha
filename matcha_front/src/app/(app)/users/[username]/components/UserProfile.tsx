@@ -39,6 +39,9 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
             </Link>
           ) : (
             <>
+              <p className="mr-1">
+                Distance: {(user.distance / 1000).toFixed(0)}km
+              </p>
               {user.match && <p className="mr-1">Match</p>}
               {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
               <form action={handleLike}>
