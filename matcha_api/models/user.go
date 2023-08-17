@@ -137,19 +137,21 @@ func (m UserModel) Update(
 	return user, err
 }
 
-func (m UserModel) Search(currentUser User, ageFrom int, ageTo int) ([]User, error) {
+func (m UserModel) Search(currentUser User, ageFrom int, ageTo int, minRating int) ([]User, error) {
 	var user User
 	rows, err := m.DB.Query(
 		fmt.Sprintf(`
 			SELECT %s FROM users
 			WHERE id <> $1 AND $2 = ANY(gender_preferences) AND gender = ANY($3) AND
-			date_part('year', age(birth_date)) >= $4 AND date_part('year', age(birth_date)) <= $5
+			date_part('year', age(birth_date)) >= $4 AND date_part('year', age(birth_date)) <= $5 AND
+			rating >= $6 * (SELECT MAX(rating) FROM users) / 5.0
 		`, fields),
 		currentUser.Id,
 		currentUser.Gender,
 		pq.Array(currentUser.GenderPreferences),
 		ageFrom,
 		ageTo,
+		minRating,
 	)
 	if err != nil {
 		return nil, err

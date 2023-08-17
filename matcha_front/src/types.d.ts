@@ -80,9 +80,7 @@ type MNotification = {
 interface SearchParams {
   ageFrom: number;
   ageTo: number;
-  fameFrom: number;
-  fameTo: number;
-  distanceFrom: number;
-  distanceTo: number;
+  minFame: number;
+  maxDistance: number;
   tags: string[];
 }

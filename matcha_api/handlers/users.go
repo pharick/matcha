@@ -15,7 +15,7 @@ func UserSearch(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	currentUser := r.Context().Value(ContextKey("User")).(models.User)
 	var d schemas.SearchData
 	lib.GetJSONBody(r, &d)
-	users, err := env.Users.Search(currentUser, d.AgeFrom, d.AgeTo)
+	users, err := env.Users.Search(currentUser, d.AgeFrom, d.AgeTo, d.MinFame)
 	if err != nil {
 		return nil, err
 	}

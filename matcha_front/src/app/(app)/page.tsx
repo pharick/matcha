@@ -9,10 +9,8 @@ interface SearchPageProps {
   searchParams: {
     ageFrom?: string;
     ageTo?: string;
-    fameFrom?: string;
-    fameTo?: string;
-    distanceFrom?: string;
-    distanceTo?: string;
+    minFame?: string;
+    maxDistance?: string;
     tag?: string | string[];
   };
 }
@@ -20,14 +18,13 @@ interface SearchPageProps {
 const SearchPage: NextPage<SearchPageProps> = async ({ searchParams }) => {
   const currentUser = await getCurrentUser();
   if (!currentUser) redirect('/login');
+  if (!currentUser.active) redirect('/profile');
 
   const params: SearchParams = {
     ageFrom: parseIntSearchParam(searchParams.ageFrom) ?? 18,
     ageTo: parseIntSearchParam(searchParams.ageTo) ?? 100,
-    fameFrom: parseIntSearchParam(searchParams.fameFrom) ?? 0,
-    fameTo: parseIntSearchParam(searchParams.fameTo) ?? 5,
-    distanceFrom: parseIntSearchParam(searchParams.distanceFrom) ?? 0,
-    distanceTo: parseIntSearchParam(searchParams.distanceTo) ?? 100,
+    minFame: parseIntSearchParam(searchParams.minFame) ?? 0,
+    maxDistance: parseIntSearchParam(searchParams.maxDistance) ?? 100,
     tags: !searchParams.tag
       ? currentUser.tags
       : typeof searchParams.tag == 'string'

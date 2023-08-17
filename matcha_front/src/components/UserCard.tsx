@@ -12,7 +12,7 @@ interface UserCardProps {
 
 const UserCard: FC<UserCardProps> = ({ user, avatar }) => {
   return (
-    <div className="group relative h-full w-full cursor-pointer overflow-hidden rounded-lg border-2 border-brown bg-brown transition hover:-translate-x-px hover:-translate-y-px hover:shadow-lg">
+    <div className="group relative h-full w-full cursor-pointer overflow-hidden rounded-lg border-2 border-brown bg-brown transition hover:shadow-lg">
       <figure className="relative z-20 h-full overflow-hidden">
         <Image
           src={

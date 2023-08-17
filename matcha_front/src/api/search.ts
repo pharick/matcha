@@ -6,10 +6,8 @@ import { redirect } from 'next/navigation';
 export async function search({
   ageFrom,
   ageTo,
-  fameFrom,
-  fameTo,
-  distanceFrom,
-  distanceTo,
+  minFame,
+  maxDistance,
   tags,
 }: SearchParams) {
   const token = cookies().get('token')?.value;
@@ -21,10 +19,8 @@ export async function search({
       body: JSON.stringify({
         age_from: ageFrom,
         age_to: ageTo,
-        fame_from: fameFrom,
-        fame_to: fameTo,
-        distance_from: distanceFrom,
-        distance_to: distanceTo,
+        min_fame: minFame,
+        max_distance: maxDistance,
         tags,
       }),
       next: { tags: ['profile'] },

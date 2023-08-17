@@ -12,8 +12,8 @@ import Button from '../Button';
 
 interface FiltersValues {
   ageRange: number[];
-  fameRange: number[];
-  distanceRange: number[];
+  minFame: number;
+  maxDistance: number;
   tags: string[];
 }
 
@@ -27,8 +27,8 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
 
   const initialValues: FiltersValues = {
     ageRange: [searchParams.ageFrom, searchParams.ageTo],
-    fameRange: [searchParams.fameFrom, searchParams.fameTo],
-    distanceRange: [searchParams.distanceFrom, searchParams.distanceTo],
+    minFame: searchParams.minFame,
+    maxDistance: searchParams.maxDistance,
     tags: searchParams.tags,
   };
 
@@ -45,7 +45,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
         className={`absolute bottom-0 left-0 right-full top-0 rounded-xl ${
           state.index === 2
             ? 'bg-neutral/50'
-            : state.index === 1
+            : state.index === 1 && state.value.length > 1
             ? 'bg-brown'
             : 'bg-neutral/50'
         }`}
@@ -76,17 +76,15 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
 
   const handleSearch = ({
     ageRange,
-    fameRange,
-    distanceRange,
+    minFame,
+    maxDistance,
     tags,
   }: FiltersValues) => {
     const params = new URLSearchParams({
       ageFrom: ageRange[0].toString(),
       ageTo: ageRange[1].toString(),
-      fameFrom: fameRange[0].toString(),
-      fameTo: fameRange[1].toString(),
-      distanceFrom: distanceRange[0].toString(),
-      distanceTo: distanceRange[1].toString(),
+      minFame: minFame.toString(),
+      maxDistance: maxDistance.toString(),
     });
     router.push(
       `/?${params.toString()}${tags.map((t) => `&tag=${t}`).join('')}`
@@ -135,13 +133,13 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
                 }
               />
               <label className="mb-4 block border-b-2 border-brown pb-1 font-bold">
-                Fame Rating
+                Minimum Fame Rating
               </label>
               <ReactSlider
                 className="mb-4 flex h-[10px] w-full items-center"
                 renderTrack={Track}
                 renderThumb={Thumb}
-                value={values.fameRange}
+                defaultValue={[values.minFame]}
                 min={0}
                 max={5}
                 ariaLabel={['Lower thumb', 'Upper thumb']}
@@ -149,25 +147,25 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
                 pearling={true}
                 minDistance={0}
                 onAfterChange={(valueNow) =>
-                  void setFieldValue('fameRange', valueNow)
+                  void setFieldValue('minFame', valueNow)
                 }
               />
               <label className="mb-4 block border-b-2 border-brown pb-1 font-bold">
-                Distance
+                Maximum Distance (km)
               </label>
               <ReactSlider
                 className="mb-4 flex h-[10px] w-full items-center"
                 renderTrack={Track}
                 renderThumb={Thumb}
-                value={values.distanceRange}
+                defaultValue={[values.maxDistance]}
                 min={0}
-                max={100}
+                max={999}
                 ariaLabel={['Lower thumb', 'Upper thumb']}
                 ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
                 pearling={true}
                 minDistance={0}
                 onAfterChange={(valueNow) =>
-                  void setFieldValue('distanceRange', valueNow)
+                  void setFieldValue('maxDistance', valueNow)
                 }
               />
               <label className="mb-2 block border-b-2 border-brown pb-1 font-bold">
