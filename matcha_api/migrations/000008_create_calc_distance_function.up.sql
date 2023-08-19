@@ -1,5 +1,5 @@
 create or replace function calc_distance(pos1 point, pos2 point)
-returns float as $dist$
+returns float as $$
 declare
 	lat1 float;
 	lat2 float;
@@ -16,4 +16,4 @@ begin
 	select 2 * atan2(sqrt(a), sqrt(1 - a)) into c;
 	return c * 6371e3;
 end;
-$dist$ language plpgsql;
+$$ language plpgsql;

@@ -1,1 +1,1 @@
-DROP FUNCTION calc_distance(point, point);
+DROP FUNCTION IF EXISTS calc_distance(point, point);
