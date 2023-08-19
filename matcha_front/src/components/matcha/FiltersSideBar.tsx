@@ -39,9 +39,9 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
         ? searchParams.sortField
         : 'distance',
       type:
-        searchParams.sortField == 'asc'
-          ? SortType.Ascending
-          : SortType.Descending,
+        searchParams.sortField == 'desc'
+          ? SortType.Descending
+          : SortType.Ascending,
     },
   };
 

@@ -25,9 +25,9 @@ const SortingField: FC<SortingFieldProps> = ({
     onChange({
       field: field,
       type:
-        value.field != field || value.type == SortType.Ascending
-          ? SortType.Descending
-          : SortType.Ascending,
+        value.field != field || value.type == SortType.Descending
+          ? SortType.Ascending
+          : SortType.Descending,
     });
   };
 
