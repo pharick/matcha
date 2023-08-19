@@ -70,7 +70,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
       <div
         key={key}
         {...rest}
-        className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-brown text-xs text-neutral"
+        className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-full bg-brown text-xs text-neutral"
       >
         {state.valueNow}
       </div>
