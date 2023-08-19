@@ -2,7 +2,9 @@ package lib
 
 import (
 	"encoding/json"
+	"fmt"
 	"matcha_api/models"
+	"math/rand"
 	"net/http"
 	"strconv"
 )
@@ -92,7 +94,7 @@ func GenerateUsers(
 		if err != nil {
 			return err
 		}
-		_, err = photos.Create(user.Id, mockUser.Picture.Large)
+		_, err = photos.Create(user.Id, fmt.Sprintf("/mock/%s/%v.jpg", user.Gender, rand.Intn(111)+1))
 		if err != nil {
 			return err
 		}

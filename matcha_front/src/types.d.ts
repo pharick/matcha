@@ -84,4 +84,6 @@ interface SearchParams {
   minFame: number;
   maxDistance: number;
   tags: string[];
+  sortField: string;
+  sortType: string;
 }

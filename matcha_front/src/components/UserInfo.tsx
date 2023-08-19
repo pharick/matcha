@@ -32,35 +32,38 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
         </div>
       </div>
 
-      <div className="mb-1 flex items-center justify-end">
-        <p className="mr-1 rounded-lg bg-neutral px-2">{user.username}</p>
-        <p className="mr-1 flex items-center rounded-lg bg-neutral px-2">
-          <RiPinDistanceFill className="mr-1" />
-          {(user.distance / 1000).toFixed(0)}km
-        </p>
+      <div className="flex flex-wrap items-center justify-end gap-y-1">
+        <p className="rounded-lg bg-neutral px-2">{user.username}</p>
+        {!user.me && (
+          <p className="ml-1 flex items-center rounded-lg bg-neutral px-2">
+            <RiPinDistanceFill className="mr-1" />
+            {(user.distance / 1000).toFixed(0)}km
+          </p>
+        )}
         {user.rating > 0 && (
-          <p className="flex items-center rounded-lg bg-neutral px-2">
+          <p className="ml-1 flex items-center rounded-lg bg-neutral px-2">
             <PiStarFill className="mr-1" /> {user.rating.toFixed(1)}
           </p>
         )}
+
+        <ul className="ml-1 flex flex-wrap items-center justify-end">
+          {user?.gender_preferences.map((gender, index) => (
+            <li
+              key={index}
+              className="mr-1 flex items-center rounded-lg bg-green-2 px-2 py-1 last:mr-0"
+            >
+              <AiFillHeart color="pink" />
+              {gender == 'male' ? (
+                <PiGenderMaleBold />
+              ) : gender == 'female' ? (
+                <PiGenderFemaleBold />
+              ) : (
+                <PiGenderIntersexBold />
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
-      <ul className="flex items-center justify-end">
-        {user?.gender_preferences.map((gender, index) => (
-          <li
-            key={index}
-            className="mr-1 flex items-center rounded-lg bg-green-2 px-2 py-1 last:mr-0"
-          >
-            <AiFillHeart color="pink" />
-            {gender == 'male' ? (
-              <PiGenderMaleBold />
-            ) : gender == 'female' ? (
-              <PiGenderFemaleBold />
-            ) : (
-              <PiGenderIntersexBold />
-            )}
-          </li>
-        ))}
-      </ul>
     </>
   );
 };

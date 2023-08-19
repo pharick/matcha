@@ -48,4 +48,6 @@ type SearchData struct {
 	MinFame     int      `json:"min_fame" validate:"required"`
 	MaxDistance int      `json:"max_distance" validate:"required"`
 	Tags        []string `json:"tags" validate:"required"`
+	SortField   string   `json:"sort_field" validate:"required"`
+	SortType    string   `json:"sort_type" validate:"required,oneof=asc desc"`
 }

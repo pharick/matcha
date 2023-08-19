@@ -27,12 +27,22 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
   const router = useRouter();
   const [hidden, setHidden] = useState(true);
 
+  const sortFields = ['distance', 'age', 'fame rating'];
+
   const initialValues: FiltersValues = {
     ageRange: [searchParams.ageFrom, searchParams.ageTo],
     minFame: searchParams.minFame,
     maxDistance: searchParams.maxDistance,
     tags: searchParams.tags,
-    sort: { field: 'distance', type: SortType.Descending },
+    sort: {
+      field: sortFields.includes(searchParams.sortField)
+        ? searchParams.sortField
+        : 'distance',
+      type:
+        searchParams.sortField == 'asc'
+          ? SortType.Ascending
+          : SortType.Descending,
+    },
   };
 
   const Track = (
@@ -82,12 +92,15 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
     minFame,
     maxDistance,
     tags,
+    sort,
   }: FiltersValues) => {
     const params = new URLSearchParams({
       ageFrom: ageRange[0].toString(),
       ageTo: ageRange[1].toString(),
       minFame: minFame.toString(),
       maxDistance: maxDistance.toString(),
+      sortField: sort.field,
+      sortType: sort.type,
     });
     router.push(
       `/?${params.toString()}${tags.map((t) => `&tag=${t}`).join('')}`
@@ -156,15 +169,15 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
               />
 
               <label className="mb-4 block border-b-2 border-brown pb-1 font-bold">
-                Maximum Distance (km)
+                Maximum Distance (100km)
               </label>
               <ReactSlider
                 className="mb-4 flex h-[10px] w-full items-center"
                 renderTrack={Track}
                 renderThumb={Thumb}
                 defaultValue={[values.maxDistance]}
-                min={0}
-                max={999}
+                min={1}
+                max={100}
                 ariaLabel={['Lower thumb', 'Upper thumb']}
                 ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
                 pearling={true}
@@ -189,7 +202,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
               </label>
               <SortingField
                 value={values.sort}
-                fields={['distance', 'age', 'fame rating']}
+                fields={sortFields}
                 onChange={(v) => void setFieldValue('sort', v)}
                 className="mb-4"
               />

@@ -24,6 +24,7 @@ const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
     const load = async () => {
       setUsers([]);
       setLoading(true);
+      console.log(searchParams);
       const res = await search(searchParams);
       setUsers(res);
       setLoading(false);

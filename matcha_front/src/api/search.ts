@@ -9,6 +9,8 @@ export async function search({
   minFame,
   maxDistance,
   tags,
+  sortField,
+  sortType,
 }: SearchParams) {
   const token = cookies().get('token')?.value;
   const res = await fetch(
@@ -20,14 +22,16 @@ export async function search({
         age_from: ageFrom,
         age_to: ageTo,
         min_fame: minFame,
-        max_distance: maxDistance,
+        max_distance: maxDistance * 100,
         tags,
+        sort_field: sortField,
+        sort_type: sortType,
       }),
       next: { tags: ['profile'] },
     }
   );
   if (res.status == 403) redirect('/profile');
-  if (!res.ok) throw Error('Something went wrong');
+  if (!res.ok) return [];
   const data = (await res.json()) as { list: User[] };
   return data.list;
 }

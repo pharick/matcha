@@ -12,6 +12,8 @@ interface SearchPageProps {
     minFame?: string;
     maxDistance?: string;
     tag?: string | string[];
+    sortField: string;
+    sortType: string;
   };
 }
 
@@ -24,12 +26,14 @@ const SearchPage: NextPage<SearchPageProps> = async ({ searchParams }) => {
     ageFrom: parseIntSearchParam(searchParams.ageFrom) ?? 18,
     ageTo: parseIntSearchParam(searchParams.ageTo) ?? 100,
     minFame: parseIntSearchParam(searchParams.minFame) ?? 0,
-    maxDistance: parseIntSearchParam(searchParams.maxDistance) ?? 100,
+    maxDistance: parseIntSearchParam(searchParams.maxDistance) ?? 5,
     tags: !searchParams.tag
       ? currentUser.tags
       : typeof searchParams.tag == 'string'
       ? [searchParams.tag]
       : searchParams.tag,
+    sortField: searchParams.sortField,
+    sortType: searchParams.sortType,
   };
 
   return <Matcha searchParams={params} />;
