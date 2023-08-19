@@ -9,12 +9,14 @@ import { GrClose } from 'react-icons/gr';
 
 import TagsField from '../TagsField';
 import Button from '../Button';
+import SortingField, { SortType } from './SortingField';
 
 interface FiltersValues {
   ageRange: number[];
   minFame: number;
   maxDistance: number;
   tags: string[];
+  sort: { field: string; type: SortType };
 }
 
 interface FiltersSideBarProps {
@@ -30,6 +32,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
     minFame: searchParams.minFame,
     maxDistance: searchParams.maxDistance,
     tags: searchParams.tags,
+    sort: { field: 'distance', type: SortType.Descending },
   };
 
   const Track = (
@@ -97,7 +100,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
         onClick={() => setHidden((h) => !h)}
         className="flex h-[50px] w-full items-center justify-end font-bold lg:hidden"
       >
-        Filters
+        Filters & Sorting
         {hidden ? (
           <FiFilter color="#403539" className="ml-2" />
         ) : (
@@ -132,6 +135,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
                   void setFieldValue('ageRange', valueNow)
                 }
               />
+
               <label className="mb-4 block border-b-2 border-brown pb-1 font-bold">
                 Minimum Fame Rating
               </label>
@@ -150,6 +154,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
                   void setFieldValue('minFame', valueNow)
                 }
               />
+
               <label className="mb-4 block border-b-2 border-brown pb-1 font-bold">
                 Maximum Distance (km)
               </label>
@@ -168,6 +173,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
                   void setFieldValue('maxDistance', valueNow)
                 }
               />
+
               <label className="mb-2 block border-b-2 border-brown pb-1 font-bold">
                 Interests
               </label>
@@ -176,6 +182,16 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
                 name="tags"
                 className="mb-2"
                 onChange={(value: string[]) => setFieldValue('tags', value)}
+              />
+
+              <label className="mb-2 block border-b-2 border-brown pb-1 font-bold">
+                Sort by
+              </label>
+              <SortingField
+                value={values.sort}
+                fields={['distance', 'age', 'fame rating']}
+                onChange={(v) => void setFieldValue('sort', v)}
+                className="mb-4"
               />
 
               <Button type="submit" className="mx-auto">
