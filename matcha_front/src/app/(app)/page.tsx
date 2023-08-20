@@ -32,8 +32,8 @@ const SearchPage: NextPage<SearchPageProps> = async ({ searchParams }) => {
       : typeof searchParams.tag == 'string'
       ? [searchParams.tag]
       : searchParams.tag,
-    sortField: searchParams.sortField,
-    sortType: searchParams.sortType,
+    sortField: searchParams.sortField ?? 'distance',
+    sortType: searchParams.sortType ?? 'asc',
   };
 
   return <Matcha searchParams={params} />;

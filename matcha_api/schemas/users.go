@@ -45,9 +45,12 @@ type UpdatePositionData struct {
 type SearchData struct {
 	AgeFrom     int      `json:"age_from" validate:"required"`
 	AgeTo       int      `json:"age_to" validate:"required"`
-	MinFame     int      `json:"min_fame" validate:"required"`
-	MaxDistance int      `json:"max_distance" validate:"required"`
+	MinFame     int      `json:"min_fame" validate:"min=0"`
+	MaxDistance int      `json:"max_distance" validate:"min=0"`
 	Tags        []string `json:"tags" validate:"required"`
 	SortField   string   `json:"sort_field" validate:"required"`
 	SortType    string   `json:"sort_type" validate:"required,oneof=asc desc"`
+	Offset      int      `json:"offset" validate:"min=0"`
+	Limit       int      `json:"limit" validate:"min=0"`
+	StartTime   string   `json:"start_time" validate:"required"`
 }

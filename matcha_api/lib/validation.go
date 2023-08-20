@@ -2,6 +2,7 @@ package lib
 
 import (
 	"encoding/json"
+	"log"
 	"matcha_api/errors"
 	"net/http"
 
@@ -24,6 +25,7 @@ func GetJSONBody(r *http.Request, d any) error {
 	if err != nil {
 		return errors.HttpError{Status: 422, Body: nil}
 	}
+	log.Println(d)
 	validate := validator.New()
 	err = validate.Struct(d)
 	if err, ok := err.(validator.ValidationErrors); ok {
