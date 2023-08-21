@@ -63,10 +63,10 @@ const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
         <Image
           src={SadCup as StaticImageData}
           width={400}
-          alt="empty_cup"
-          className="m-auto my-10"
+          alt="Empty cup"
+          className="m-auto my-3"
         />
-        <p className="my-4 text-center text-lg font-bold">No matches found</p>
+        <p className="text-center text-lg font-bold">No matches found</p>
       </>
     );
   else

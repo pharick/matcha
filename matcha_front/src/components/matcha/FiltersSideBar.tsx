@@ -27,7 +27,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
   const router = useRouter();
   const [hidden, setHidden] = useState(true);
 
-  const sortFields = ['distance', 'age', 'fame rating'];
+  const sortFields = ['distance', 'age', 'fame_rating'];
 
   const initialValues: FiltersValues = {
     ageRange: [searchParams.ageFrom, searchParams.ageTo],
@@ -39,7 +39,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
         ? searchParams.sortField
         : 'distance',
       type:
-        searchParams.sortField == 'desc'
+        searchParams.sortType == 'desc'
           ? SortType.Descending
           : SortType.Ascending,
     },

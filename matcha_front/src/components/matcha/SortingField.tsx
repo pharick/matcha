@@ -38,22 +38,19 @@ const SortingField: FC<SortingFieldProps> = ({
           <li key={f} className="mr-1">
             <button
               className={`flex items-center rounded border border-brown px-1 py-0.5 ${
-                value.field == f.split(' ').join('_').toLowerCase() &&
-                'bg-brown text-white'
+                value.field == f && 'bg-brown text-white'
               }`}
-              onClick={() => changeSort(f.split(' ').join('_').toLowerCase())}
+              onClick={() => changeSort(f)}
               type="button"
             >
               {f
-                .split(' ')
+                .split('_')
                 .map((v) => v.at(0)?.toUpperCase() + v.slice(1).toLowerCase())
                 .join(' ')}
               <span className="ml-1">
-                {value.field == f.split(' ').join('_').toLowerCase() &&
-                value.type == SortType.Ascending ? (
+                {value.field == f && value.type == SortType.Ascending ? (
                   <GoSortAsc />
-                ) : value.field == f.split(' ').join('_').toLowerCase() &&
-                  value.type == SortType.Descending ? (
+                ) : value.field == f && value.type == SortType.Descending ? (
                   <GoSortDesc />
                 ) : (
                   ''
