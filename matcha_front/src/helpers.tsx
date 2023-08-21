@@ -28,3 +28,21 @@ export function parseIntSearchParam(v?: string) {
   if (isNaN(n)) return undefined;
   return n;
 }
+
+export function getRandomMatchPhrase(username: string) {
+  const phrases: string[] = [
+    "Congratulations! You've found a match! 🎉",
+    `Great news! You and ${username} are a match!`,
+    `You've got a connection! ${username} is interested too.`,
+    `It's a match made in heaven! You and ${username} are a perfect match.`,
+    `You're in luck! ${username} is interested in getting to know you.`,
+    `Swipe right success! ${username} is your new match.`,
+    `A new spark ignites! ${username} has matched with you.`,
+    `The stars have aligned! You and ${username} are a match.`,
+    `Two hearts meet! ${username} is your latest match.`,
+    `Bingo! You and ${username} have matched up. Start chatting now!`,
+  ];
+  const number = Math.floor(Math.random() * 9);
+  console.log(number);
+  return phrases[number];
+}

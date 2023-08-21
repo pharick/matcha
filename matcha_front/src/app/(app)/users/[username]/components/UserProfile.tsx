@@ -2,10 +2,12 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { BiLike, BiSolidLike } from 'react-icons/bi';
 import { FaUserEdit } from 'react-icons/fa';
+import Image, { StaticImageData } from 'next/image';
 
 import UserPhoto from './UserPhoto';
 import ProfileVisitor from './ProfileVisitor';
 import { setLike, unsetLike } from '@/api/profile';
+import Match from '@/images/Match.svg';
 
 interface UserProfileProps {
   user: User;
@@ -39,7 +41,14 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
             </Link>
           ) : (
             <>
-              {user.match && <p className="mr-1">Match</p>}
+              {user.match && (
+                <Image
+                  src={Match as StaticImageData}
+                  alt="match"
+                  width={80}
+                  className="m-5"
+                />
+              )}
               {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
               <form action={handleLike}>
                 <button

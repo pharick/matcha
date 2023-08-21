@@ -9,7 +9,7 @@ import Marquee from 'react-fast-marquee';
 
 import { FaBell } from 'react-icons/fa6';
 import { getUnreadNotifications, viewNotification } from '@/api/notifications';
-import { getNotificationMessage } from '@/helpers';
+import { getNotificationMessage, getRandomMatchPhrase } from '@/helpers';
 import Match from '@/images/Match.svg';
 
 interface NotificationsProps {
@@ -60,17 +60,29 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
   return (
     <>
       {notifications.some((n) => n.type == 'match' && !n.viewed) && (
-        <Marquee speed={50}>
+        <Marquee speed={50} className="mx-10">
           <div className="mx-10 flex flex-1 items-center overflow-hidden">
-            <Image
-              src={Match as StaticImageData}
-              alt="match"
-              width={80}
-              className="m-5"
-            />
-            <p className="text-lg font-bold">
-              Hurry up! Don&apos;t miss your chance!!!
-            </p>
+            {notifications
+              .filter((n) => n.type == 'match' && !n.viewed)
+              .map((n) => (
+                <>
+                  <Image
+                    src={Match as StaticImageData}
+                    alt="match"
+                    width={80}
+                    className="m-5"
+                  />
+                  <p className="text-lg font-bold">
+                    {getRandomMatchPhrase(n.username)}
+                  </p>
+                  <Image
+                    src={Match as StaticImageData}
+                    alt="match"
+                    width={80}
+                    className="m-5"
+                  />
+                </>
+              ))}
           </div>
         </Marquee>
       )}
