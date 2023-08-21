@@ -103,7 +103,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ user, photos }) => {
   return (
     <DndProvider backend={HTML5Backend}>
       {photos.length > 0 ? (
-        <ul className="flex flex-wrap justify-center">
+        <ul className="grid grid-cols-[repeat(auto-fill,_224px)] justify-center gap-2">
           {photos
             .sort((a, b) => a.index - b.index)
             .map((photo) => (

@@ -16,7 +16,7 @@ const UserPhoto: FC<UserProfileProps> = ({ user, photos }) => {
   const [photoId, setPhotoId] = useState<number>(0);
 
   return (
-    <div className="relative h-full w-full rounded-lg border-2 border-brown bg-brown">
+    <div className="relative h-full w-full overflow-hidden rounded-lg border-2 border-brown bg-brown">
       {photoId > 0 && (
         <button
           className="group absolute left-0 top-0 z-40 block h-full px-1 hover:bg-green-5/50"
@@ -37,7 +37,7 @@ const UserPhoto: FC<UserProfileProps> = ({ user, photos }) => {
               : (DefaultProfilePicture as StaticImageData)
           }
           fill={true}
-          className="rounded-lg object-cover"
+          className="object-cover"
           sizes="300px"
           alt="photo"
         />

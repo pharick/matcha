@@ -31,7 +31,7 @@ const UserWidget: FC<UserWidgetProps> = ({ currentUser }) => {
 
       <nav className="absolute right-0 top-full z-50 hidden min-w-max rounded-xl bg-green-5/90 text-center font-bold group-hover:block">
         <Link
-          className="block rounded-t-xl border-b border-brown/50 p-2 hover:bg-brown hover:text-white"
+          className="block rounded-t-xl border-b border-brown/50 p-2 transition hover:bg-brown hover:text-white"
           href="/profile"
         >
           Profile settings
@@ -39,7 +39,7 @@ const UserWidget: FC<UserWidgetProps> = ({ currentUser }) => {
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form action={logout}>
           <button
-            className="block w-full rounded-b-xl p-2 hover:bg-brown hover:text-white"
+            className="block w-full rounded-b-xl p-2 transition hover:bg-brown hover:text-white"
             type="submit"
           >
             Log Out

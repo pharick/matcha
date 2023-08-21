@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"database/sql"
-	"log"
 	"matcha_api/errors"
 	"matcha_api/lib"
 	"matcha_api/models"
@@ -15,9 +14,22 @@ import (
 func UserSearch(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	currentUser := r.Context().Value(ContextKey("User")).(models.User)
 	var d schemas.SearchData
-	lib.GetJSONBody(r, &d)
-	log.Println(d)
-	users, err := env.Users.Search(currentUser.Id, d.AgeFrom, d.AgeTo)
+	err := lib.GetJSONBody(r, &d)
+	if err != nil {
+		return nil, err
+	}
+	users, err := env.Users.Search(
+		currentUser,
+		d.AgeFrom,
+		d.AgeTo,
+		d.MinFame,
+		d.MaxDistance,
+		d.SortField,
+		d.SortType,
+		d.Offset,
+		d.Limit,
+		d.StartTime,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -42,6 +54,8 @@ func UserSearch(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 			Biography:         user.Biography,
 			BirthDate:         user.BirthDate,
 			Avatar:            avatar_url,
+			Rating:            lib.NormalizeRating(&env.Users, user.Rating),
+			Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
 		})
 	}
 	ret := schemas.UsersReturn{
@@ -80,16 +94,6 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 	if err != sql.ErrNoRows {
 		avatar_url = avatar.Url
 	}
-	maxRating, err := env.Users.GetMaxRating()
-	if err != nil {
-		return nil, err
-	}
-	var rating float64
-	if maxRating == 0 {
-		rating = 0
-	} else {
-		rating = float64(user.Rating) / float64(maxRating) * 5.0
-	}
 	ret := schemas.UserReturn{
 		Id:                user.Id,
 		Username:          user.Username,
@@ -105,7 +109,8 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Liked:             liked,
 		Match:             match,
 		Avatar:            avatar_url,
-		Rating:            rating,
+		Rating:            lib.NormalizeRating(&env.Users, user.Rating),
+		Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
 	}
 	return ret, nil
 }

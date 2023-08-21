@@ -1,26 +1,21 @@
-import { FC, Suspense } from 'react';
+import { FC } from 'react';
 
-import FiltersSideBar, {
-  FiltersValues,
-} from '@/components/matcha/FiltersSideBar';
+import FiltersSideBar from '@/components/matcha/FiltersSideBar';
 import SearchResults from './SearchResults';
 
 interface MatchaProps {
-  filtersValues: FiltersValues;
-  usersPromise: Promise<User[]>;
+  searchParams: SearchParams;
 }
 
-const Matcha: FC<MatchaProps> = ({ filtersValues, usersPromise }) => {
+const Matcha: FC<MatchaProps> = ({ searchParams }) => {
   return (
-    <div className="flex flex-wrap">
-      <aside className="sticky top-1 z-40 w-full rounded-lg bg-green-5/70 px-2 lg:static lg:w-[400px]">
-        <FiltersSideBar initialValues={filtersValues} />
+    <div className="mb-2 h-full min-h-screen flex-wrap lg:flex">
+      <aside className="sticky top-1 z-40 mb-2 w-full rounded-lg bg-green-5/70 px-2 lg:static lg:mb-0 lg:mr-2 lg:w-[400px]">
+        <FiltersSideBar searchParams={searchParams} />
       </aside>
 
       <main className="flex-1">
-        <Suspense fallback={<p>Loading...</p>}>
-          <SearchResults usersPromise={usersPromise} />
-        </Suspense>
+        <SearchResults searchParams={searchParams} />
       </main>
     </div>
   );

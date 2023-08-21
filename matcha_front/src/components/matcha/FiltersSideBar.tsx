@@ -9,21 +9,41 @@ import { GrClose } from 'react-icons/gr';
 
 import TagsField from '../TagsField';
 import Button from '../Button';
+import SortingField, { SortType } from './SortingField';
 
-export interface FiltersValues {
+interface FiltersValues {
   ageRange: number[];
-  fameRange: number[];
-  distanceRange: number[];
+  minFame: number;
+  maxDistance: number;
   tags: string[];
+  sort: { field: string; type: SortType };
 }
 
 interface FiltersSideBarProps {
-  initialValues: FiltersValues;
+  searchParams: SearchParams;
 }
 
-const FiltersSideBar: FC<FiltersSideBarProps> = ({ initialValues }) => {
+const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
   const router = useRouter();
   const [hidden, setHidden] = useState(true);
+
+  const sortFields = ['distance', 'age', 'fame rating'];
+
+  const initialValues: FiltersValues = {
+    ageRange: [searchParams.ageFrom, searchParams.ageTo],
+    minFame: searchParams.minFame,
+    maxDistance: searchParams.maxDistance,
+    tags: searchParams.tags,
+    sort: {
+      field: sortFields.includes(searchParams.sortField)
+        ? searchParams.sortField
+        : 'distance',
+      type:
+        searchParams.sortField == 'desc'
+          ? SortType.Descending
+          : SortType.Ascending,
+    },
+  };
 
   const Track = (
     props: HTMLPropsWithRefCallback<HTMLDivElement>,
@@ -38,7 +58,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ initialValues }) => {
         className={`absolute bottom-0 left-0 right-full top-0 rounded-xl ${
           state.index === 2
             ? 'bg-neutral/50'
-            : state.index === 1
+            : state.index === 1 && state.value.length > 1
             ? 'bg-brown'
             : 'bg-neutral/50'
         }`}
@@ -60,7 +80,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ initialValues }) => {
       <div
         key={key}
         {...rest}
-        className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-brown text-xs text-neutral"
+        className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-full bg-brown text-xs text-neutral"
       >
         {state.valueNow}
       </div>
@@ -69,17 +89,18 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ initialValues }) => {
 
   const handleSearch = ({
     ageRange,
-    fameRange,
-    distanceRange,
+    minFame,
+    maxDistance,
     tags,
+    sort,
   }: FiltersValues) => {
     const params = new URLSearchParams({
       ageFrom: ageRange[0].toString(),
       ageTo: ageRange[1].toString(),
-      fameFrom: fameRange[0].toString(),
-      fameTo: fameRange[1].toString(),
-      distanceFrom: distanceRange[0].toString(),
-      distanceTo: distanceRange[1].toString(),
+      minFame: minFame.toString(),
+      maxDistance: maxDistance.toString(),
+      sortField: sort.field,
+      sortType: sort.type,
     });
     router.push(
       `/?${params.toString()}${tags.map((t) => `&tag=${t}`).join('')}`
@@ -92,7 +113,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ initialValues }) => {
         onClick={() => setHidden((h) => !h)}
         className="flex h-[50px] w-full items-center justify-end font-bold lg:hidden"
       >
-        Filters
+        Filters & Sorting
         {hidden ? (
           <FiFilter color="#403539" className="ml-2" />
         ) : (
@@ -127,14 +148,15 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ initialValues }) => {
                   void setFieldValue('ageRange', valueNow)
                 }
               />
+
               <label className="mb-4 block border-b-2 border-brown pb-1 font-bold">
-                Fame Rating
+                Minimum Fame Rating
               </label>
               <ReactSlider
                 className="mb-4 flex h-[10px] w-full items-center"
                 renderTrack={Track}
                 renderThumb={Thumb}
-                value={values.fameRange}
+                defaultValue={[values.minFame]}
                 min={0}
                 max={5}
                 ariaLabel={['Lower thumb', 'Upper thumb']}
@@ -142,27 +164,29 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ initialValues }) => {
                 pearling={true}
                 minDistance={0}
                 onAfterChange={(valueNow) =>
-                  void setFieldValue('fameRange', valueNow)
+                  void setFieldValue('minFame', valueNow)
                 }
               />
+
               <label className="mb-4 block border-b-2 border-brown pb-1 font-bold">
-                Distance
+                Maximum Distance (100km)
               </label>
               <ReactSlider
                 className="mb-4 flex h-[10px] w-full items-center"
                 renderTrack={Track}
                 renderThumb={Thumb}
-                value={values.distanceRange}
-                min={0}
+                defaultValue={[values.maxDistance]}
+                min={1}
                 max={100}
                 ariaLabel={['Lower thumb', 'Upper thumb']}
                 ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
                 pearling={true}
                 minDistance={0}
                 onAfterChange={(valueNow) =>
-                  void setFieldValue('distanceRange', valueNow)
+                  void setFieldValue('maxDistance', valueNow)
                 }
               />
+
               <label className="mb-2 block border-b-2 border-brown pb-1 font-bold">
                 Interests
               </label>
@@ -171,6 +195,16 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ initialValues }) => {
                 name="tags"
                 className="mb-2"
                 onChange={(value: string[]) => setFieldValue('tags', value)}
+              />
+
+              <label className="mb-2 block border-b-2 border-brown pb-1 font-bold">
+                Sort by
+              </label>
+              <SortingField
+                value={values.sort}
+                fields={sortFields}
+                onChange={(v) => void setFieldValue('sort', v)}
+                className="mb-4"
               />
 
               <Button type="submit" className="mx-auto">

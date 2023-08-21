@@ -16,6 +16,7 @@ type UserReturn struct {
 	Match             bool     `json:"match"`
 	Avatar            string   `json:"avatar"`
 	Rating            float64  `json:"rating"`
+	Distance          float64  `json:"distance"`
 }
 
 type UsersReturn struct {
@@ -42,11 +43,14 @@ type UpdatePositionData struct {
 }
 
 type SearchData struct {
-	AgeFrom      int      `json:"age_from" validate:"required"`
-	AgeTo        int      `json:"age_to" validate:"required"`
-	FameFrom     int      `json:"fame_from" validate:"required"`
-	FameTo       int      `json:"fame_to" validate:"required"`
-	DistanceFrom int      `json:"distance_from" validate:"required"`
-	DistanceTo   int      `json:"distance_to" validate:"required"`
-	Tags         []string `json:"tags" validate:"required"`
+	AgeFrom     int      `json:"age_from" validate:"required"`
+	AgeTo       int      `json:"age_to" validate:"required"`
+	MinFame     int      `json:"min_fame" validate:"min=0"`
+	MaxDistance int      `json:"max_distance" validate:"min=0"`
+	Tags        []string `json:"tags" validate:"required"`
+	SortField   string   `json:"sort_field" validate:"required"`
+	SortType    string   `json:"sort_type" validate:"required,oneof=asc desc"`
+	Offset      int      `json:"offset" validate:"min=0"`
+	Limit       int      `json:"limit" validate:"min=0"`
+	StartTime   string   `json:"start_time" validate:"required"`
 }

@@ -10,11 +10,21 @@ CREATE TABLE IF NOT EXISTS users (
         birth_date DATE NOT NULL,
         active BOOLEAN NOT NULL DEFAULT false,
         gender GENDER,
-        gender_preferences GENDER[] NOT NULL DEFAULT '{}',
+        gender_preferences GENDER[] NOT NULL DEFAULT '{"male", "female", "other"}',
         last_position POINT NOT NULL DEFAULT '(0,0)',
         biography TEXT,
-        rating INTEGER
+        rating INTEGER NOT NULL DEFAULT 0,
+        updated_at TIMESTAMP NOT NULL DEFAULT now()
 );
+
+CREATE OR REPLACE FUNCTION update_modified_column() 
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = now();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+CREATE TRIGGER update_user_modtime BEFORE UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE update_modified_column();
 
 CREATE INDEX users_username_idx ON users (username);
 CREATE INDEX users_email_idx ON users (email);

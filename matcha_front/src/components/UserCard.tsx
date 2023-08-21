@@ -12,7 +12,7 @@ interface UserCardProps {
 
 const UserCard: FC<UserCardProps> = ({ user, avatar }) => {
   return (
-    <div className="group relative h-full w-full cursor-pointer overflow-hidden rounded-lg border-2 border-brown bg-brown hover:-translate-x-px hover:-translate-y-px hover:shadow-lg">
+    <div className="group relative h-full w-full cursor-pointer overflow-hidden rounded-lg border-2 border-brown bg-brown transition hover:shadow-lg">
       <figure className="relative z-20 h-full overflow-hidden">
         <Image
           src={
@@ -31,7 +31,7 @@ const UserCard: FC<UserCardProps> = ({ user, avatar }) => {
 
       <Link
         href={`/users/${user.username}`}
-        className="absolute top-0 z-40 hidden h-full w-full items-center justify-center rounded-lg bg-white/30 font-bold group-hover:flex"
+        className="absolute top-0 z-40 flex h-full w-full items-center justify-center rounded-lg text-[0px] font-bold transition transition-[font-size] group-hover:bg-white/30 group-hover:text-lg"
       >
         See more
       </Link>

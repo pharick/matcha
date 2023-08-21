@@ -4,13 +4,18 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 export async function search(
-  ageFrom: number,
-  ageTo: number,
-  fameFrom: number,
-  fameTo: number,
-  distanceFrom: number,
-  distanceTo: number,
-  tags: string[]
+  {
+    ageFrom,
+    ageTo,
+    minFame,
+    maxDistance,
+    tags,
+    sortField,
+    sortType,
+  }: SearchParams,
+  offset: number,
+  limit: number,
+  startTime: string
 ) {
   const token = cookies().get('token')?.value;
   const res = await fetch(
@@ -21,17 +26,23 @@ export async function search(
       body: JSON.stringify({
         age_from: ageFrom,
         age_to: ageTo,
-        fame_from: fameFrom,
-        fame_to: fameTo,
-        distance_from: distanceFrom,
-        distance_to: distanceTo,
+        min_fame: minFame,
+        max_distance: maxDistance * 100,
         tags,
+        sort_field: sortField,
+        sort_type: sortType,
+        offset,
+        limit,
+        start_time: startTime,
       }),
       next: { tags: ['profile'] },
     }
   );
   if (res.status == 403) redirect('/profile');
-  if (!res.ok) throw Error('Something went wrong');
+  if (!res.ok) {
+    console.log(await res.json());
+    return [];
+  }
   const data = (await res.json()) as { list: User[] };
   return data.list;
 }

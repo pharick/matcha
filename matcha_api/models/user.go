@@ -137,15 +137,51 @@ func (m UserModel) Update(
 	return user, err
 }
 
-func (m UserModel) Search(currentUserId int, ageFrom int, ageTo int) ([]User, error) {
+func (m UserModel) Search(
+	currentUser User,
+	ageFrom int,
+	ageTo int,
+	minRating int,
+	maxDistance int,
+	sortField string,
+	sortType string,
+	offset int,
+	limit int,
+	startTime string,
+) ([]User, error) {
+	var sortQuery string
+	if sortField == "age" && sortType == "asc" {
+		sortQuery = "birth_date DESC"
+	} else if sortField == "age" && sortType == "desc" {
+		sortQuery = "birth_date ASC"
+	} else if sortField == "fame_rating" {
+		sortQuery = fmt.Sprintf("rating %s", sortType)
+	} else {
+		sortQuery = fmt.Sprintf("calc_distance(last_position, ('(' || $7 || ',' || $8 || ')')::point) %s", sortType)
+	}
 	var user User
 	rows, err := m.DB.Query(
 		fmt.Sprintf(`
 			SELECT %s FROM users
-			WHERE id <> $1 AND
-			date_part('year', age(birth_date)) >= $2 AND date_part('year', age(birth_date)) <= $3
-		`, fields),
-		currentUserId, ageFrom, ageTo,
+			WHERE id <> $1 AND updated_at < $12 AND
+			$2 = ANY(gender_preferences) AND gender = ANY($3) AND
+			date_part('year', age(birth_date)) >= $4 AND date_part('year', age(birth_date)) <= $5 AND
+			rating >= $6 * (SELECT MAX(rating) FROM users) / 5.0 AND
+			calc_distance(last_position, ('(' || $7 || ',' || $8 || ')')::point) <= $9 * 1000
+			ORDER BY %s OFFSET $10 LIMIT $11
+		`, fields, sortQuery),
+		currentUser.Id,
+		currentUser.Gender,
+		pq.Array(currentUser.GenderPreferences),
+		ageFrom,
+		ageTo,
+		minRating,
+		currentUser.LastPosition.Longitude,
+		currentUser.LastPosition.Latitude,
+		maxDistance,
+		offset,
+		limit,
+		startTime,
 	)
 	if err != nil {
 		return nil, err

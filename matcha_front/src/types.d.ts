@@ -25,6 +25,7 @@ type User = {
   match: boolean;
   avatar: string;
   rating: number;
+  distance: number;
 };
 
 type CurrentUser = User & { active: boolean; avatar: string };
@@ -76,3 +77,13 @@ type MNotification = {
   create_time: string;
   viewed: boolean;
 };
+
+interface SearchParams {
+  ageFrom: number;
+  ageTo: number;
+  minFame: number;
+  maxDistance: number;
+  tags: string[];
+  sortField: string;
+  sortType: string;
+}
