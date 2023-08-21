@@ -26,16 +26,15 @@ const SignUpForm: FC = () => {
       .matches(/^[aA-zZ]*$/, 'Numbers and special characters are not allowed'),
     first_name: Yup.string()
       .required("What's your first name?")
-      .min(2, 'First name must be between 2 and 16 characters')
+      .min(1, 'First name must be between 2 and 16 characters')
       .max(16, 'First name must be between 2 and 16 characters')
       .matches(/^[aA-zZ]*$/, 'Numbers and special characters are not allowed'),
     last_name: Yup.string()
       .required("What's your last name?")
-      .min(2, 'First name must be between 2 and 16 characters')
-      .max(16, 'First name must be between 2 and 16 characters')
+      .min(1, 'Last name must be between 2 and 16 characters')
+      .max(16, 'Last name must be between 2 and 16 characters')
       .matches(/^[aA-zZ]*$/, 'Numbers and special characters are not allowed'),
     birth_date: Yup.date()
-      // .required('Enter your birth date')
       .nullable()
       .test('DOB', 'This website for 18+ only', (value) => {
         if (value) return differenceInYears(new Date(), value) >= 18;

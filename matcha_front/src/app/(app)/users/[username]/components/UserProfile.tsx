@@ -95,6 +95,7 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
         ) : (
           'No tags available'
         )}
+        <button className="block self-end">Report</button>
       </div>
     </main>
   );

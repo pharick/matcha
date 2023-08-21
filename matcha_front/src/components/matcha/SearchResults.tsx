@@ -1,10 +1,12 @@
 'use client';
 
 import { FC, useEffect, useState } from 'react';
+import Image, { StaticImageData } from 'next/image';
 
 import UserCard from '@/components/UserCard';
 import { search } from '@/api/search';
 import Button from '../Button';
+import SadCup from '@/images/sad_cup.svg';
 
 const SearchResultsLoading: FC = () => (
   <>
@@ -56,7 +58,17 @@ const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
   };
 
   if (!loading && users.length <= 0)
-    return <p className="my-4 text-center text-lg">No matches found</p>;
+    return (
+      <>
+        <Image
+          src={SadCup as StaticImageData}
+          width={400}
+          alt="empty_cup"
+          className="m-auto my-10"
+        />
+        <p className="my-4 text-center text-lg font-bold">No matches found</p>
+      </>
+    );
   else
     return (
       <>

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import useWebSocket from 'react-use-websocket';
 import { format } from 'date-fns';
 import Image, { StaticImageData } from 'next/image';
-import Marquee from 'react-double-marquee';
+import Marquee from 'react-fast-marquee';
 
 import { FaBell } from 'react-icons/fa6';
 import { getUnreadNotifications, viewNotification } from '@/api/notifications';
@@ -60,8 +60,8 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
   return (
     <>
       {notifications.some((n) => n.type == 'match' && !n.viewed) && (
-        <div className="mx-10 flex-1 overflow-hidden">
-          <div className="flex flex-1 animate-[info_10s_ease-in-out_infinite] items-center">
+        <Marquee speed={50}>
+          <div className="mx-10 flex flex-1 items-center overflow-hidden">
             <Image
               src={Match as StaticImageData}
               alt="match"
@@ -71,9 +71,8 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
             <p className="text-lg font-bold">
               Hurry up! Don&apos;t miss your chance!!!
             </p>
-          {/* </Marquee> */}
           </div>
-        </div>
+        </Marquee>
       )}
       <div className={`group relative flex items-center ${className}`}>
         <button className="relative">

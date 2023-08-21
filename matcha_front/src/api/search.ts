@@ -27,7 +27,7 @@ export async function search(
         age_from: ageFrom,
         age_to: ageTo,
         min_fame: minFame,
-        max_distance: maxDistance * 100,
+        max_distance: maxDistance,
         tags,
         sort_field: sortField,
         sort_type: sortType,

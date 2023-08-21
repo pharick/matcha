@@ -27,8 +27,10 @@ const nextConfig = {
         destination: '/profile/information',
         permanent: true,
       },
+
     ];
   },
+    swcMinify: false,
 };
 
 module.exports = nextConfig;

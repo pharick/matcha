@@ -66,26 +66,29 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
     );
   };
 
-  const Thumb = (
-    props: HTMLPropsWithRefCallback<HTMLDivElement>,
-    state: {
-      index: number;
-      value: number[];
-      valueNow: number;
-    }
-  ) => {
-    const { key, ...rest } =
-      props as HTMLPropsWithRefCallback<HTMLDivElement> & { key: string };
-    return (
-      <div
-        key={key}
-        {...rest}
-        className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-full bg-brown text-xs text-neutral"
-      >
-        {state.valueNow}
-      </div>
-    );
-  };
+  function getThumb(showValue: boolean) {
+    const Thumb = (
+      props: HTMLPropsWithRefCallback<HTMLDivElement>,
+      state: {
+        index: number;
+        value: number[];
+        valueNow: number;
+      }
+    ) => {
+      const { key, ...rest } =
+        props as HTMLPropsWithRefCallback<HTMLDivElement> & { key: string };
+      return (
+        <div
+          key={key}
+          {...rest}
+          className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-full bg-brown text-xs text-neutral"
+        >
+          {showValue && state.valueNow}
+        </div>
+      );
+    };
+    return Thumb;
+  }
 
   const handleSearch = ({
     ageRange,
@@ -136,7 +139,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
               <ReactSlider
                 className="mb-4 flex h-[10px] w-full items-center"
                 renderTrack={Track}
-                renderThumb={Thumb}
+                renderThumb={getThumb(true)}
                 value={values.ageRange}
                 min={18}
                 max={100}
@@ -155,7 +158,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
               <ReactSlider
                 className="mb-4 flex h-[10px] w-full items-center"
                 renderTrack={Track}
-                renderThumb={Thumb}
+                renderThumb={getThumb(true)}
                 defaultValue={[values.minFame]}
                 min={0}
                 max={5}
@@ -169,20 +172,20 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
               />
 
               <label className="mb-4 block border-b-2 border-brown pb-1 font-bold">
-                Maximum Distance (100km)
+                Maximum Distance ({values.maxDistance} km)
               </label>
               <ReactSlider
                 className="mb-4 flex h-[10px] w-full items-center"
                 renderTrack={Track}
-                renderThumb={Thumb}
+                renderThumb={getThumb(false)}
                 defaultValue={[values.maxDistance]}
                 min={1}
-                max={100}
+                max={5000}
                 ariaLabel={['Lower thumb', 'Upper thumb']}
                 ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
                 pearling={true}
                 minDistance={0}
-                onAfterChange={(valueNow) =>
+                onChange={(valueNow) =>
                   void setFieldValue('maxDistance', valueNow)
                 }
               />
