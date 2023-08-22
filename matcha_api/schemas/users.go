@@ -19,8 +19,9 @@ type UserReturn struct {
 	Distance          float64  `json:"distance"`
 }
 
-type UsersReturn struct {
-	List []UserReturn `json:"list"`
+type SearchReturn struct {
+	List  []UserReturn `json:"list"`
+	Total int          `json:"total"`
 }
 
 type UpdateUserData struct {

@@ -41,8 +41,7 @@ export async function search(
   if (res.status == 403) redirect('/profile');
   if (!res.ok) {
     console.log(await res.json());
-    return [];
+    return { list: [], total: 0 };
   }
-  const data = (await res.json()) as { list: User[] };
-  return data.list;
+  return (await res.json()) as { list: User[]; total: number };
 }
