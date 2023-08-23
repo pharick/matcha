@@ -46,7 +46,7 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
                   src={Match as StaticImageData}
                   alt="match"
                   width={80}
-                  className="m-5"
+                  className="mr-5"
                 />
               )}
               {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
