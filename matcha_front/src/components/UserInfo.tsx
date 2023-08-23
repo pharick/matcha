@@ -1,4 +1,6 @@
 import { FC } from 'react';
+import formatDistance from 'date-fns/formatDistance';
+
 import {
   PiGenderFemaleBold,
   PiGenderIntersexBold,
@@ -16,19 +18,32 @@ interface UserInfoProps {
 const UserInfo: FC<UserInfoProps> = ({ user }) => {
   return (
     <>
-      <div className="mb-1 flex items-baseline justify-end">
-        <h1 className="mr-2 text-right text-2xl font-bold">
-          {user.first_name} {user.last_name}
-        </h1>
-        <div className="flex items-center text-xl">
-          {birthdateToAge(user.birth_date)}
-          {user.gender == 'male' ? (
-            <PiGenderMaleBold />
-          ) : user.gender == 'female' ? (
-            <PiGenderFemaleBold />
-          ) : (
-            <PiGenderIntersexBold />
-          )}
+      <div className="mb-1 flex flex-wrap items-center justify-end">
+        {user.last_online && (
+          <p
+            className={`rounded px-1 text-sm text-white ${
+              user.online ? 'bg-green-500' : 'bg-red-500'
+            }`}
+          >
+            {user.online
+              ? 'Online'
+              : `${formatDistance(new Date(user.last_online), new Date())} ago`}
+          </p>
+        )}
+        <div className="ml-2 flex items-baseline">
+          <h1 className="mr-2 text-right text-2xl font-bold">
+            {user.first_name} {user.last_name}
+          </h1>
+          <div className="flex items-center text-xl">
+            {birthdateToAge(user.birth_date)}
+            {user.gender == 'male' ? (
+              <PiGenderMaleBold />
+            ) : user.gender == 'female' ? (
+              <PiGenderFemaleBold />
+            ) : (
+              <PiGenderIntersexBold />
+            )}
+          </div>
         </div>
       </div>
 

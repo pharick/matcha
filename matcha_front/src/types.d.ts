@@ -26,6 +26,8 @@ type User = {
   avatar: string;
   rating: number;
   distance: number;
+  online: boolean;
+  last_online: string;
 };
 
 type CurrentUser = User & { active: boolean; avatar: string };

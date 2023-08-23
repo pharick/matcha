@@ -17,6 +17,8 @@ type UserReturn struct {
 	Avatar            string   `json:"avatar"`
 	Rating            float64  `json:"rating"`
 	Distance          float64  `json:"distance"`
+	Online            bool     `json:"online"`
+	LastOnline        string   `json:"last_online"`
 }
 
 type SearchReturn struct {

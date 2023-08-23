@@ -27,6 +27,7 @@ type User struct {
 	Biography         string
 	Rating            int
 	LastPosition      Position
+	LastOnline        string
 }
 
 type UserModel struct {
@@ -35,7 +36,7 @@ type UserModel struct {
 
 var fields = `
 	users.id, username, email, active, password_hash, first_name, last_name, birth_date,
-	gender, gender_preferences::text[], biography, rating, last_position[0], last_position[1]
+	gender, gender_preferences::text[], biography, rating, last_position[0], last_position[1], last_online
 `
 
 var searchQuery = `
@@ -65,6 +66,7 @@ func scanRow(row interface{ Scan(...any) error }, user *User) error {
 		&rating,
 		&user.LastPosition.Longitude,
 		&user.LastPosition.Latitude,
+		&user.LastOnline,
 	)
 	if err != nil {
 		return err
@@ -284,6 +286,11 @@ func (m UserModel) GetMaxRating() (int, error) {
 	var maxRating sql.NullInt32
 	err := m.DB.QueryRow("SELECT MAX(rating) FROM users").Scan(&maxRating)
 	return int(maxRating.Int32), err
+}
+
+func (m UserModel) UpdateLastOnline(id int) error {
+	err := m.DB.QueryRow("UPDATE users SET last_online = now() WHERE id = $1", id).Err()
+	return err
 }
 
 func (m UserModel) Count() (int, error) {
