@@ -33,11 +33,64 @@ type MockUser struct {
 	} `json:"picture"`
 }
 
+var interests = []string{
+	"reading",
+	"cooking",
+	"gardening",
+	"sports",
+	"hiking",
+	"photography",
+	"painting",
+	"drawing",
+	"music",
+	"dancing",
+	"traveling",
+	"collecting",
+	"yoga",
+	"meditation",
+	"fishing",
+	"crafting",
+	"volunteering",
+	"gaming",
+	"cycling",
+	"bird_watching",
+	"technology",
+	"fashion",
+	"writing",
+	"diy",
+	"home_improvement",
+	"movies",
+	"tv_shows",
+	"pets",
+	"sewing",
+	"astrology",
+	"fitness",
+	"science",
+	"foodie",
+	"motorcycling",
+	"graphic_novels",
+	"reading_comics",
+	"sculpting",
+	"skydiving",
+	"extreme_sports",
+	"board games",
+	"investing",
+	"finance",
+	"antique_restoration",
+	"magic",
+	"illusions",
+	"astronomy",
+	"language_learning",
+	"martial_arts",
+}
+
+var interestsN = 5
+
 type RandomUserResponse struct {
 	Results []MockUser `json:"results"`
 }
 
-func GenerateUser(users *models.UserModel) (*MockUser, error) {
+func generateUser(users *models.UserModel) (*MockUser, error) {
 	var data RandomUserResponse
 	res, err := http.Get("https://randomuser.me/api/")
 	if err != nil {
@@ -51,13 +104,28 @@ func GenerateUser(users *models.UserModel) (*MockUser, error) {
 	return &data.Results[0], err
 }
 
+func generateInterests() []string {
+	checker := make(map[int]string)
+	selected := make([]string, 0, interestsN)
+	for len(selected) < interestsN {
+		i := rand.Intn(len(interests))
+		if _, exists := checker[i]; !exists {
+			selected = append(selected, interests[i])
+			checker[i] = interests[i]
+		}
+	}
+	return selected
+
+}
+
 func GenerateUsers(
 	users *models.UserModel,
 	photos *models.PhotoModel,
+	tags *models.TagModel,
 	n int,
 ) error {
 	for i := 0; i < n; i++ {
-		mockUser, err := GenerateUser(users)
+		mockUser, err := generateUser(users)
 		if err != nil {
 			return err
 		}
@@ -95,6 +163,10 @@ func GenerateUsers(
 			return err
 		}
 		_, err = photos.Create(user.Id, fmt.Sprintf("/mock/%s/%v.jpg", user.Gender, rand.Intn(111)+1))
+		if err != nil {
+			return err
+		}
+		_, err = tags.Set(user.Id, generateInterests())
 		if err != nil {
 			return err
 		}
