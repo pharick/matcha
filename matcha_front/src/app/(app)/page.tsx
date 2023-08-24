@@ -26,7 +26,7 @@ const SearchPage: NextPage<SearchPageProps> = async ({ searchParams }) => {
     ageFrom: parseIntSearchParam(searchParams.ageFrom) ?? 18,
     ageTo: parseIntSearchParam(searchParams.ageTo) ?? 100,
     minFame: parseIntSearchParam(searchParams.minFame) ?? 0,
-    maxDistance: parseIntSearchParam(searchParams.maxDistance) ?? 5,
+    maxDistance: parseIntSearchParam(searchParams.maxDistance) ?? 5000,
     tags: !searchParams.tag
       ? currentUser.tags
       : typeof searchParams.tag == 'string'

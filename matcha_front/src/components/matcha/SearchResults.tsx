@@ -1,11 +1,10 @@
 'use client';
 
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import Image, { StaticImageData } from 'next/image';
 
 import UserCard from '@/components/UserCard';
 import { search } from '@/api/search';
-import Button from '../Button';
 import SadCup from '@/images/sad_cup.svg';
 
 const SearchResultsLoading: FC = () => (
@@ -19,45 +18,60 @@ interface SearchResultsProps {
   searchParams: SearchParams;
 }
 
-const BATCH_SIZE = 8;
+const BATCH_SIZE = 2;
 const startTime = new Date();
 
 const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const [batchN, setBatchN] = useState(0);
+  const [total, setTotal] = useState(1);
+  const endMarker = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
-    const load = async () => {
-      setUsers([]);
+    setUsers([]);
+    setBatchN(0);
+  }, [searchParams]);
+
+  useEffect(() => {
+    const loadMore = async () => {
       setLoading(true);
       const res = await search(
         searchParams,
-        0,
+        batchN * BATCH_SIZE,
         BATCH_SIZE,
         startTime.toISOString()
       );
-      setUsers(res);
-      setLoading(false);
+      setUsers((users) => [...users, ...res.list]);
       setBatchN((n) => n + 1);
+      setTotal(res.total);
+      setLoading(false);
     };
-    void load();
-  }, [searchParams]);
 
-  const loadMore = async () => {
-    setLoading(true);
-    const res = await search(
-      searchParams,
-      batchN * BATCH_SIZE,
-      BATCH_SIZE,
-      startTime.toISOString()
+    const observer = new IntersectionObserver(
+      (entries) => {
+        console.log(total, batchN);
+        if (
+          entries[0].isIntersecting &&
+          (users.length < total || batchN == 0) &&
+          !loading
+        )
+          void loadMore();
+      },
+      { threshold: 1 }
     );
-    setUsers((users) => [...users, ...res]);
-    setLoading(false);
-    setBatchN((n) => n + 1);
-  };
 
-  if (!loading && users.length <= 0)
+    if (endMarker.current) {
+      const ref = endMarker.current;
+      observer.observe(endMarker.current);
+
+      return () => {
+        observer.unobserve(ref);
+      };
+    }
+  }, [searchParams, endMarker, batchN, loading, total, users.length]);
+
+  if (!loading && users.length <= 0 && batchN > 0)
     return (
       <>
         <Image
@@ -80,9 +94,9 @@ const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
           ))}
           {loading && <SearchResultsLoading />}
         </ul>
-        <Button className="mx-auto" onClick={() => void loadMore()}>
-          Load more
-        </Button>
+        <p ref={endMarker} className="text-center">
+          {users.length >= total && 'No more matches'}
+        </p>
       </>
     );
 };

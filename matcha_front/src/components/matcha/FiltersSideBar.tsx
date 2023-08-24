@@ -123,7 +123,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
           <GrClose color="#403539" className="ml-2" />
         )}
       </button>
-      <div className={`p-4 text-center ${hidden && 'hidden'} lg:block`}>
+      <div className={`p-4 ${hidden && 'hidden'} lg:block`}>
         <Formik
           initialValues={initialValues}
           onSubmit={handleSearch}
@@ -172,7 +172,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
               />
 
               <label className="mb-4 block border-b-2 border-brown pb-1 font-bold">
-                Maximum Distance ({values.maxDistance} km)
+                Maximum Distance — {values.maxDistance}km
               </label>
               <ReactSlider
                 className="mb-4 flex h-[10px] w-full items-center"
@@ -180,7 +180,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
                 renderThumb={getThumb(false)}
                 defaultValue={[values.maxDistance]}
                 min={1}
-                max={5000}
+                max={10000}
                 ariaLabel={['Lower thumb', 'Upper thumb']}
                 ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
                 pearling={true}

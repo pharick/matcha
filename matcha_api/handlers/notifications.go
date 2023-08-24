@@ -28,7 +28,6 @@ func ServeNotificationsWs(env *Env, w http.ResponseWriter, r *http.Request) {
 		lib.HttpJsonError(w, map[string]string{}, 401)
 		return
 	}
-
 	conn, err := sockets.Upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
@@ -41,7 +40,7 @@ func ServeNotificationsWs(env *Env, w http.ResponseWriter, r *http.Request) {
 		UserId: user.Id,
 	}
 	client.Hub.Register <- client
-
+	env.Users.UpdateLastOnline(user.Id)
 	go client.WritePump()
 	go client.ReadPump()
 }

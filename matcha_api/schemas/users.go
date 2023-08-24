@@ -17,10 +17,13 @@ type UserReturn struct {
 	Avatar            string   `json:"avatar"`
 	Rating            float64  `json:"rating"`
 	Distance          float64  `json:"distance"`
+	Online            bool     `json:"online"`
+	LastOnline        string   `json:"last_online"`
 }
 
-type UsersReturn struct {
-	List []UserReturn `json:"list"`
+type SearchReturn struct {
+	List  []UserReturn `json:"list"`
+	Total int          `json:"total"`
 }
 
 type UpdateUserData struct {

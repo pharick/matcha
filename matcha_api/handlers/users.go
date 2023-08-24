@@ -18,6 +18,17 @@ func UserSearch(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
+	count, err := env.Users.SearchTotal(
+		currentUser,
+		d.AgeFrom,
+		d.AgeTo,
+		d.MinFame,
+		d.MaxDistance,
+		d.StartTime,
+	)
+	if err != nil {
+		return nil, err
+	}
 	users, err := env.Users.Search(
 		currentUser,
 		d.AgeFrom,
@@ -58,8 +69,9 @@ func UserSearch(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 			Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
 		})
 	}
-	ret := schemas.UsersReturn{
-		List: usersRet,
+	ret := schemas.SearchReturn{
+		List:  usersRet,
+		Total: count,
 	}
 	return ret, nil
 }
@@ -111,6 +123,8 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Avatar:            avatar_url,
 		Rating:            lib.NormalizeRating(&env.Users, user.Rating),
 		Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
+		Online:            env.NotificationsHub.IsUserOnline(user.Id),
+		LastOnline:        user.LastOnline,
 	}
 	return ret, nil
 }

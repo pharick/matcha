@@ -1,3 +1,4 @@
+import { findTags } from '@/api/tags';
 import {
   ChangeEventHandler,
   FC,
@@ -26,29 +27,10 @@ const TagsField: FC<TagsFieldProps> = ({
     null
   );
 
-  const findTags = async (v: string) => {
-    if (v.length <= 0) {
-      setSuggestions([]);
-      return;
-    }
-    const resp = await fetch(
-      `${process.env.NEXT_PUBLIC_FRONT_BASE_URL}/api/tags/find/`,
-      {
-        method: 'POST',
-        body: JSON.stringify({ value: v }),
-        cache: 'no-cache',
-      }
-    );
-    if (resp.ok) {
-      const data = (await resp.json()) as { list: string[] };
-      setSuggestions(data.list.filter((tag) => !value.includes(tag)));
-    }
-  };
-
   const handleAdd = () => {
-    const trimed = fieldVal.trim();
-    if (trimed.length <= 0) return;
-    onChange([...value, fieldVal.trim()]);
+    const trimmed = fieldVal.trim().toLowerCase();
+    if (trimmed.length <= 0 || value.includes(trimmed)) return;
+    onChange([...value, trimmed]);
     setFieldVal('');
     setSuggestions([]);
     setCurrentSuggestion(null);
@@ -73,10 +55,15 @@ const TagsField: FC<TagsFieldProps> = ({
     }
   };
 
+  const updateSuggest = async (v: string) => {
+    const suggest = await findTags(v);
+    setSuggestions(suggest.filter((tag) => !value.includes(tag)));
+  };
+
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setCurrentSuggestion(null);
     setFieldVal(e.target.value);
-    void findTags(e.target.value);
+    void updateSuggest(e.target.value);
   };
 
   useEffect(() => {

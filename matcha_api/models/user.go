@@ -27,6 +27,7 @@ type User struct {
 	Biography         string
 	Rating            int
 	LastPosition      Position
+	LastOnline        string
 }
 
 type UserModel struct {
@@ -35,7 +36,15 @@ type UserModel struct {
 
 var fields = `
 	users.id, username, email, active, password_hash, first_name, last_name, birth_date,
-	gender, gender_preferences::text[], biography, rating, last_position[0], last_position[1]
+	gender, gender_preferences::text[], biography, rating, last_position[0], last_position[1], last_online
+`
+
+var searchQuery = `
+	id <> $1 AND updated_at < $2 AND
+	$3 = ANY(gender_preferences) AND gender = ANY($4) AND
+	date_part('year', age(birth_date)) >= $5 AND date_part('year', age(birth_date)) <= $6 AND
+	rating >= $7 * (SELECT MAX(rating) FROM users) / 5.0 AND
+	calc_distance(last_position, ('(' || $8 || ',' || $9 || ')')::point) <= $10 * 1000
 `
 
 func scanRow(row interface{ Scan(...any) error }, user *User) error {
@@ -57,6 +66,7 @@ func scanRow(row interface{ Scan(...any) error }, user *User) error {
 		&rating,
 		&user.LastPosition.Longitude,
 		&user.LastPosition.Latitude,
+		&user.LastOnline,
 	)
 	if err != nil {
 		return err
@@ -137,6 +147,31 @@ func (m UserModel) Update(
 	return user, err
 }
 
+func (m UserModel) SearchTotal(
+	currentUser User,
+	ageFrom int,
+	ageTo int,
+	minRating int,
+	maxDistance int,
+	startTime string,
+) (int, error) {
+	var count int
+	err := m.DB.QueryRow(
+		fmt.Sprintf("SELECT COUNT(1) FROM users WHERE %s", searchQuery),
+		currentUser.Id,
+		startTime,
+		currentUser.Gender,
+		pq.Array(currentUser.GenderPreferences),
+		ageFrom,
+		ageTo,
+		minRating,
+		currentUser.LastPosition.Longitude,
+		currentUser.LastPosition.Latitude,
+		maxDistance,
+	).Scan(&count)
+	return count, err
+}
+
 func (m UserModel) Search(
 	currentUser User,
 	ageFrom int,
@@ -157,20 +192,17 @@ func (m UserModel) Search(
 	} else if sortField == "fame_rating" {
 		sortQuery = fmt.Sprintf("rating %s", sortType)
 	} else {
-		sortQuery = fmt.Sprintf("calc_distance(last_position, ('(' || $7 || ',' || $8 || ')')::point) %s", sortType)
+		sortQuery = fmt.Sprintf("calc_distance(last_position, ('(' || $8 || ',' || $9 || ')')::point) %s", sortType)
 	}
 	var user User
 	rows, err := m.DB.Query(
 		fmt.Sprintf(`
 			SELECT %s FROM users
-			WHERE id <> $1 AND updated_at < $12 AND
-			$2 = ANY(gender_preferences) AND gender = ANY($3) AND
-			date_part('year', age(birth_date)) >= $4 AND date_part('year', age(birth_date)) <= $5 AND
-			rating >= $6 * (SELECT MAX(rating) FROM users) / 5.0 AND
-			calc_distance(last_position, ('(' || $7 || ',' || $8 || ')')::point) <= $9 * 1000
-			ORDER BY %s OFFSET $10 LIMIT $11
-		`, fields, sortQuery),
+			WHERE %s
+			ORDER BY %s OFFSET $11 LIMIT $12
+		`, fields, searchQuery, sortQuery),
 		currentUser.Id,
+		startTime,
 		currentUser.Gender,
 		pq.Array(currentUser.GenderPreferences),
 		ageFrom,
@@ -181,7 +213,6 @@ func (m UserModel) Search(
 		maxDistance,
 		offset,
 		limit,
-		startTime,
 	)
 	if err != nil {
 		return nil, err
@@ -255,6 +286,11 @@ func (m UserModel) GetMaxRating() (int, error) {
 	var maxRating sql.NullInt32
 	err := m.DB.QueryRow("SELECT MAX(rating) FROM users").Scan(&maxRating)
 	return int(maxRating.Int32), err
+}
+
+func (m UserModel) UpdateLastOnline(id int) error {
+	err := m.DB.QueryRow("UPDATE users SET last_online = now() WHERE id = $1", id).Err()
+	return err
 }
 
 func (m UserModel) Count() (int, error) {

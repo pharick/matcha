@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
         last_position POINT NOT NULL DEFAULT '(0,0)',
         biography TEXT,
         rating INTEGER NOT NULL DEFAULT 0,
+        last_online TIMESTAMP NOT NULL DEFAULT now(),
         updated_at TIMESTAMP NOT NULL DEFAULT now()
 );
 

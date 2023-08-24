@@ -27,6 +27,11 @@ func NewHub() *Hub {
 	}
 }
 
+func (h *Hub) IsUserOnline(id int) bool {
+	_, ok := h.Users[id]
+	return ok
+}
+
 func (h *Hub) Run() {
 	for {
 		select {
