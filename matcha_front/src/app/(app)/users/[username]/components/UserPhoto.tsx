@@ -6,6 +6,7 @@ import { BiRightArrowAlt, BiLeftArrowAlt } from 'react-icons/bi';
 
 import DefaultProfilePicture from '@/images/default_profile_picture.svg';
 import UserInfo from '../../../../../components/UserInfo';
+import Rozetka from '@/images/rozetka.svg';
 
 interface UserProfileProps {
   user: User;
@@ -14,6 +15,7 @@ interface UserProfileProps {
 
 const UserPhoto: FC<UserProfileProps> = ({ user, photos }) => {
   const [photoId, setPhotoId] = useState<number>(0);
+  console.log(user.match);
 
   return (
     <div className="relative h-full w-full overflow-hidden rounded-lg border-2 border-brown bg-brown">
@@ -51,6 +53,15 @@ const UserPhoto: FC<UserProfileProps> = ({ user, photos }) => {
             <BiRightArrowAlt size={20} />
           </div>
         </button>
+      )}
+
+      {user.match && (
+        <Image
+          src={Rozetka as StaticImageData}
+          alt="match"
+          width={100}
+          className="m-5 bg-white z-50"
+        />
       )}
 
       <div className="absolute bottom-0 left-0 right-0 top-0 z-30 flex flex-col justify-end rounded-b-lg p-3 shadow-[inset_0_-200px_80px_-100px_rgba(255,255,255,0.6)]">

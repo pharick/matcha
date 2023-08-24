@@ -7,7 +7,7 @@ import Image, { StaticImageData } from 'next/image';
 import UserPhoto from './UserPhoto';
 import ProfileVisitor from './ProfileVisitor';
 import { setLike, unsetLike } from '@/api/profile';
-import Match from '@/images/Match.svg';
+import Rozetka from '@/images/rozetka.svg';
 
 interface UserProfileProps {
   user: User;
@@ -41,14 +41,14 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
             </Link>
           ) : (
             <>
-              {user.match && (
+              {/* {user.match && (
                 <Image
-                  src={Match as StaticImageData}
+                  src={Rozetka as StaticImageData}
                   alt="match"
-                  width={80}
+                  width={100}
                   className="m-5"
                 />
-              )}
+              )} */}
               {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
               <form action={handleLike}>
                 <button
