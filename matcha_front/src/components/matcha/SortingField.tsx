@@ -33,7 +33,7 @@ const SortingField: FC<SortingFieldProps> = ({
 
   return (
     <div className={`${className}`}>
-      <ul className="flex flex-wrap">
+      <ul className="flex flex-wrap gap-y-1">
         {fields.map((f) => (
           <li key={f} className="mr-1">
             <button
@@ -63,12 +63,5 @@ const SortingField: FC<SortingFieldProps> = ({
     </div>
   );
 };
-
-{
-  /* <div className="mb-3 flex border-b border-brown pb-1">
-  <h2 className="mr-1 font-bold">Sorting:</h2>
-  
-</div>; */
-}
 
 export default SortingField;

@@ -178,6 +178,7 @@ func (m UserModel) Search(
 	ageTo int,
 	minRating int,
 	maxDistance int,
+	tags []string,
 	sortField string,
 	sortType string,
 	offset int,
@@ -191,29 +192,56 @@ func (m UserModel) Search(
 		sortQuery = "birth_date ASC"
 	} else if sortField == "fame_rating" {
 		sortQuery = fmt.Sprintf("rating %s", sortType)
+	} else if sortField == "specific_interests" {
+		sortQuery = fmt.Sprintf("coalesce(array_length(array_intersect($13, ARRAY(SELECT tags.name FROM users_tags JOIN tags ON users_tags.tag_id = tags.id WHERE users_tags.user_id = users.id)), 1), 0) %s", sortType)
 	} else {
 		sortQuery = fmt.Sprintf("calc_distance(last_position, ('(' || $8 || ',' || $9 || ')')::point) %s", sortType)
 	}
 	var user User
-	rows, err := m.DB.Query(
-		fmt.Sprintf(`
-			SELECT %s FROM users
-			WHERE %s
-			ORDER BY %s OFFSET $11 LIMIT $12
-		`, fields, searchQuery, sortQuery),
-		currentUser.Id,
-		startTime,
-		currentUser.Gender,
-		pq.Array(currentUser.GenderPreferences),
-		ageFrom,
-		ageTo,
-		minRating,
-		currentUser.LastPosition.Longitude,
-		currentUser.LastPosition.Latitude,
-		maxDistance,
-		offset,
-		limit,
-	)
+	var rows *sql.Rows
+	var err error
+	if sortField == "specific_interests" {
+		rows, err = m.DB.Query(
+			fmt.Sprintf(`
+				SELECT %s FROM users
+				WHERE %s
+				ORDER BY %s, id OFFSET $11 LIMIT $12
+			`, fields, searchQuery, sortQuery),
+			currentUser.Id,
+			startTime,
+			currentUser.Gender,
+			pq.Array(currentUser.GenderPreferences),
+			ageFrom,
+			ageTo,
+			minRating,
+			currentUser.LastPosition.Longitude,
+			currentUser.LastPosition.Latitude,
+			maxDistance,
+			offset,
+			limit,
+			pq.Array(tags),
+		)
+	} else {
+		rows, err = m.DB.Query(
+			fmt.Sprintf(`
+				SELECT %s FROM users
+				WHERE %s
+				ORDER BY %s, id OFFSET $11 LIMIT $12
+			`, fields, searchQuery, sortQuery),
+			currentUser.Id,
+			startTime,
+			currentUser.Gender,
+			pq.Array(currentUser.GenderPreferences),
+			ageFrom,
+			ageTo,
+			minRating,
+			currentUser.LastPosition.Longitude,
+			currentUser.LastPosition.Latitude,
+			maxDistance,
+			offset,
+			limit,
+		)
+	}
 	if err != nil {
 		return nil, err
 	}

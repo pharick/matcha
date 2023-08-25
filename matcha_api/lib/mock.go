@@ -73,7 +73,7 @@ var interests = []string{
 	"sculpting",
 	"skydiving",
 	"extreme_sports",
-	"board games",
+	"board_games",
 	"investing",
 	"finance",
 	"antique_restoration",

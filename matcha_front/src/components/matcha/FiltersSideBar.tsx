@@ -27,7 +27,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
   const router = useRouter();
   const [hidden, setHidden] = useState(true);
 
-  const sortFields = ['distance', 'age', 'fame_rating'];
+  const sortFields = ['distance', 'age', 'fame_rating', 'specific_interests'];
 
   const initialValues: FiltersValues = {
     ageRange: [searchParams.ageFrom, searchParams.ageTo],
@@ -191,16 +191,6 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
               />
 
               <label className="mb-2 block border-b-2 border-brown pb-1 font-bold">
-                Interests
-              </label>
-              <Field
-                as={TagsField}
-                name="tags"
-                className="mb-2"
-                onChange={(value: string[]) => setFieldValue('tags', value)}
-              />
-
-              <label className="mb-2 block border-b-2 border-brown pb-1 font-bold">
                 Sort by
               </label>
               <SortingField
@@ -209,6 +199,20 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
                 onChange={(v) => void setFieldValue('sort', v)}
                 className="mb-4"
               />
+
+              {values.sort.field == 'specific_interests' && (
+                <>
+                  <label className="mb-2 block border-b-2 border-brown pb-1 font-bold">
+                    Interests
+                  </label>
+                  <Field
+                    as={TagsField}
+                    name="tags"
+                    className="mb-2"
+                    onChange={(value: string[]) => setFieldValue('tags', value)}
+                  />
+                </>
+              )}
 
               <Button type="submit" className="mx-auto">
                 Search
