@@ -42,9 +42,9 @@ const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
         BATCH_SIZE,
         startTime.toISOString()
       );
-      setUsers((users) => [...users, ...res.list]);
+      setUsers((users) => [...users, ...(res.list as User[])]);
       setBatchN((n) => n + 1);
-      setTotal(res.total);
+      setTotal(res.total as number);
       setLoading(false);
     };
 

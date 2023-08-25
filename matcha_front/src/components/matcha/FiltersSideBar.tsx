@@ -8,7 +8,7 @@ import { FiFilter } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
 
 import TagsField from '../TagsField';
-import Button from '../Button';
+// import Button from '../Button';
 import SortingField, { SortType } from './SortingField';
 
 interface FiltersValues {
@@ -97,6 +97,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
     tags,
     sort,
   }: FiltersValues) => {
+    console.log('search');
     const params = new URLSearchParams({
       ageFrom: ageRange[0].toString(),
       ageTo: ageRange[1].toString(),
@@ -128,7 +129,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
           initialValues={initialValues}
           onSubmit={handleSearch}
           validateOnBlur={false}
-          validateOnChange={false}
+          validateOnChange={true}
           enableReinitialize={true}
         >
           {({ setFieldValue, values }) => (
@@ -147,8 +148,11 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
                 ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
                 pearling={true}
                 minDistance={0}
-                onAfterChange={(valueNow) =>
+                onChange={(valueNow) =>
                   void setFieldValue('ageRange', valueNow)
+                }
+                onAfterChange={(valueNow) =>
+                  handleSearch({ ...values, ageRange: valueNow })
                 }
               />
 
@@ -166,8 +170,12 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
                 ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
                 pearling={true}
                 minDistance={0}
+                onChange={(valueNow) => void setFieldValue('minFame', valueNow)}
                 onAfterChange={(valueNow) =>
-                  void setFieldValue('minFame', valueNow)
+                  handleSearch({
+                    ...values,
+                    minFame: valueNow as unknown as number,
+                  })
                 }
               />
 
@@ -188,6 +196,12 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
                 onChange={(valueNow) =>
                   void setFieldValue('maxDistance', valueNow)
                 }
+                onAfterChange={(valueNow) =>
+                  handleSearch({
+                    ...values,
+                    maxDistance: valueNow as unknown as number,
+                  })
+                }
               />
 
               <label className="mb-2 block border-b-2 border-brown pb-1 font-bold">
@@ -196,7 +210,10 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
               <SortingField
                 value={values.sort}
                 fields={sortFields}
-                onChange={(v) => void setFieldValue('sort', v)}
+                onChange={(v) => {
+                  void setFieldValue('sort', v);
+                  handleSearch({ ...values, sort: v });
+                }}
                 className="mb-4"
               />
 
@@ -209,14 +226,20 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
                     as={TagsField}
                     name="tags"
                     className="mb-2"
-                    onChange={(value: string[]) => setFieldValue('tags', value)}
+                    onChange={(value: string[]) => {
+                      void setFieldValue('tags', value);
+                      handleSearch({
+                        ...values,
+                        tags: value,
+                      });
+                    }}
                   />
                 </>
               )}
 
-              <Button type="submit" className="mx-auto">
+              {/* <Button type="submit" className="mx-auto">
                 Search
-              </Button>
+              </Button> */}
             </Form>
           )}
         </Formik>

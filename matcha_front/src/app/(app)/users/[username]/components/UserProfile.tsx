@@ -2,12 +2,12 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { BiLike, BiSolidLike } from 'react-icons/bi';
 import { FaUserEdit } from 'react-icons/fa';
-import Image, { StaticImageData } from 'next/image';
+// import Image, { StaticImageData } from 'next/image';
 
 import UserPhoto from './UserPhoto';
 import ProfileVisitor from './ProfileVisitor';
 import { setLike, unsetLike } from '@/api/profile';
-import Rozetka from '@/images/rozetka.svg';
+// import Rosetka from '@/images/rozetka.svg';
 
 interface UserProfileProps {
   user: User;
@@ -43,7 +43,7 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
             <>
               {/* {user.match && (
                 <Image
-                  src={Rozetka as StaticImageData}
+                  src={Rosetka as StaticImageData}
                   alt="match"
                   width={100}
                   className="m-5"

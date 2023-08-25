@@ -31,7 +31,7 @@ const UserCard: FC<UserCardProps> = ({ user, avatar }) => {
 
       <Link
         href={`/users/${user.username}`}
-        className="absolute top-0 z-40 flex h-full w-full items-center justify-center rounded-lg text-[0px] font-bold transition transition-[font-size] group-hover:bg-white/30 group-hover:text-lg"
+        className="absolute top-0 z-40 flex h-full w-full flex-wrap items-center justify-center rounded-lg text-[0px] font-bold transition transition-[font-size] group-hover:bg-white/30 group-hover:text-lg"
       >
         See more
       </Link>

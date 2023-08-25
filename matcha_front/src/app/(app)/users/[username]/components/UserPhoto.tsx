@@ -6,7 +6,7 @@ import { BiRightArrowAlt, BiLeftArrowAlt } from 'react-icons/bi';
 
 import DefaultProfilePicture from '@/images/default_profile_picture.svg';
 import UserInfo from '../../../../../components/UserInfo';
-import Rozetka from '@/images/rozetka.svg';
+import Rosetka from '@/images/rozetka.svg';
 
 interface UserProfileProps {
   user: User;
@@ -18,7 +18,7 @@ const UserPhoto: FC<UserProfileProps> = ({ user, photos }) => {
   console.log(user.match);
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-lg border-2 border-brown bg-brown">
+    <div className="relative h-full w-full rounded-lg border-2 border-brown bg-brown">
       {photoId > 0 && (
         <button
           className="group absolute left-0 top-0 z-40 block h-full px-1 hover:bg-green-5/50"
@@ -29,7 +29,7 @@ const UserPhoto: FC<UserProfileProps> = ({ user, photos }) => {
           </div>
         </button>
       )}
-      <figure className="relative z-20 h-full overflow-hidden">
+      <figure className="relative z-20 h-full overflow-hidden rounded-lg">
         <Image
           src={
             photos[photoId] && photos[photoId].url.startsWith('http')
@@ -57,10 +57,10 @@ const UserPhoto: FC<UserProfileProps> = ({ user, photos }) => {
 
       {user.match && (
         <Image
-          src={Rozetka as StaticImageData}
+          src={Rosetka as StaticImageData}
           alt="match"
           width={100}
-          className="m-5 bg-white z-50"
+          className="absolute right-1 top-1 z-50"
         />
       )}
 
