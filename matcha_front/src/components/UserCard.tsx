@@ -7,39 +7,46 @@ import Link from 'next/link';
 
 interface UserCardProps {
   user: User;
-  avatar: string;
+  searchTags: string[];
 }
 
-const UserCard: FC<UserCardProps> = ({ user, avatar }) => {
+const UserCard: FC<UserCardProps> = ({ user, searchTags }) => {
   return (
-    <div className="group relative h-full w-full cursor-pointer overflow-hidden rounded-lg border-2 border-brown bg-brown transition hover:shadow-lg">
-      <figure className="relative z-20 h-full overflow-hidden">
-        <Image
-          src={
-            avatar && avatar.startsWith('http')
-              ? avatar
-              : avatar
-              ? `${process.env.NEXT_PUBLIC_BACK_BASE_URL}${avatar}`
-              : (DefaultProfilePicture as StaticImageData)
-          }
-          fill={true}
-          className="object-cover"
-          sizes="500px"
-          alt="photo"
-        />
-      </figure>
+    <Link href={`/users/${user.username}`}>
+      <article className="group relative h-full w-full overflow-hidden rounded-lg border-2 border-brown bg-brown transition hover:shadow-lg">
+        <figure className="relative z-20 h-full overflow-hidden">
+          <Image
+            src={
+              user.avatar && user.avatar.startsWith('http')
+                ? user.avatar
+                : user.avatar
+                ? `${process.env.NEXT_PUBLIC_BACK_BASE_URL}${user.avatar}`
+                : (DefaultProfilePicture as StaticImageData)
+            }
+            fill={true}
+            className="object-cover"
+            sizes="500px"
+            alt="photo"
+          />
+        </figure>
 
-      <Link
-        href={`/users/${user.username}`}
-        className="absolute top-0 z-40 flex h-full w-full flex-wrap items-center justify-center rounded-lg text-[0px] font-bold transition transition-[font-size] group-hover:bg-white/30 group-hover:text-lg"
-      >
-        See more
-      </Link>
+        <div className="absolute -bottom-0 left-0 right-0 top-0 z-30 flex flex-col justify-end rounded-b-lg p-3 shadow-[inset_0_-250px_80px_-100px_rgba(255,255,255,0.6)]">
+          <UserInfo user={user} />
 
-      <div className="absolute bottom-0 left-0 right-0 top-0 z-30 flex flex-col justify-end rounded-b-lg p-3 shadow-[inset_0_-200px_80px_-100px_rgba(255,255,255,0.6)]">
-        <UserInfo user={user} />
-      </div>
-    </div>
+          {user.tags.filter((tag) => searchTags.includes(tag)).length > 0 && (
+            <ul className="mt-1 hidden flex-wrap justify-end gap-1 group-hover:flex">
+              {user.tags
+                .filter((tag) => searchTags.includes(tag))
+                .map((tag, i) => (
+                  <li key={i} className="rounded-lg bg-green-2 px-2 text-white">
+                    {tag}
+                  </li>
+                ))}
+            </ul>
+          )}
+        </div>
+      </article>
+    </Link>
   );
 };
 

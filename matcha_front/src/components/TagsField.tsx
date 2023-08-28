@@ -89,11 +89,11 @@ const TagsField: FC<TagsFieldProps> = ({
       } items-center rounded-[20px] bg-transparent bg-gradient-radial from-green-1/70 to-neutral/30`}
     >
       {value.length > 0 && (
-        <ul className="mb-2 flex flex-wrap">
+        <ul className="flex flex-wrap gap-1 p-2">
           {value.map((val, i) => (
             <li
               key={i}
-              className="ml-2 mt-2 flex items-center rounded bg-brown px-1 py-0.5 text-white"
+              className="flex items-center rounded bg-brown px-1 py-0.5 text-white"
             >
               {val}
               <button

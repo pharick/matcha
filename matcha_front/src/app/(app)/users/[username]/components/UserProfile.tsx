@@ -2,12 +2,10 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { BiLike, BiSolidLike } from 'react-icons/bi';
 import { FaUserEdit } from 'react-icons/fa';
-// import Image, { StaticImageData } from 'next/image';
 
 import UserPhoto from './UserPhoto';
 import ProfileVisitor from './ProfileVisitor';
 import { setLike, unsetLike } from '@/api/profile';
-// import Rosetka from '@/images/rozetka.svg';
 
 interface UserProfileProps {
   user: User;
@@ -41,14 +39,6 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
             </Link>
           ) : (
             <>
-              {/* {user.match && (
-                <Image
-                  src={Rosetka as StaticImageData}
-                  alt="match"
-                  width={100}
-                  className="m-5"
-                />
-              )} */}
               {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
               <form action={handleLike}>
                 <button

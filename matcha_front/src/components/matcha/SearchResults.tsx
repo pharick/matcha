@@ -91,7 +91,7 @@ const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
           <ul className="mb-3 grid grid-cols-[repeat(auto-fill,_450px)] justify-center gap-2">
             {users.map((user, index) => (
               <li className="h-[450px]" key={index}>
-                <UserCard user={user} avatar={user.avatar} />
+                <UserCard user={user} searchTags={searchParams.tags} />
               </li>
             ))}
             {loading && <SearchResultsLoading />}

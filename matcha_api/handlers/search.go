@@ -52,6 +52,10 @@ func Search(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		if err != sql.ErrNoRows {
 			avatar_url = avatar.Url
 		}
+		tags, err := env.Tags.GetAllByUserId(user.Id)
+		if err != nil && err != sql.ErrNoRows {
+			return nil, err
+		}
 		usersRet = append(usersRet, schemas.UserReturn{
 			Id:                user.Id,
 			Username:          user.Username,
@@ -65,6 +69,7 @@ func Search(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 			Avatar:            avatar_url,
 			Rating:            lib.NormalizeRating(&env.Users, user.Rating),
 			Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
+			Tags:              tags,
 		})
 	}
 	ret := schemas.SearchReturn{
