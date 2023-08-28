@@ -97,7 +97,6 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
     tags,
     sort,
   }: FiltersValues) => {
-    console.log('search');
     const params = new URLSearchParams({
       ageFrom: ageRange[0].toString(),
       ageTo: ageRange[1].toString(),

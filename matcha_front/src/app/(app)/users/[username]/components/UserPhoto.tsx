@@ -15,7 +15,6 @@ interface UserProfileProps {
 
 const UserPhoto: FC<UserProfileProps> = ({ user, photos }) => {
   const [photoId, setPhotoId] = useState<number>(0);
-  console.log(user.match);
 
   return (
     <div className="relative h-full w-full rounded-lg border-2 border-brown bg-brown">

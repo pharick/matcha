@@ -40,7 +40,6 @@ export async function search(
   );
   if (res.status == 403) redirect('/profile');
   if (!res.ok) {
-    console.log(await res.json());
     return { list: [], total: 0 };
   }
   return (await res.json()) as { list: User[]; total: number };

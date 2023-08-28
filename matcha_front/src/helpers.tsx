@@ -43,6 +43,5 @@ export function getRandomMatchPhrase(username: string) {
     `Bingo! You and ${username} have matched up. Start chatting now!`,
   ];
   const number = Math.floor(Math.random() * 9);
-  console.log(number);
   return phrases[number];
 }
