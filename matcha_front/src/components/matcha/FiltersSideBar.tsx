@@ -106,7 +106,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
       sortField: sort.field,
       sortType: sort.type,
     });
-    router.push(
+    router.replace(
       `/?${params.toString()}${tags.map((t) => `&tag=${t}`).join('')}`
     );
   };

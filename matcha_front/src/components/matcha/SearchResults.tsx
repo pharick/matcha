@@ -24,13 +24,15 @@ const startTime = new Date();
 const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
-  const [batchN, setBatchN] = useState(0);
-  const [total, setTotal] = useState(1);
   const endMarker = useRef<HTMLParagraphElement>(null);
 
+  const batchN = useRef(0);
+  const total = useRef(1);
+
   useEffect(() => {
+    batchN.current = 0;
+    total.current = 1;
     setUsers([]);
-    setBatchN(0);
   }, [searchParams]);
 
   useEffect(() => {
@@ -38,27 +40,28 @@ const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
       setLoading(true);
       const res = await search(
         searchParams,
-        batchN * BATCH_SIZE,
+        batchN.current * BATCH_SIZE,
         BATCH_SIZE,
         startTime.toISOString()
       );
       setUsers((users) => [...users, ...res.list]);
-      setBatchN((n) => n + 1);
-      setTotal(res.total);
+      batchN.current += 1;
+      total.current = res.total;
       setLoading(false);
     };
 
     const observer = new IntersectionObserver(
       (entries) => {
-        console.log(total, batchN);
         if (
           entries[0].isIntersecting &&
-          (users.length < total || batchN == 0) &&
+          (users.length < total.current || batchN.current == 0) &&
           !loading
         )
           void loadMore();
       },
-      { threshold: 1 }
+      {
+        threshold: 1,
+      }
     );
 
     if (endMarker.current) {
@@ -69,36 +72,39 @@ const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
         observer.unobserve(ref);
       };
     }
-  }, [searchParams, endMarker, batchN, loading, total, users.length]);
+  }, [loading, searchParams, users.length]);
 
-  if (!loading && users.length <= 0 && batchN > 0)
-    return (
-      <>
-        <Image
-          src={SadCup as StaticImageData}
-          width={400}
-          alt="Empty cup"
-          className="m-auto my-3"
-        />
-        <p className="text-center text-lg font-bold">No matches found</p>
-      </>
-    );
-  else
-    return (
-      <>
-        <ul className="mb-2 grid grid-cols-[repeat(auto-fill,_450px)] justify-center gap-2">
-          {users.map((user, index) => (
-            <li className="h-[450px]" key={index}>
-              <UserCard user={user} avatar={user.avatar} />
-            </li>
-          ))}
-          {loading && <SearchResultsLoading />}
-        </ul>
-        <p ref={endMarker} className="text-center">
-          {users.length >= total && 'No more matches'}
-        </p>
-      </>
-    );
+  return (
+    <>
+      {!loading && users.length <= 0 && batchN.current > 0 ? (
+        <>
+          <Image
+            src={SadCup as StaticImageData}
+            width={400}
+            alt="Empty cup"
+            className="m-auto my-3"
+          />
+          <p className="text-center text-lg font-bold">No matches found</p>
+        </>
+      ) : (
+        <>
+          <ul className="mb-3 grid grid-cols-[repeat(auto-fill,_450px)] justify-center gap-2">
+            {users.map((user, index) => (
+              <li className="h-[450px]" key={index}>
+                <UserCard user={user} avatar={user.avatar} />
+              </li>
+            ))}
+            {loading && <SearchResultsLoading />}
+          </ul>
+        </>
+      )}
+      <p ref={endMarker} className="text-center font-bold">
+        {users.length >= total.current &&
+          total.current > 0 &&
+          'No more matches'}
+      </p>
+    </>
+  );
 };
 
 export default SearchResults;

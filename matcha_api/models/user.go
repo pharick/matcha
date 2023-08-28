@@ -44,7 +44,8 @@ var searchQuery = `
 	$3 = ANY(gender_preferences) AND gender = ANY($4) AND
 	date_part('year', age(birth_date)) >= $5 AND date_part('year', age(birth_date)) <= $6 AND
 	rating >= $7 * (SELECT MAX(rating) FROM users) / 5.0 AND
-	calc_distance(last_position, ('(' || $8 || ',' || $9 || ')')::point) <= $10 * 1000
+	calc_distance(last_position, ('(' || $8 || ',' || $9 || ')')::point) <= $10 * 1000 AND
+	(SELECT COUNT(1) FROM likes WHERE from_user_id = $1 AND user_id = id) <= 0
 `
 
 func scanRow(row interface{ Scan(...any) error }, user *User) error {
