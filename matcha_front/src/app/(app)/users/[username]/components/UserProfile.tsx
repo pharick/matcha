@@ -80,12 +80,9 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
         </h2>
         {user?.tags.length > 0 ? (
           <div>
-            <ul className="flex flex-wrap">
+            <ul className="flex flex-wrap gap-2">
               {user?.tags.map((tag, i) => (
-                <li
-                  key={i}
-                  className="mb-5 mr-2 rounded-lg bg-green-2 px-2 text-white"
-                >
+                <li key={i} className="rounded-lg bg-green-2 px-2 text-white">
                   {tag}
                 </li>
               ))}
