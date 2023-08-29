@@ -19,6 +19,11 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
     else await unsetLike(user.username);
   };
 
+  const handleStartConversation = async () => {
+    'use server';
+    await console.log('start');
+  };
+
   return (
     <main className="mx-auto my-5 flex flex-wrap justify-center">
       <ProfileVisitor username={user.username} />
@@ -68,7 +73,7 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
         </div>
       </div>
 
-      <div className="min-w-[500px] flex-1">
+      <div className="relative min-w-[500px] flex-1">
         <h2 className="mb-5 border-b-2 border-brown pb-1 text-xl text-brown">
           Biography
         </h2>
@@ -91,7 +96,38 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
         ) : (
           'No tags available'
         )}
-        <button className="block self-end">Report</button>
+        <div className="absolute bottom-0 right-0 mb-5 flex">
+          <form action={handleStartConversation}>
+            <button
+              type="submit"
+              className={`${
+                user.liked ? 'bg-green-5 active:bg-green-5' : 'bg-green-2'
+              } flex items-center rounded-lg border-2 border-brown px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`}
+            >
+              Block User
+            </button>
+          </form>
+          <form action={handleStartConversation}>
+            <button
+              type="submit"
+              className={`${
+                user.liked ? 'bg-green-5 active:bg-green-5' : 'bg-green-2'
+              } flex items-center rounded-lg border-2 border-brown px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`}
+            >
+              Report as fake
+            </button>
+          </form>
+          <form action={handleStartConversation}>
+            <button
+              type="submit"
+              className={`${
+                user.liked ? 'bg-green-5 active:bg-green-5' : 'bg-green-2'
+              } flex items-center rounded-lg border-2 border-brown px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`}
+            >
+              Send Message
+            </button>
+          </form>
+        </div>
       </div>
     </main>
   );

@@ -80,6 +80,12 @@ type MNotification = {
   viewed: boolean;
 };
 
+type ChatMessage = {
+  to_user_id: number;
+  from_user_id: number;
+  message: string;
+};
+
 interface SearchParams {
   ageFrom: number;
   ageTo: number;
