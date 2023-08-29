@@ -17,6 +17,18 @@ interface SearchPageProps {
   };
 }
 
+export enum SortType {
+  Ascending = 'asc',
+  Descending = 'desc',
+}
+
+export const sortFields = {
+  distance: SortType.Ascending,
+  age: SortType.Ascending,
+  fame_rating: SortType.Descending,
+  specific_interests: SortType.Descending,
+};
+
 const SearchPage: NextPage<SearchPageProps> = async ({ searchParams }) => {
   const currentUser = await getCurrentUser();
   if (!currentUser) redirect('/login');
@@ -33,7 +45,13 @@ const SearchPage: NextPage<SearchPageProps> = async ({ searchParams }) => {
       ? [searchParams.tag]
       : searchParams.tag,
     sortField: searchParams.sortField ?? 'distance',
-    sortType: searchParams.sortType ?? 'asc',
+    sortType:
+      searchParams.sortType ??
+      (Object.keys(sortFields).includes(searchParams.sortField)
+        ? sortFields[
+            searchParams.sortField as keyof typeof sortFields
+          ].toString()
+        : sortFields.distance.toString()),
   };
 
   return <Matcha searchParams={params} />;

@@ -8,8 +8,8 @@ import { FiFilter } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
 
 import TagsField from '../TagsField';
-// import Button from '../Button';
-import SortingField, { SortType } from './SortingField';
+import SortingField from './SortingField';
+import { SortType, sortFields } from '@/app/(app)/page';
 
 interface FiltersValues {
   ageRange: number[];
@@ -27,15 +27,13 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
   const router = useRouter();
   const [hidden, setHidden] = useState(true);
 
-  const sortFields = ['distance', 'age', 'fame_rating', 'specific_interests'];
-
   const initialValues: FiltersValues = {
     ageRange: [searchParams.ageFrom, searchParams.ageTo],
     minFame: searchParams.minFame,
     maxDistance: searchParams.maxDistance,
     tags: searchParams.tags,
     sort: {
-      field: sortFields.includes(searchParams.sortField)
+      field: Object.keys(sortFields).includes(searchParams.sortField)
         ? searchParams.sortField
         : 'distance',
       type:
@@ -208,7 +206,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
               </label>
               <SortingField
                 value={values.sort}
-                fields={sortFields}
+                fields={Object.keys(sortFields)}
                 onChange={(v) => {
                   void setFieldValue('sort', v);
                   handleSearch({ ...values, sort: v });
@@ -235,10 +233,6 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
                   />
                 </>
               )}
-
-              {/* <Button type="submit" className="mx-auto">
-                Search
-              </Button> */}
             </Form>
           )}
         </Formik>

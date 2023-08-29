@@ -1,11 +1,7 @@
 import { FC } from 'react';
 
 import { GoSortAsc, GoSortDesc } from 'react-icons/go';
-
-export enum SortType {
-  Ascending = 'asc',
-  Descending = 'desc',
-}
+import { SortType, sortFields } from '@/app/(app)/page';
 
 interface SortingFieldProps {
   className?: string;
@@ -25,7 +21,9 @@ const SortingField: FC<SortingFieldProps> = ({
     onChange({
       field: field,
       type:
-        value.field != field || value.type == SortType.Descending
+        value.field != field
+          ? sortFields[field as keyof typeof sortFields]
+          : value.type == SortType.Descending
           ? SortType.Ascending
           : SortType.Descending,
     });
