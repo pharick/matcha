@@ -87,5 +87,13 @@ func main() {
 		},
 	)
 
+	//chat
+	mux.HandleFunc(
+		pat.Get("/ws/chat/"),
+		func(w http.ResponseWriter, r *http.Request) {
+			handlers.ServeChatWs(env, w, r)
+		},
+	)
+
 	http.ListenAndServe(":8000", mux)
 }

@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"matcha_api/schemas"
 
 	"github.com/gorilla/websocket"
 )
@@ -78,6 +79,30 @@ func (c *Client) ReadPump() {
 				log.Printf("error: %v", err)
 			}
 			break
+		}
+	}
+}
+
+func (c *Client) ReadPumpChat() {
+	defer func() {
+		c.Hub.Unregister <- c
+		c.Conn.Close()
+	}()
+	c.Conn.SetReadLimit(maxMessageSize)
+	c.Conn.SetReadDeadline(time.Now().Add(pongWait))
+	c.Conn.SetPongHandler(func(string) error { c.Conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
+	var msg schemas.ChatMessage
+	for {
+		err := c.Conn.ReadJSON(&msg)
+		if err != nil {
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+				log.Printf("error: %v", err)
+			}
+			break
+		}
+		c.Hub.Private <- PrivateMessage{
+			UserId:  msg.ToUserId,
+			Message: msg,
 		}
 	}
 }

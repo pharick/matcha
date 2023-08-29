@@ -16,11 +16,15 @@ type Env struct {
 	Likes            models.LikeModel
 	Settings         settings.Settings
 	NotificationsHub *sockets.Hub
+	ChatHub			 *sockets.Hub
 }
 
 func CreateEnv(dbConn *sql.DB, settings settings.Settings) *Env {
 	notificationsHub := sockets.NewHub()
 	go notificationsHub.Run()
+
+	chatHub := sockets.NewHub()
+	go chatHub.Run()
 
 	return &Env{
 		Users:            models.UserModel{DB: dbConn},
@@ -31,5 +35,6 @@ func CreateEnv(dbConn *sql.DB, settings settings.Settings) *Env {
 		Likes:            models.LikeModel{DB: dbConn},
 		Settings:         settings,
 		NotificationsHub: notificationsHub,
+		ChatHub:	      chatHub,
 	}
 }
