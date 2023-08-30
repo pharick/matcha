@@ -3,7 +3,6 @@ package handlers
 import (
 	"log"
 	"matcha_api/errors"
-	"matcha_api/lib"
 	"matcha_api/lib/sockets"
 	"matcha_api/models"
 	"net/http"
@@ -12,26 +11,27 @@ import (
 	"goji.io/pat"
 )
 
-func ServeNotificationsWs(env *Env, w http.ResponseWriter, r *http.Request) {
-	tokenCookie, err := r.Cookie("token")
-	if err != nil {
-		lib.HttpJsonError(w, map[string]string{}, 401)
-		return
-	}
-	username, target, err := lib.ParseJWT(tokenCookie.Value, env.Settings.JWTSecret)
-	if err != nil || target != "auth" {
-		lib.HttpJsonError(w, map[string]string{}, 401)
-		return
-	}
-	user, err := env.Users.GetOneByUsername(username)
-	if err != nil {
-		lib.HttpJsonError(w, map[string]string{}, 401)
-		return
-	}
+func NotificationsWs(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	// tokenCookie, err := r.Cookie("token")
+	// if err != nil {
+	// 	lib.HttpJsonError(w, map[string]string{}, 401)
+	// 	return
+	// }
+	// username, target, err := lib.ParseJWT(tokenCookie.Value, env.Settings.JWTSecret)
+	// if err != nil || target != "auth" {
+	// 	lib.HttpJsonError(w, map[string]string{}, 401)
+	// 	return
+	// }
+	// user, err := env.Users.GetOneByUsername(username)
+	// if err != nil {
+	// 	lib.HttpJsonError(w, map[string]string{}, 401)
+	// 	return
+	// }
+	user := r.Context().Value(ContextKey("User")).(models.User)
 	conn, err := sockets.Upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
-		return
+		return nil, nil
 	}
 	client := &sockets.Client{
 		Hub:    env.NotificationsHub,
@@ -43,6 +43,7 @@ func ServeNotificationsWs(env *Env, w http.ResponseWriter, r *http.Request) {
 	env.Users.UpdateLastOnline(user.Id)
 	go client.WritePump()
 	go client.ReadPump()
+	return nil, nil
 }
 
 func ViewNotification(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {

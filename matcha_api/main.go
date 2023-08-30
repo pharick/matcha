@@ -83,7 +83,7 @@ func main() {
 	mux.HandleFunc(
 		pat.Get("/ws/notifications/"),
 		func(w http.ResponseWriter, r *http.Request) {
-			handlers.ServeNotificationsWs(env, w, r)
+			handlers.WsAuth(handlers.FullProfileRequired(handlers.NotificationsWs))(env, w, r)
 		},
 	)
 
@@ -91,7 +91,7 @@ func main() {
 	mux.HandleFunc(
 		pat.Get("/ws/chat/"),
 		func(w http.ResponseWriter, r *http.Request) {
-			handlers.ServeChatWs(env, w, r)
+			handlers.WsAuth(handlers.FullProfileRequired(handlers.ChatWs))(env, w, r)
 		},
 	)
 

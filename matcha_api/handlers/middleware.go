@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"matcha_api/errors"
 	"matcha_api/lib"
 	"matcha_api/models"
@@ -49,4 +50,19 @@ func FullProfileRequired(
 		return inner(env, w, r)
 	}
 	return AuthRequired(mw)
+}
+
+func WsAuth(
+	inner func(env *Env, w http.ResponseWriter, r *http.Request) (any, error),
+) func(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	mw := func(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+		tokenCookie, err := r.Cookie("token")
+		if err != nil {
+			lib.HttpJsonError(w, map[string]string{}, 401)
+			return nil, nil
+		}
+		r.Header.Add("Authorization", fmt.Sprintf("Bearer %s", tokenCookie.Value))
+		return inner(env, w, r)
+	}
+	return mw
 }
