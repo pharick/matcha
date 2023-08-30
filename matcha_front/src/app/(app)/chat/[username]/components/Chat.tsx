@@ -1,7 +1,7 @@
 'use client';
 
 import { FC, useState } from 'react';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useEffect } from 'react';
 import useWebSocket from 'react-use-websocket';
 
@@ -14,7 +14,7 @@ interface NewChatMesageValues {
 }
 
 const Chat: FC<ChatProps> = ({ user }) => {
-  const [messageFrom, setMessage] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   const { lastJsonMessage, sendJsonMessage } = useWebSocket(
     `${process.env.NEXT_PUBLIC_WS_BASE_URL}/api/ws/chat/${user.username}/`
@@ -24,20 +24,24 @@ const Chat: FC<ChatProps> = ({ user }) => {
     if (lastJsonMessage == null) return;
     const message = lastJsonMessage as ChatMessage;
     console.log(message);
-    setMessage((m) => [message, ...m]);
+    setMessages((m) => [...m, message]);
   }, [lastJsonMessage]);
 
   const initialValues: NewChatMesageValues = {
     message: '',
   };
 
-  const sendMessage = (values: NewChatMesageValues) => {
+  const sendMessage = (
+    values: NewChatMesageValues,
+    { resetForm }: FormikHelpers<NewChatMesageValues>
+  ) => {
     if (!values.message) return;
     const msg: ChatMessage = {
       text: values.message,
       me: false,
     };
     sendJsonMessage(msg);
+    resetForm();
   };
 
   return (
@@ -45,10 +49,12 @@ const Chat: FC<ChatProps> = ({ user }) => {
       <div className="w-[400px] bg-neutral/30"></div>
       <div className="relative flex flex-1 flex-col px-2">
         <ul className="flex-1 overflow-y-auto">
-          {messageFrom.map((m, i) => (
+          {messages.map((m, i) => (
             <li
               key={i}
-              className="m-2 ml-auto w-fit rounded-lg bg-neutral/50 p-3"
+              className={`${
+                m.me && 'ml-auto'
+              } m-2  w-fit rounded-lg bg-neutral/50 p-3`}
             >
               {m.text}
             </li>
@@ -60,7 +66,7 @@ const Chat: FC<ChatProps> = ({ user }) => {
             {() => (
               <Form className="flex flex-row">
                 <Field
-                  className=" flex-1 bg-transparent"
+                  className=" flex-1 bg-transparent outline-1 outline-neutral/50"
                   type="text"
                   name="message"
                   placeholder="Message"
