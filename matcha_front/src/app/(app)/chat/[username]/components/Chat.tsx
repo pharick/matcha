@@ -78,7 +78,7 @@ const Chat: FC<ChatProps> = ({ user }) => {
         <li>Message</li>
       </ul>
 
-      <div className="bg-green-1 p-2">
+      <div className="bg-green-1/50 p-2">
         <Formik initialValues={initialValues} onSubmit={sendMessage}>
           {() => (
             <Form>
