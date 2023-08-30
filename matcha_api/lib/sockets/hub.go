@@ -1,13 +1,13 @@
 package sockets
 
 type PrivateMessage struct {
-	UserId  int
-	Message any
+	ClientId string
+	Message  any
 }
 
 type Hub struct {
 	Clients    map[*Client]bool
-	Users      map[int]*Client
+	Users      map[string]*Client
 	Private    chan PrivateMessage
 	Broadcasts chan any
 	Register   chan *Client
@@ -21,11 +21,11 @@ func NewHub() *Hub {
 		Register:   make(chan *Client),
 		Unregister: make(chan *Client),
 		Clients:    make(map[*Client]bool),
-		Users:      make(map[int]*Client),
+		Users:      make(map[string]*Client),
 	}
 }
 
-func (h *Hub) IsUserOnline(id int) bool {
+func (h *Hub) IsUserOnline(id string) bool {
 	_, ok := h.Users[id]
 	return ok
 }
@@ -35,11 +35,11 @@ func (h *Hub) Run() {
 		select {
 		case client := <-h.Register:
 			h.Clients[client] = true
-			h.Users[client.UserId] = client
+			h.Users[client.Id] = client
 		case client := <-h.Unregister:
 			if _, ok := h.Clients[client]; ok {
 				delete(h.Clients, client)
-				delete(h.Users, client.UserId)
+				delete(h.Users, client.Id)
 				close(client.Send)
 			}
 		case message := <-h.Broadcasts:
@@ -49,18 +49,18 @@ func (h *Hub) Run() {
 				default:
 					close(client.Send)
 					delete(h.Clients, client)
-					delete(h.Users, client.UserId)
+					delete(h.Users, client.Id)
 				}
 			}
 		case message := <-h.Private:
-			client, ok := h.Users[message.UserId]
+			client, ok := h.Users[message.ClientId]
 			if ok {
 				select {
 				case client.Send <- message.Message:
 				default:
 					close(client.Send)
 					delete(h.Clients, client)
-					delete(h.Users, client.UserId)
+					delete(h.Users, client.Id)
 				}
 			}
 		}

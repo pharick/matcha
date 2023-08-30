@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"database/sql"
+	"fmt"
 	"matcha_api/errors"
 	"matcha_api/lib"
 	"matcha_api/models"
@@ -58,7 +59,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Avatar:            avatar_url,
 		Rating:            lib.NormalizeRating(&env.Users, user.Rating),
 		Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
-		Online:            env.NotificationsHub.IsUserOnline(user.Id),
+		Online:            env.NotificationsHub.IsUserOnline(fmt.Sprintf("%v", user.Id)),
 		LastOnline:        user.LastOnline,
 	}
 	return ret, nil

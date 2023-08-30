@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"matcha_api/errors"
 	"matcha_api/lib/sockets"
@@ -35,7 +36,7 @@ func ChatWs(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		Conn:     conn,
 		Send:     make(chan any, 256),
 		Received: make(chan []byte, 256),
-		UserId:   currentUser.Id,
+		Id:       fmt.Sprintf("%v.%v", currentUser.Id, user.Id),
 	}
 	client.Hub.Register <- client
 
@@ -51,7 +52,7 @@ func ChatWs(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 			continue
 		}
 		client.Hub.Private <- sockets.PrivateMessage{
-			UserId: user.Id,
+			ClientId: fmt.Sprintf("%v.%v", user.Id, currentUser.Id),
 			Message: schemas.ChatMessage{
 				Text: msg.Text,
 			},

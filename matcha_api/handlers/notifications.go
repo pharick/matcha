@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"log"
 	"matcha_api/errors"
 	"matcha_api/lib/sockets"
@@ -23,7 +24,7 @@ func NotificationsWs(env *Env, w http.ResponseWriter, r *http.Request) (any, err
 		Conn:     conn,
 		Send:     make(chan any, 256),
 		Received: make(chan []byte, 256),
-		UserId:   user.Id,
+		Id:       fmt.Sprintf("%v", user.Id),
 	}
 	client.Hub.Register <- client
 	env.Users.UpdateLastOnline(user.Id)

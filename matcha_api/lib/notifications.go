@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"fmt"
 	"matcha_api/lib/sockets"
 	"matcha_api/models"
 	"matcha_api/schemas"
@@ -26,8 +27,8 @@ func SendNotification(
 		Viewed:     notification.Viewed,
 	}
 	hub.Private <- sockets.PrivateMessage{
-		UserId:  userId,
-		Message: ret,
+		ClientId: fmt.Sprintf("%v", userId),
+		Message:  ret,
 	}
 	return nil
 }

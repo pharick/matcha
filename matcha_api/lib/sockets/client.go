@@ -26,7 +26,7 @@ type Client struct {
 	Conn     *websocket.Conn
 	Send     chan any
 	Received chan []byte
-	UserId   int
+	Id       string
 }
 
 func (c *Client) WritePump() {
