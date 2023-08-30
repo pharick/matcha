@@ -92,4 +92,5 @@ interface SearchParams {
 
 type ChatMessage = {
   text: string;
+  me: bool;
 };

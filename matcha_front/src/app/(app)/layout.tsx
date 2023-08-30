@@ -3,6 +3,7 @@ import { Montserrat } from 'next/font/google';
 import { redirect } from 'next/navigation';
 
 import Header from '@/components/header/Header';
+import Footer from '@/components/Footer';
 import { getCurrentUser } from '@/api/auth';
 
 import '@/app/globals.css';
@@ -36,7 +37,7 @@ export default async function RootLayout({
           <Header currentUser={currentUser} />
           <div className="relative flex-1">{children}</div>
         </div>
-        <div className="bg-black p-2 text-white">Footer</div>
+        <Footer />
       </body>
     </html>
   );

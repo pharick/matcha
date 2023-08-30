@@ -54,6 +54,14 @@ func ChatWs(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		client.Hub.Private <- sockets.PrivateMessage{
 			ClientId: fmt.Sprintf("%v.%v", user.Id, currentUser.Id),
 			Message: schemas.ChatMessage{
+				Me:   false,
+				Text: msg.Text,
+			},
+		}
+		client.Hub.Private <- sockets.PrivateMessage{
+			ClientId: fmt.Sprintf("%v.%v", currentUser.Id, user.Id),
+			Message: schemas.ChatMessage{
+				Me:   true,
 				Text: msg.Text,
 			},
 		}
