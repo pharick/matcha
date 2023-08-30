@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 import useWebSocket from 'react-use-websocket';
 
 interface ChatProps {
-  currentUser: User;
   user: User;
 }
 
@@ -14,9 +13,9 @@ interface NewChatMesageValues {
   message?: string;
 }
 
-const Chat: FC<ChatProps> = ({ currentUser, user }) => {
+const Chat: FC<ChatProps> = ({ user }) => {
   const { lastJsonMessage, sendJsonMessage } = useWebSocket(
-    `${process.env.NEXT_PUBLIC_WS_BASE_URL}/api/ws/chat/`
+    `${process.env.NEXT_PUBLIC_WS_BASE_URL}/api/ws/chat/${user.username}/`
   );
 
   useEffect(() => {
@@ -30,11 +29,11 @@ const Chat: FC<ChatProps> = ({ currentUser, user }) => {
   };
 
   const sendMessage = (values: NewChatMesageValues) => {
-    sendJsonMessage({
-      to_user_id: user.id,
-      from_user_id: currentUser.id,
-      message: values.message,
-    });
+    if (!values.message) return;
+    const msg: ChatMessage = {
+      text: values.message,
+    };
+    sendJsonMessage(msg);
   };
 
   return (

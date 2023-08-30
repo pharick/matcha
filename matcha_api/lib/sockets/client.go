@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"time"
-	"matcha_api/schemas"
 
 	"github.com/gorilla/websocket"
 )
@@ -23,10 +22,11 @@ var Upgrader = websocket.Upgrader{
 }
 
 type Client struct {
-	Hub    *Hub
-	Conn   *websocket.Conn
-	Send   chan any
-	UserId int
+	Hub      *Hub
+	Conn     *websocket.Conn
+	Send     chan any
+	Received chan []byte
+	UserId   int
 }
 
 func (c *Client) WritePump() {
@@ -73,36 +73,14 @@ func (c *Client) ReadPump() {
 	c.Conn.SetReadDeadline(time.Now().Add(pongWait))
 	c.Conn.SetPongHandler(func(string) error { c.Conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
-		_, _, err := c.Conn.ReadMessage()
+		_, msg, err := c.Conn.ReadMessage()
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Printf("error: %v", err)
 			}
+			close(c.Received)
 			break
 		}
-	}
-}
-
-func (c *Client) ReadPumpChat() {
-	defer func() {
-		c.Hub.Unregister <- c
-		c.Conn.Close()
-	}()
-	c.Conn.SetReadLimit(maxMessageSize)
-	c.Conn.SetReadDeadline(time.Now().Add(pongWait))
-	c.Conn.SetPongHandler(func(string) error { c.Conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
-	var msg schemas.ChatMessage
-	for {
-		err := c.Conn.ReadJSON(&msg)
-		if err != nil {
-			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				log.Printf("error: %v", err)
-			}
-			break
-		}
-		c.Hub.Private <- PrivateMessage{
-			UserId:  msg.ToUserId,
-			Message: msg,
-		}
+		c.Received <- msg
 	}
 }

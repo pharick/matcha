@@ -1,7 +1,5 @@
 package sockets
 
-import "log"
-
 type PrivateMessage struct {
 	UserId  int
 	Message any
@@ -38,13 +36,11 @@ func (h *Hub) Run() {
 		case client := <-h.Register:
 			h.Clients[client] = true
 			h.Users[client.UserId] = client
-			log.Printf("Connected: %v, %v", h.Clients, h.Users)
 		case client := <-h.Unregister:
 			if _, ok := h.Clients[client]; ok {
 				delete(h.Clients, client)
 				delete(h.Users, client.UserId)
 				close(client.Send)
-				log.Printf("Disconnected %v, %v", h.Clients, h.Users)
 			}
 		case message := <-h.Broadcasts:
 			for client := range h.Clients {
@@ -54,7 +50,6 @@ func (h *Hub) Run() {
 					close(client.Send)
 					delete(h.Clients, client)
 					delete(h.Users, client.UserId)
-					log.Printf("Disconnected %v, %v", h.Clients, h.Users)
 				}
 			}
 		case message := <-h.Private:
@@ -66,7 +61,6 @@ func (h *Hub) Run() {
 					close(client.Send)
 					delete(h.Clients, client)
 					delete(h.Users, client.UserId)
-					log.Printf("Disconnected %v, %v", h.Clients, h.Users)
 				}
 			}
 		}

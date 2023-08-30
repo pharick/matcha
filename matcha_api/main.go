@@ -89,7 +89,7 @@ func main() {
 
 	//chat
 	mux.HandleFunc(
-		pat.Get("/ws/chat/"),
+		pat.Get("/ws/chat/:username/"),
 		func(w http.ResponseWriter, r *http.Request) {
 			handlers.WsAuth(handlers.FullProfileRequired(handlers.ChatWs))(env, w, r)
 		},

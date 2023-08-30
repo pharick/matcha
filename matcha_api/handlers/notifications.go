@@ -12,21 +12,6 @@ import (
 )
 
 func NotificationsWs(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
-	// tokenCookie, err := r.Cookie("token")
-	// if err != nil {
-	// 	lib.HttpJsonError(w, map[string]string{}, 401)
-	// 	return
-	// }
-	// username, target, err := lib.ParseJWT(tokenCookie.Value, env.Settings.JWTSecret)
-	// if err != nil || target != "auth" {
-	// 	lib.HttpJsonError(w, map[string]string{}, 401)
-	// 	return
-	// }
-	// user, err := env.Users.GetOneByUsername(username)
-	// if err != nil {
-	// 	lib.HttpJsonError(w, map[string]string{}, 401)
-	// 	return
-	// }
 	user := r.Context().Value(ContextKey("User")).(models.User)
 	conn, err := sockets.Upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -34,10 +19,11 @@ func NotificationsWs(env *Env, w http.ResponseWriter, r *http.Request) (any, err
 		return nil, nil
 	}
 	client := &sockets.Client{
-		Hub:    env.NotificationsHub,
-		Conn:   conn,
-		Send:   make(chan any, 256),
-		UserId: user.Id,
+		Hub:      env.NotificationsHub,
+		Conn:     conn,
+		Send:     make(chan any, 256),
+		Received: make(chan []byte, 256),
+		UserId:   user.Id,
 	}
 	client.Hub.Register <- client
 	env.Users.UpdateLastOnline(user.Id)
