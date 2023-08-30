@@ -37,15 +37,56 @@ const Chat: FC<ChatProps> = ({ user }) => {
   };
 
   return (
-    <div>
-      <Formik initialValues={initialValues} onSubmit={sendMessage}>
-        {() => (
-          <Form>
-            <Field type="text" name="message" placeholder="Message" />
-            <button type="submit">Submit</button>
-          </Form>
-        )}
-      </Formik>
+    <div className="absolute bottom-0 left-0 right-0 top-0 flex flex-col bg-white">
+      <ul className="flex-1 overflow-y-auto">
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+        <li>Message</li>
+      </ul>
+
+      <div className="bg-green-1 p-2">
+        <Formik initialValues={initialValues} onSubmit={sendMessage}>
+          {() => (
+            <Form>
+              <Field type="text" name="message" placeholder="Message" />
+              <button type="submit">Submit</button>
+            </Form>
+          )}
+        </Formik>
+      </div>
     </div>
   );
 };

@@ -31,9 +31,12 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={montserrat.className}>
-      <body className="mx-10 min-h-screen">
-        <Header currentUser={currentUser} />
-        {children}
+      <body>
+        <div className="mx-10 flex min-h-screen flex-col">
+          <Header currentUser={currentUser} />
+          <div className="relative flex-1">{children}</div>
+        </div>
+        <div className="bg-black p-2 text-white">Footer</div>
       </body>
     </html>
   );
