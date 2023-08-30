@@ -109,7 +109,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
   };
 
   return (
-    <div className="top-0 z-40 h-screen w-full overflow-y-auto lg:sticky">
+    <div className="top-0 z-40 w-full overflow-y-auto lg:sticky">
       <button
         onClick={() => setHidden((h) => !h)}
         className="flex h-[50px] w-full items-center justify-end font-bold lg:hidden"
@@ -121,7 +121,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
           <GrClose color="#403539" className="ml-2" />
         )}
       </button>
-      <div className={`p-4 ${hidden && 'hidden'} lg:block`}>
+      <div className={`p-4 ${hidden && 'hidden'} h-screen lg:block`}>
         <Formik
           initialValues={initialValues}
           onSubmit={handleSearch}
