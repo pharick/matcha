@@ -32,6 +32,7 @@ const Chat: FC<ChatProps> = ({ user }) => {
     if (!values.message) return;
     const msg: ChatMessage = {
       text: values.message,
+      me: false,
     };
     sendJsonMessage(msg);
   };
