@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 
-import Matcha from '@/components/matcha/Matcha';
+import Matcha, { sortFields } from '@/components/matcha/Matcha';
 import { getCurrentUser } from '@/api/auth';
 import { redirect } from 'next/navigation';
 import { parseIntSearchParam } from '@/helpers';
@@ -16,18 +16,6 @@ interface SearchPageProps {
     sortType: string;
   };
 }
-
-export enum SortType {
-  Ascending = 'asc',
-  Descending = 'desc',
-}
-
-export const sortFields = {
-  distance: SortType.Ascending,
-  age: SortType.Ascending,
-  fame_rating: SortType.Descending,
-  specific_interests: SortType.Descending,
-};
 
 const SearchPage: NextPage<SearchPageProps> = async ({ searchParams }) => {
   const currentUser = await getCurrentUser();

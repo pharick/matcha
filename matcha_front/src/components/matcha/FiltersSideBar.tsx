@@ -9,7 +9,7 @@ import { GrClose } from 'react-icons/gr';
 
 import TagsField from '../TagsField';
 import SortingField from './SortingField';
-import { SortType, sortFields } from '@/app/(app)/page';
+import { SortType, sortFields } from './Matcha';
 
 interface FiltersValues {
   ageRange: number[];

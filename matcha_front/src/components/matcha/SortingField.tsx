@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { GoSortAsc, GoSortDesc } from 'react-icons/go';
-import { SortType, sortFields } from '@/app/(app)/page';
+import { SortType, sortFields } from './Matcha';
 
 interface SortingFieldProps {
   className?: string;

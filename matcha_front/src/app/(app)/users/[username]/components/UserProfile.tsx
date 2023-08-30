@@ -19,9 +19,10 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
     else await unsetLike(user.username);
   };
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   const handleStartConversation = async () => {
     'use server';
-    await console.log('start');
+    console.log('start');
   };
 
   return (
@@ -97,6 +98,7 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
           'No tags available'
         )}
         <div className="absolute bottom-0 right-0 mb-5 flex">
+          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
           <form action={handleStartConversation}>
             <button
               type="submit"
@@ -107,6 +109,7 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
               Block User
             </button>
           </form>
+          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
           <form action={handleStartConversation}>
             <button
               type="submit"
@@ -117,6 +120,7 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
               Report as fake
             </button>
           </form>
+          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
           <form action={handleStartConversation}>
             <button
               type="submit"

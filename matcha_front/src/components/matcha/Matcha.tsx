@@ -3,6 +3,18 @@ import { FC } from 'react';
 import FiltersSideBar from '@/components/matcha/FiltersSideBar';
 import SearchResults from './SearchResults';
 
+export enum SortType {
+  Ascending = 'asc',
+  Descending = 'desc',
+}
+
+export const sortFields = {
+  distance: SortType.Ascending,
+  age: SortType.Ascending,
+  fame_rating: SortType.Descending,
+  specific_interests: SortType.Descending,
+};
+
 interface MatchaProps {
   searchParams: SearchParams;
 }
