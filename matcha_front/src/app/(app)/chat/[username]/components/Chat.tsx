@@ -64,7 +64,7 @@ const Chat: FC<ChatProps> = ({ currentUser, user }) => {
   };
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 top-0 mb-4 flex flex-row overflow-hidden rounded-lg bg-green-5/50 text-right border border-brown">
+    <div className="absolute bottom-0 left-0 right-0 top-0 mb-4 flex flex-row overflow-hidden rounded-lg border border-brown bg-green-5/50 text-right">
       <MessagesSideBar />
       <div className="relative flex flex-1 flex-col">
         <UserInfo user={user} />

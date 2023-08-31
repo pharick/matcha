@@ -46,7 +46,7 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
           </div>
         </div>
         <div className="flex items-center text-sm">
-            <p className="bg-neutral px-1 rounded-lg mr-2">{user.username}</p>
+          <p className="mr-2 rounded-lg bg-neutral px-1">{user.username}</p>
           {user.last_online && (
             <p
               className={`w-fit rounded-lg px-1  text-neutral ${
