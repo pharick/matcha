@@ -4,6 +4,8 @@ import { FC, useRef, useState } from 'react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useEffect } from 'react';
 import useWebSocket from 'react-use-websocket';
+import { format } from 'date-fns';
+import { getAllChatMessages } from '@/api/chat';
 
 interface ChatProps {
   currentUser: User;
@@ -21,6 +23,14 @@ const Chat: FC<ChatProps> = ({ currentUser, user }) => {
   const { lastJsonMessage, sendJsonMessage } = useWebSocket(
     `${process.env.NEXT_PUBLIC_WS_BASE_URL}/api/ws/chat/${user.username}/`
   );
+
+  useEffect(() => {
+    const getMessages = async () => {
+      const msgs = await getAllChatMessages(user.username);
+      setMessages(msgs);
+    };
+    void getMessages();
+  }, [user.username]);
 
   useEffect(() => {
     if (lastJsonMessage == null) return;
@@ -62,7 +72,10 @@ const Chat: FC<ChatProps> = ({ currentUser, user }) => {
                 m.from_user_id == currentUser.id && 'ml-auto'
               } m-2  w-fit rounded-lg bg-neutral/50 p-3`}
             >
-              {m.text}
+              <p className="text-xs text-gray-600">
+                {format(new Date(m.created_at), 'dd.MM.yyyy H:mm')}
+              </p>
+              <p>{m.text}</p>
             </li>
           ))}
         </ul>

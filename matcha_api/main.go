@@ -77,6 +77,9 @@ func main() {
 	mux.Handle(pat.Get("/notifications/unread/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.GetUnreadNotifications)})
 	mux.Handle(pat.Post("/notifications/:id/view/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.ViewNotification)})
 
+	// chat
+	mux.Handle(pat.Get("/chat/:username/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.GetAllChatMessages)})
+
 	// --- WEBSOCKETS ---
 
 	// notifications

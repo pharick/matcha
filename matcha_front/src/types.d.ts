@@ -95,6 +95,7 @@ type ChatMessage = {
   from_user_id: number;
   to_user_id: number;
   text: string;
+  created_at: string;
 };
 
 type NewChatMessage = {
