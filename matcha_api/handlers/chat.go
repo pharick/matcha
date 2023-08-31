@@ -59,6 +59,7 @@ func ChatWs(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 			FromUserId: msg.FromUserId,
 			ToUserId:   msg.ToUserId,
 			Text:       msg.Text,
+			CreatedAt:  msg.CreatedAt,
 		}
 		client.Hub.Private <- sockets.PrivateMessage{
 			ClientId: fmt.Sprintf("%v.%v", user.Id, currentUser.Id),
@@ -71,4 +72,34 @@ func ChatWs(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	}
 	log.Printf("%s stop waiting messages", currentUser.Username)
 	return nil, nil
+}
+
+func GetAllChatMessages(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	currentUser := r.Context().Value(ContextKey("User")).(models.User)
+	username := pat.Param(r, "username")
+	user, err := env.Users.GetOneActiveByUsername(username)
+	if err == sql.ErrNoRows {
+		return nil, errors.HttpError{Status: 404, Body: nil}
+	}
+	if err != nil {
+		return nil, err
+	}
+	messages, err := env.ChatMessages.GetAllMessages(currentUser.Id, user.Id)
+	if err != nil {
+		return nil, err
+	}
+	messagesRet := make([]schemas.ChatMessageReturn, 0, len(messages))
+	for _, msg := range messages {
+		messagesRet = append(messagesRet, schemas.ChatMessageReturn{
+			Id:         msg.Id,
+			FromUserId: msg.FromUserId,
+			ToUserId:   msg.ToUserId,
+			Text:       msg.Text,
+			CreatedAt:  msg.CreatedAt,
+		})
+	}
+	ret := schemas.ChatMessagesReturn{
+		List: messagesRet,
+	}
+	return ret, nil
 }
