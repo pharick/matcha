@@ -3,7 +3,7 @@ import { AiFillHeart } from 'react-icons/ai';
 
 const Footer = () => {
   return (
-    <footer className="bg-green-1/50 px-2 py-3 text-center">
+    <footer className="bg-green-1/10 px-2 py-3 text-center">
       Made with <AiFillHeart color="#F39BB3" className="inline" /> by{' '}
       <Link
         className="font-bold underline hover:text-brown/80"
