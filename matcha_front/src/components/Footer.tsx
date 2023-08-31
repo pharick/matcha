@@ -14,7 +14,7 @@ const Footer = () => {
       and{' '}
       <Link
         className="font-bold underline hover:text-brown/80"
-        href="https://profile.intra.42.fr/users/cbelva"
+        href="https://profile.intra.42.fr/users/cpasty"
       >
         cpasty
       </Link>

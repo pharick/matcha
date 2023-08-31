@@ -16,7 +16,6 @@ import (
 
 func ChatWs(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	currentUser := r.Context().Value(ContextKey("User")).(models.User)
-
 	username := pat.Param(r, "username")
 	user, err := env.Users.GetOneActiveByUsername(username)
 	if err == sql.ErrNoRows {
@@ -25,12 +24,10 @@ func ChatWs(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	conn, err := sockets.Upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		return nil, err
 	}
-
 	client := &sockets.Client{
 		Hub:      env.ChatHub,
 		Conn:     conn,
@@ -44,29 +41,34 @@ func ChatWs(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	go client.ReadPump()
 
 	log.Printf("%s start waiting messages", currentUser.Username)
-	var msg schemas.ChatMessage
+	var newMsg schemas.NewChatMessage
 	for data := range client.Received {
 		log.Printf("New message for %s from %s", currentUser.Username, user.Username)
-		err := json.Unmarshal(data, &msg)
+		err := json.Unmarshal(data, &newMsg)
 		if err != nil {
+			log.Println(err)
 			continue
+		}
+		msg, err := env.ChatMessages.Create(currentUser.Id, user.Id, newMsg.Text)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		ret := schemas.ChatMessageReturn{
+			Id:         msg.Id,
+			FromUserId: msg.FromUserId,
+			ToUserId:   msg.ToUserId,
+			Text:       msg.Text,
 		}
 		client.Hub.Private <- sockets.PrivateMessage{
 			ClientId: fmt.Sprintf("%v.%v", user.Id, currentUser.Id),
-			Message: schemas.ChatMessage{
-				Me:   false,
-				Text: msg.Text,
-			},
+			Message:  ret,
 		}
 		client.Hub.Private <- sockets.PrivateMessage{
 			ClientId: fmt.Sprintf("%v.%v", currentUser.Id, user.Id),
-			Message: schemas.ChatMessage{
-				Me:   true,
-				Text: msg.Text,
-			},
+			Message:  ret,
 		}
 	}
 	log.Printf("%s stop waiting messages", currentUser.Username)
-
 	return nil, nil
 }
