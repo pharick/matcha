@@ -91,6 +91,12 @@ interface SearchParams {
 }
 
 type ChatMessage = {
+  id: number;
+  from_user_id: number;
+  to_user_id: number;
   text: string;
-  me: bool;
+};
+
+type NewChatMessage = {
+  text: string;
 };
