@@ -5,6 +5,9 @@ import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useEffect } from 'react';
 import useWebSocket from 'react-use-websocket';
 
+import Message from './Message';
+import MessagesSideBar from './MessagesSideBar';
+
 interface ChatProps {
   currentUser: User;
   user: User;
@@ -52,7 +55,7 @@ const Chat: FC<ChatProps> = ({ currentUser, user }) => {
 
   return (
     <div className="absolute bottom-0 left-0 right-0 top-0 mb-4 flex flex-row overflow-hidden rounded-lg bg-green-5/50 text-right">
-      <div className="w-[400px] bg-neutral/30"></div>
+      <MessagesSideBar />
       <div className="relative flex flex-1 flex-col px-2">
         <ul ref={messageList} className="flex-1 overflow-y-auto scroll-smooth">
           {messages.map((m, i) => (
@@ -60,9 +63,13 @@ const Chat: FC<ChatProps> = ({ currentUser, user }) => {
               key={i}
               className={`${
                 m.from_user_id == currentUser.id && 'ml-auto'
-              } m-2  w-fit rounded-lg bg-neutral/50 p-3`}
+              } m-2  flex w-fit items-center rounded-lg bg-neutral/50 p-3`}
             >
-              {m.text}
+              {m.from_user_id == currentUser.id ? (
+                <Message avatar={currentUser.avatar}>{m.text}</Message>
+              ) : (
+                <Message avatar={user.avatar}>{m.text}</Message>
+              )}
             </li>
           ))}
         </ul>
