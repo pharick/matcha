@@ -4,11 +4,11 @@ import { FC, useRef, useState } from 'react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useEffect } from 'react';
 import useWebSocket from 'react-use-websocket';
-import { format } from 'date-fns';
 import { getAllChatMessages } from '@/api/chat';
 
 import Message from './Message';
 import MessagesSideBar from './MessagesSideBar';
+import UserInfo from './UserInfo';
 
 interface ChatProps {
   currentUser: User;
@@ -64,36 +64,48 @@ const Chat: FC<ChatProps> = ({ currentUser, user }) => {
   };
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 top-0 mb-4 flex flex-row overflow-hidden rounded-lg bg-green-5/50 text-right">
+    <div className="absolute bottom-0 left-0 right-0 top-0 mb-4 flex flex-row overflow-hidden rounded-lg bg-green-5/50 text-right border border-brown">
       <MessagesSideBar />
-      <div className="relative flex flex-1 flex-col px-2">
-        <ul ref={messageList} className="flex-1 overflow-y-auto scroll-smooth">
+      <div className="relative flex flex-1 flex-col">
+        <UserInfo user={user} />
+        <ul
+          ref={messageList}
+          className="mx-2 flex-1 overflow-y-auto scroll-smooth"
+        >
           {messages.map((m, i) => (
             <li
               key={i}
               className={`${
                 m.from_user_id == currentUser.id && 'ml-auto'
-              } m-2  flex w-fit items-center rounded-lg bg-neutral/50 p-3`}
+              } w-fit`}
             >
               {m.from_user_id == currentUser.id ? (
-                <Message avatar={currentUser.avatar}>{m.text}</Message>
+                <Message
+                  avatar={currentUser.avatar}
+                  timestamp={m.created_at}
+                  isCurrentUser={true}
+                >
+                  {m.text}
+                </Message>
               ) : (
-                <Message avatar={user.avatar}>{m.text}</Message>
+                <Message
+                  avatar={user.avatar}
+                  timestamp={m.created_at}
+                  isCurrentUser={false}
+                >
+                  {m.text}
+                </Message>
               )}
-              <p className="text-xs text-gray-600">
-                {format(new Date(m.created_at), 'dd.MM.yyyy H:mm')}
-              </p>
-              {/* <p>{m.text}</p> */}
             </li>
           ))}
         </ul>
 
-        <div className="mb-2 w-full">
+        <div className="w-full">
           <Formik initialValues={initialValues} onSubmit={sendMessage}>
             {() => (
               <Form className="flex flex-row">
                 <Field
-                  className="flex-1 rounded-lg bg-neutral/30 p-2 placeholder:text-brown/60"
+                  className="flex-1  bg-neutral/30 p-2 text-right placeholder:text-brown/60"
                   type="text"
                   name="message"
                   placeholder="Write a message..."
