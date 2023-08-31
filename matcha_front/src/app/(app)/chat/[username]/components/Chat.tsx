@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useEffect } from 'react';
 import useWebSocket from 'react-use-websocket';
@@ -16,6 +16,7 @@ interface NewChatMesageValues {
 
 const Chat: FC<ChatProps> = ({ currentUser, user }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const messageList = useRef<HTMLUListElement>(null);
 
   const { lastJsonMessage, sendJsonMessage } = useWebSocket(
     `${process.env.NEXT_PUBLIC_WS_BASE_URL}/api/ws/chat/${user.username}/`
@@ -27,6 +28,11 @@ const Chat: FC<ChatProps> = ({ currentUser, user }) => {
     console.log(message);
     setMessages((m) => [...m, message]);
   }, [lastJsonMessage]);
+
+  useEffect(() => {
+    if (messageList.current)
+      messageList.current.scrollTop = messageList.current.scrollHeight;
+  }, [messages]);
 
   const initialValues: NewChatMesageValues = {
     message: '',
@@ -48,7 +54,7 @@ const Chat: FC<ChatProps> = ({ currentUser, user }) => {
     <div className="absolute bottom-0 left-0 right-0 top-0 mb-4 flex flex-row overflow-hidden rounded-lg bg-green-5/50 text-right">
       <div className="w-[400px] bg-neutral/30"></div>
       <div className="relative flex flex-1 flex-col px-2">
-        <ul className="flex-1 overflow-y-auto">
+        <ul ref={messageList} className="flex-1 overflow-y-auto scroll-smooth">
           {messages.map((m, i) => (
             <li
               key={i}
@@ -70,7 +76,6 @@ const Chat: FC<ChatProps> = ({ currentUser, user }) => {
                   type="text"
                   name="message"
                   placeholder="Write a message..."
-                  autofocus
                 />
               </Form>
             )}
