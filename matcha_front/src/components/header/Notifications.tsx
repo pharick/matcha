@@ -17,11 +17,11 @@ interface NotificationsProps {
 }
 
 const Notifications: FC<NotificationsProps> = ({ className }) => {
+  const [notifications, setNotifications] = useState<MNotification[]>([]);
+
   const { lastJsonMessage } = useWebSocket(
     `${process.env.NEXT_PUBLIC_WS_BASE_URL}/api/ws/notifications/`
   );
-
-  const [notifications, setNotifications] = useState<MNotification[]>([]);
 
   const notify = async (n: MNotification) => {
     if (Notification.permission == 'denied') return;

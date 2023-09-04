@@ -1,6 +1,6 @@
 import { Metadata, NextPage } from 'next';
 
-import UserProfile from './components/UserProfile';
+import UserProfile from '../components/UserProfile';
 import { getUserProfile } from '@/api/profile';
 import { getCurrentUser } from '@/api/auth';
 import { getUserPhotos } from '@/api/photos';

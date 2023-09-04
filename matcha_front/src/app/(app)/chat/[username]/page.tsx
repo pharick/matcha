@@ -1,6 +1,6 @@
-import { NextPage } from 'next';
+import { NextPage, Metadata } from 'next';
 
-import Chat from './components/Chat';
+import Chat from '../components/Chat';
 import { getUserProfile } from '@/api/profile';
 import { notFound, redirect } from 'next/navigation';
 import { getCurrentUser } from '@/api/auth';
@@ -9,15 +9,27 @@ interface ChatPageProps {
   params: { username: string };
 }
 
-const ChatPage: NextPage<ChatPageProps> = async ({ params: { username } }) => {
-  const [currentUser, user] = await Promise.all([
-    getCurrentUser(),
-    getUserProfile(username),
-  ]);
-  if (!currentUser) redirect('/login');
-  if (!user) notFound();
+export async function generateMetadata({
+  params: { username },
+}: ChatPageProps): Promise<Metadata> {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) return {};
+  const user = await getUserProfile(username);
+  return {
+    title: user
+      ? `Chat with ${user?.first_name} ${user?.last_name}`
+      : 'Chat not found',
+  };
+}
 
+const UserChatPage: NextPage<ChatPageProps> = async ({
+  params: { username },
+}) => {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) redirect('/login');
+  const user = await getUserProfile(username);
+  if (!user) notFound();
   return <Chat currentUser={currentUser} user={user} />;
 };
 
-export default ChatPage;
+export default UserChatPage;

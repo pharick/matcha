@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import formatDistance from 'date-fns/formatDistance';
 
 import { birthdateToAge } from '@/helpers';
@@ -13,22 +14,24 @@ interface UserInfoProps {
   user: User;
 }
 
-const UserInfo: FC<UserInfoProps> = ({ user }) => {
+const ChatUserInfo: FC<UserInfoProps> = ({ user }) => {
   return (
-    <div className="flex h-[70px] items-center border border-transparent border-b-brown bg-neutral/30 px-5">
-      <figure className="relative h-[60px] w-[60px] overflow-hidden rounded-full border-2 border-brown">
-        <Image
-          src={
-            user.avatar.startsWith('http')
-              ? user.avatar
-              : `${process.env.NEXT_PUBLIC_BACK_BASE_URL}${user.avatar}`
-          }
-          fill={true}
-          className="object-cover"
-          sizes="30px"
-          alt="photo"
-        />
-      </figure>
+    <div className="flex items-center border border-transparent border-b-brown bg-neutral/30 px-5 py-1">
+      <Link href={`/users/${user.username}`}>
+        <figure className="relative h-[60px] w-[60px] overflow-hidden rounded-full border-2 border-brown hover:border-brown/70">
+          <Image
+            src={
+              user.avatar.startsWith('http')
+                ? user.avatar
+                : `${process.env.NEXT_PUBLIC_BACK_BASE_URL}${user.avatar}`
+            }
+            fill={true}
+            className="object-cover"
+            sizes="30px"
+            alt="photo"
+          />
+        </figure>
+      </Link>
       <div className="ml-2">
         <div className="mb-2 flex">
           <p className="rounded-lg pr-2 font-bold">
@@ -67,4 +70,4 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
   );
 };
 
-export default UserInfo;
+export default ChatUserInfo;
