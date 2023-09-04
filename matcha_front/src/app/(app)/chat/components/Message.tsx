@@ -21,7 +21,7 @@ const Message: FC<MessageProps> = ({
       </div>
       <div
         className={`mx-3 flex items-center gap-1 ${
-          isCurrentUser && 'flex-row-reverse'
+          isCurrentUser && 'flex-row-reverse justify-end'
         }`}
       >
         <p className="text-xs text-gray-600">

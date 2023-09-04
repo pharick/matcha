@@ -24,6 +24,14 @@ func ChatWs(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
+	isMatch, err := env.Likes.IsMatch(currentUser.Id, user.Id)
+	if err != nil {
+		return nil, err
+	}
+	if !isMatch {
+		return nil, errors.HttpError{Status: 403, Body: nil}
+	}
+
 	conn, err := sockets.Upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		return nil, err
@@ -36,7 +44,6 @@ func ChatWs(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		Id:       fmt.Sprintf("%v.%v", currentUser.Id, user.Id),
 	}
 	client.Hub.Register <- client
-
 	go client.WritePump()
 	go client.ReadPump()
 

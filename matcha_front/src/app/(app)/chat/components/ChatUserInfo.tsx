@@ -33,7 +33,7 @@ const ChatUserInfo: FC<UserInfoProps> = ({ user }) => {
         </figure>
       </Link>
       <div className="ml-2">
-        <div className="mb-2 flex">
+        <div className="mb-1 flex">
           <p className="rounded-lg pr-2 font-bold">
             {user.first_name} {user.last_name}
           </p>

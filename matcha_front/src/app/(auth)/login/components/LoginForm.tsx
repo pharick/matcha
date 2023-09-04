@@ -37,6 +37,7 @@ const LoginForm: FC = () => {
       onSubmit={handleLogin}
       validateOnBlur={false}
       validateOnChange={false}
+      enableReinitialize={true}
     >
       {({ errors, touched, isSubmitting }) => (
         <Form className="relative mx-auto flex flex-col">
