@@ -2,6 +2,7 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { BiLike, BiSolidLike } from 'react-icons/bi';
 import { FaUserEdit } from 'react-icons/fa';
+import { HiChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 
 import UserPhoto from './UserPhoto';
 import ProfileVisitor from './ProfileVisitor';
@@ -26,15 +27,15 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
   };
 
   return (
-    <main className="mx-auto my-5 flex flex-wrap justify-center">
+    <main className="mx-auto mb-5 flex flex-col flex-wrap justify-center lg:flex-row">
       <ProfileVisitor username={user.username} />
 
-      <div className="mr-5 w-[500px]">
+      <div className="mx-auto mb-2 w-[500px] lg:m-0 lg:mr-5">
         <div className="mb-2 h-[500px]">
           <UserPhoto user={user} photos={photos} />
         </div>
 
-        <div className="mb-5 flex items-center justify-end">
+        <div className="flex items-center justify-end gap-1">
           {user.me ? (
             <Link
               href="/profile"
@@ -60,44 +61,27 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
                     </>
                   ) : (
                     <>
-                      <BiSolidLike
-                        color="#F39BB3"
-                        className="mr-1"
-                      ></BiSolidLike>
+                      <BiSolidLike color="#F39BB3" className="mr-1" />
                       Unlike
                     </>
                   )}
                 </button>
               </form>
+
+              <Link
+                href={`/chat/${user.username}`}
+                className="flex items-center rounded-lg border-2 border-brown bg-green-5 px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+              >
+                <HiChatBubbleOvalLeftEllipsis className="mr-1" />
+                Chat
+              </Link>
             </>
           )}
         </div>
       </div>
 
-      <div className="relative min-w-[500px] flex-1">
-        <h2 className="mb-5 border-b-2 border-brown pb-1 text-xl text-brown">
-          Biography
-        </h2>
-        <div className="mb-5 rounded-lg bg-neutral/50 p-3">
-          {user?.biography || 'No bio available'}
-        </div>
-        <h2 className="mb-5 border-b-2 border-brown pb-1 text-xl text-brown">
-          Interests
-        </h2>
-        {user?.tags.length > 0 ? (
-          <div>
-            <ul className="flex flex-wrap gap-2">
-              {user?.tags.map((tag, i) => (
-                <li key={i} className="rounded-lg bg-green-2 px-2 text-white">
-                  {tag}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : (
-          'No tags available'
-        )}
-        <div className="absolute bottom-0 right-0 mb-5 flex">
+      <div className="flex flex-1 flex-col">
+        <div className="mb-3 flex justify-center gap-1 lg:justify-start">
           {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
           <form action={handleStartConversation}>
             <button
@@ -120,17 +104,31 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
               Report as fake
             </button>
           </form>
-          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-          <form action={handleStartConversation}>
-            <button
-              type="submit"
-              className={`${
-                user.liked ? 'bg-green-5 active:bg-green-5' : 'bg-green-2'
-              } flex items-center rounded-lg border-2 border-brown px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`}
-            >
-              Send Message
-            </button>
-          </form>
+        </div>
+
+        <div>
+          <h2 className="mb-5 border-b-2 border-brown pb-1 text-xl text-brown">
+            Biography
+          </h2>
+          <div className="mb-5 rounded-lg bg-neutral/50 p-3">
+            {user?.biography || 'No bio available'}
+          </div>
+          <h2 className="mb-5 border-b-2 border-brown pb-1 text-xl text-brown">
+            Interests
+          </h2>
+          {user?.tags.length > 0 ? (
+            <div>
+              <ul className="flex flex-wrap gap-2">
+                {user?.tags.map((tag, i) => (
+                  <li key={i} className="rounded-lg bg-green-2 px-2 text-white">
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            'No tags available'
+          )}
         </div>
       </div>
     </main>
