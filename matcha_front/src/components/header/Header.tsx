@@ -26,7 +26,7 @@ const Header: FC<HeaderProps> = ({ currentUser }) => {
           <MainMenu currentUser={currentUser} />
         </div>
 
-        <div className="flex flex-1 items-center justify-end">
+        <div className="flex flex-1 items-center justify-end overflow-x-hidden">
           <Notifications className="mr-3" />
           <UserWidget currentUser={currentUser} />
         </div>

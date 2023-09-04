@@ -59,33 +59,36 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
 
   return (
     <>
-      {notifications.some((n) => n.type == 'match' && !n.viewed) && (
-        <Marquee speed={50} className="mx-10">
-          <div className="mx-10 flex flex-1 items-center overflow-hidden">
-            {notifications
-              .filter((n) => n.type == 'match' && !n.viewed)
-              .map((n, i) => (
-                <div className="flex items-center" key={i}>
-                  <Image
-                    src={Match as StaticImageData}
-                    alt="match"
-                    width={80}
-                    className="mx-5"
-                  />
-                  <p className="text-lg font-bold">
-                    {getRandomMatchPhrase(n.username)}
-                  </p>
-                  <Image
-                    src={Match as StaticImageData}
-                    alt="match"
-                    width={80}
-                    className="mx-5"
-                  />
-                </div>
-              ))}
-          </div>
-        </Marquee>
-      )}
+      <div className="mr-2 flex-1">
+        {notifications.some((n) => n.type == 'match' && !n.viewed) && (
+          <Marquee speed={50} pauseOnHover={true}>
+            <div className="mx-10 flex items-center">
+              {notifications
+                .filter((n) => n.type == 'match' && !n.viewed)
+                .map((n, i) => (
+                  <div className="flex items-center" key={i}>
+                    <Image
+                      src={Match as StaticImageData}
+                      alt="match"
+                      width={80}
+                      className="mx-5"
+                    />
+                    <p className="text-lg font-bold">
+                      {getRandomMatchPhrase(n.username)}
+                    </p>
+                    <Image
+                      src={Match as StaticImageData}
+                      alt="match"
+                      width={80}
+                      className="mx-5"
+                    />
+                  </div>
+                ))}
+            </div>
+          </Marquee>
+        )}
+      </div>
+
       <div className={`group relative flex items-center ${className}`}>
         <button className="relative">
           <FaBell size={24} />
