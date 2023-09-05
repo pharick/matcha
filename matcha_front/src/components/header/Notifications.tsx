@@ -59,10 +59,10 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
 
   return (
     <>
-      <div className="mr-2 flex-1">
+      <div className="flex-1 px-2">
         {notifications.some((n) => n.type == 'match' && !n.viewed) && (
           <Marquee speed={50} pauseOnHover={true}>
-            <div className="mx-10 flex items-center">
+            <div className="flex items-center">
               {notifications
                 .filter((n) => n.type == 'match' && !n.viewed)
                 .map((n, i) => (
@@ -71,7 +71,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
                       src={Match as StaticImageData}
                       alt="match"
                       width={80}
-                      className="mx-5"
+                      className=""
                     />
                     <p className="text-lg font-bold">
                       {getRandomMatchPhrase(n.username)}
@@ -80,7 +80,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
                       src={Match as StaticImageData}
                       alt="match"
                       width={80}
-                      className="mx-5"
+                      className=""
                     />
                   </div>
                 ))}
