@@ -59,35 +59,37 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
 
   return (
     <>
-      <div className="mr-2 flex-1 overflow-y-hidden">
-        {notifications.some((n) => n.type == 'match' && !n.viewed) && (
-          <Marquee speed={50} pauseOnHover={true}>
-            <div className="flex items-center gap-10">
-              {notifications
-                .filter((n) => n.type == 'match' && !n.viewed)
-                .map((n, i) => (
-                  <div className="flex items-center gap-5" key={i}>
-                    <Image
-                      src={Match as StaticImageData}
-                      alt="match"
-                      width={80}
-                    />
-                    <p className="text-lg font-bold">
-                      {getRandomMatchPhrase(n.username)}
-                    </p>
-                    <Image
-                      src={Match as StaticImageData}
-                      alt="match"
-                      width={80}
-                    />
-                  </div>
-                ))}
-            </div>
-          </Marquee>
-        )}
+      <div className="hidden flex-1 xl:block">
+        <div className="m-auto overflow-y-hidden  xl:w-[600px] 2xl:w-[800px]">
+          {notifications.some((n) => n.type == 'match' && !n.viewed) && (
+            <Marquee speed={50} pauseOnHover={true}>
+              <div className="flex items-center">
+                {notifications
+                  .filter((n) => n.type == 'match' && !n.viewed)
+                  .map((n, i) => (
+                    <div className="mx-6 flex items-center" key={i}>
+                      <Image
+                        src={Match as StaticImageData}
+                        alt="match"
+                        width={80}
+                      />
+                      <p className="text-lg font-bold">
+                        {getRandomMatchPhrase(n.username)}
+                      </p>
+                      <Image
+                        src={Match as StaticImageData}
+                        alt="match"
+                        width={80}
+                      />
+                    </div>
+                  ))}
+              </div>
+            </Marquee>
+          )}
+        </div>
       </div>
 
-      <div className={`group relative flex items-center ${className}`}>
+      <div className={`group relative ml-3 flex items-center ${className}`}>
         <button className="relative">
           <FaBell size={24} />
           {notifications.some((n) => !n.viewed) && (
