@@ -318,7 +318,7 @@ func (m UserModel) GetMaxRating() (int, error) {
 }
 
 func (m UserModel) UpdateLastOnline(id int) error {
-	err := m.DB.QueryRow("UPDATE users SET last_online = now() WHERE id = $1", id).Err()
+	_, err := m.DB.Exec("UPDATE users SET last_online = now() WHERE id = $1", id)
 	return err
 }
 

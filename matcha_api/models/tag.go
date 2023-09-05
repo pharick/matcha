@@ -29,25 +29,23 @@ func (m TagModel) CreateIfNotExists(name string) (Tag, error) {
 }
 
 func (m TagModel) Set(userId int, tagNames []string) ([]string, error) {
-	res, err := m.DB.Query("DELETE FROM users_tags WHERE user_id = $1", userId)
+	_, err := m.DB.Exec("DELETE FROM users_tags WHERE user_id = $1", userId)
 	if err != nil {
 		return nil, err
 	}
-	defer res.Close()
 	insertedTagNames := make([]string, 0)
 	for _, name := range tagNames {
 		tag, err := m.CreateIfNotExists(name)
 		if err != nil && err != sql.ErrNoRows {
 			return nil, err
 		}
-		res, err = m.DB.Query(
+		_, err = m.DB.Exec(
 			"INSERT INTO users_tags(user_id, tag_id) VALUES($1, $2)",
 			userId, tag.Id,
 		)
 		if err != nil {
 			return nil, err
 		}
-		defer res.Close()
 		insertedTagNames = append(insertedTagNames, tag.Name)
 	}
 	return insertedTagNames, nil

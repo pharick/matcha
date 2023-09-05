@@ -54,14 +54,13 @@ func (m PhotoModel) GetOneById(id int) (Photo, error) {
 
 func (m PhotoModel) Update(d Photo) (Photo, error) {
 	var photo Photo
-	res, err := m.DB.Query(
+	_, err := m.DB.Exec(
 		"UPDATE photos SET index = index + 1 WHERE index >= $1",
 		d.Index,
 	)
 	if err != nil {
 		return photo, err
 	}
-	defer res.Close()
 	err = m.DB.QueryRow(
 		`UPDATE photos SET index = $2 
 		WHERE id = $1
@@ -77,14 +76,13 @@ func (m PhotoModel) Update(d Photo) (Photo, error) {
 }
 
 func (m PhotoModel) Remove(id int) error {
-	res, err := m.DB.Query(
+	_, err := m.DB.Exec(
 		"DELETE FROM photos WHERE id = $1",
 		id,
 	)
 	if err != nil {
 		return err
 	}
-	defer res.Close()
 	return nil
 }
 
