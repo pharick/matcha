@@ -11,10 +11,18 @@ const MainMenu: FC<MainMenuProps> = ({ currentUser }) => {
       <ul className="flex">
         <li className="shrink-0">
           <Link
-            className="block border-r border-brown p-2 transition hover:bg-green-5/50"
+            className="block border-r border-brown/30 p-2 transition hover:bg-green-5/50"
             href="/"
           >
             Find love
+          </Link>
+        </li>
+        <li className="shrink-0">
+          <Link
+            className="block border-r border-brown/30 p-2 transition hover:bg-green-5/50"
+            href={`/chat/`}
+          >
+            Chat
           </Link>
         </li>
         <li className="shrink-0">

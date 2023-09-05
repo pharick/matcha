@@ -1,6 +1,9 @@
 package models
 
-import "database/sql"
+import (
+	"database/sql"
+	"log"
+)
 
 type Like struct {
 	UserId     int
@@ -20,18 +23,19 @@ func (m LikeModel) Create(userId int, fromUserId int) (Like, error) {
 		&like.UserId,
 		&like.FromUserId,
 	)
+	log.Printf("conns: %v", m.DB.Stats().OpenConnections)
 	return like, err
 }
 
 func (m LikeModel) Delete(userId int, fromUserId int) error {
-	res, err := m.DB.Query(
+	_, err := m.DB.Exec(
 		"DELETE FROM likes WHERE user_id = $1 AND from_user_id = $2",
 		userId, fromUserId,
 	)
 	if err != nil {
 		return err
 	}
-	defer res.Close()
+	log.Printf("conns: %v", m.DB.Stats().OpenConnections)
 	return nil
 }
 

@@ -17,7 +17,7 @@ const Header: FC<HeaderProps> = ({ currentUser }) => {
   return (
     <header>
       <div className="mb-5 mt-3 flex justify-between">
-        <div className="flex items-center">
+        <div className="flex shrink-0 items-center">
           <Link href="/" className="flex items-center">
             <Image src={Matcha} width={100} priority alt="logo" />
             <Image src={Cup} width={80} alt="cup" className="mr-2" />
