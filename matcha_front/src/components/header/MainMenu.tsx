@@ -68,31 +68,34 @@ const MainMenu: FC<MainMenuProps> = ({ currentUser }) => {
         ) : (
           <RxHamburgerMenu size={30} onClick={() => handleOpenMenu()} />
         )}
-        {openMenu && (
-          <ul className="absolute left-0 z-50 h-screen w-[250px] rounded-lg bg-green-5/90 text-center font-bold">
-            <MainMenuItem
-              isBurger={true}
-              href="/"
-              onClick={() => handleOpenMenu}
-            >
-              Find Love
-            </MainMenuItem>
-            <MainMenuItem
-              isBurger={true}
-              href={`/chat/`}
-              onClick={() => handleOpenMenu}
-            >
-              Chat
-            </MainMenuItem>
-            <MainMenuItem
-              isBurger={true}
-              href={`/users/${currentUser.username}`}
-              onClick={() => handleOpenMenu}
-            >
-              My profile
-            </MainMenuItem>
-          </ul>
-        )}
+        {/* {openMenu && ( */}
+        <ul
+          className={`absolute left-0 z-50 h-screen w-[250px] rounded-lg bg-green-5/90 text-center font-bold ${
+            openMenu
+              ? 'easy-in-out translate-x-0 duration-500'
+              : 'easy-in-out -translate-x-full duration-500'
+          }
+        `}
+        >
+          <MainMenuItem isBurger={true} href="/" onClick={() => handleOpenMenu}>
+            Find Love
+          </MainMenuItem>
+          <MainMenuItem
+            isBurger={true}
+            href={`/chat/`}
+            onClick={() => handleOpenMenu}
+          >
+            Chat
+          </MainMenuItem>
+          <MainMenuItem
+            isBurger={true}
+            href={`/users/${currentUser.username}`}
+            onClick={() => handleOpenMenu}
+          >
+            My profile
+          </MainMenuItem>
+        </ul>
+        {/* )} */}
       </nav>
     </>
   );
