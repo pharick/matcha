@@ -21,7 +21,7 @@ const Header: FC<HeaderProps> = ({ currentUser }) => {
           <MainMenu currentUser={currentUser} />
         </div>
 
-        <div className="flex shrink-0 items-center">
+        <div className="flex shrink-0 cursor-pointer items-center">
           <Link href="/" className="flex items-center">
             <Image src={Matcha} width={100} priority alt="logo" />
             <Image src={Cup} width={80} alt="cup" className="mr-2" />

@@ -1,48 +1,82 @@
 import { NextPage } from 'next';
-
-import Matcha, { sortFields } from '@/components/matcha/Matcha';
-import { getCurrentUser } from '@/api/auth';
 import { redirect } from 'next/navigation';
-import { parseIntSearchParam } from '@/helpers';
+import Image, { StaticImageData } from 'next/image';
+import {
+  PiGenderFemaleBold,
+  PiGenderIntersexBold,
+  PiGenderMaleBold,
+//   PiStarFill,
+} from 'react-icons/pi';
 
-interface SearchPageProps {
-  searchParams: {
-    ageFrom?: string;
-    ageTo?: string;
-    minFame?: string;
-    maxDistance?: string;
-    tag?: string | string[];
-    sortField: string;
-    sortType: string;
-  };
-}
+import { getCurrentUser } from '@/api/auth';
+import DefaultProfilePicture from '@/images/default_profile_picture.svg';
+import { birthdateToAge } from '@/helpers';
 
-const SearchPage: NextPage<SearchPageProps> = async ({ searchParams }) => {
-  const currentUser = await getCurrentUser();
-  if (!currentUser) redirect('/login');
-  if (!currentUser.active) redirect('/profile');
+const MainPage: NextPage = async () => {
+  const user = await getCurrentUser();
+  if (!user) redirect('/login');
 
-  const params: SearchParams = {
-    ageFrom: parseIntSearchParam(searchParams.ageFrom) ?? 18,
-    ageTo: parseIntSearchParam(searchParams.ageTo) ?? 100,
-    minFame: parseIntSearchParam(searchParams.minFame) ?? 0,
-    maxDistance: parseIntSearchParam(searchParams.maxDistance) ?? 5000,
-    tags: !searchParams.tag
-      ? currentUser.tags
-      : typeof searchParams.tag == 'string'
-      ? [searchParams.tag]
-      : searchParams.tag,
-    sortField: searchParams.sortField ?? 'distance',
-    sortType:
-      searchParams.sortType ??
-      (Object.keys(sortFields).includes(searchParams.sortField)
-        ? sortFields[
-            searchParams.sortField as keyof typeof sortFields
-          ].toString()
-        : sortFields.distance.toString()),
-  };
-
-  return <Matcha searchParams={params} />;
+  return (
+    <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+      <div className="min-h-[350px] rounded-lg bg-neutral/50 p-5">
+        <h2 className="rounded-lg bg-green-2 px-5 font-bold">
+          People who visited you
+        </h2>
+        <ul className="mx-3 mt-3 rounded-lg bg-green-5/50">
+          <li className="flex h-[80px] items-center border-b border-brown/50 px-5">
+            <figure className="relative h-[60px] w-[60px] overflow-hidden rounded-full border-2 border-brown">
+              <Image
+                src={
+                  user.avatar && user.avatar.startsWith('http')
+                    ? user.avatar
+                    : user.avatar
+                    ? `${process.env.NEXT_PUBLIC_BACK_BASE_URL}${user.avatar}`
+                    : (DefaultProfilePicture as StaticImageData)
+                }
+                fill={true}
+                className="object-cover"
+                sizes="100px"
+                alt="photo"
+              />
+            </figure>
+            <h1 className="mx-2 font-bold">
+              {user.first_name} {user.last_name}
+            </h1>
+            <div className="flex items-center text-xl">
+              {birthdateToAge(user.birth_date)}
+              {user.gender == 'male' ? (
+                <PiGenderMaleBold />
+              ) : user.gender == 'female' ? (
+                <PiGenderFemaleBold />
+              ) : (
+                <PiGenderIntersexBold />
+              )}
+            </div>
+          </li>
+          <li className="h-[80px] border-b border-brown/50"></li>
+          <li className="h-[80px] border-b border-brown/50"></li>
+          <li className="h-[80px] border-b border-brown/50"></li>
+          <li className="h-[80px]"></li>
+        </ul>
+        <div className="flex h-[50px] items-center justify-center">Page</div>
+      </div>
+      <div className="min-h-[350px] rounded-lg bg-neutral/50 p-5">
+        <h2 className="rounded-lg bg-green-2 px-5 font-bold">
+          People who liked you
+        </h2>
+      </div>
+      <div className="min-h-[350px] rounded-lg bg-neutral/50 p-5">
+        <h2 className="rounded-lg bg-green-2 px-5 font-bold">
+          People who visited you
+        </h2>
+      </div>
+      <div className="min-h-[350px] rounded-lg bg-neutral/50 p-5">
+        <h2 className="rounded-lg bg-green-2 px-5 font-bold">
+          People who liked you
+        </h2>
+      </div>
+    </div>
+  );
 };
 
-export default SearchPage;
+export default MainPage;

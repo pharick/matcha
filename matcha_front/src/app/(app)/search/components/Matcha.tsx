@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import FiltersSideBar from '@/components/matcha/FiltersSideBar';
+import FiltersSideBar from '@/app/(app)/search/components/FiltersSideBar';
 import SearchResults from './SearchResults';
 
 export enum SortType {

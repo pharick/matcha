@@ -7,7 +7,7 @@ import ReactSlider from 'react-slider';
 import { FiFilter } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
 
-import TagsField from '../TagsField';
+import TagsField from '../../../../components/TagsField';
 import SortingField from './SortingField';
 import { SortType, sortFields } from './Matcha';
 
