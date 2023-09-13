@@ -14,6 +14,7 @@ import { birthdateToAge } from '@/helpers';
 const MainPage: NextPage = async () => {
   const user = await getCurrentUser();
   if (!user) redirect('/login');
+  if (!user.active) redirect('/profile');
 
   return (
     <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">

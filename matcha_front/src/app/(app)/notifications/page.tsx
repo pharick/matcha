@@ -17,7 +17,7 @@ interface NotificationsPageProps {
 const NotificationsPage: NextPage<NotificationsPageProps> = ({
   searchParams: { page },
 }) => {
-  const PAGE_SIZE = 10;
+  const PAGE_SIZE = 8;
   const pageInt = parseIntSearchParam(page) ?? 0;
   const notificationsPromise = getAllNotifications(
     pageInt * PAGE_SIZE,

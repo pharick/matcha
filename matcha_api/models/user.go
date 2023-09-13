@@ -327,3 +327,79 @@ func (m UserModel) Count() (int, error) {
 	err := m.DB.QueryRow("SELECT COUNT(1) FROM users").Scan(&n)
 	return n, err
 }
+
+func (m UserModel) CountLikesByUserId(userId int) (int, error) {
+	var n int
+	err := m.DB.QueryRow("SELECT COUNT(1) FROM likes WHERE user_id = $1", userId).Scan(&n)
+	return n, err
+}
+
+func (m UserModel) CountLikesByFromUserId(fromUserId int) (int, error) {
+	var n int
+	err := m.DB.QueryRow("SELECT COUNT(1) FROM likes WHERE from_user_id = $1", fromUserId).Scan(&n)
+	return n, err
+}
+
+func (m UserModel) GetLikesByUserId(
+	userId int,
+	offset int,
+	limit int,
+) ([]User, error) {
+	rows, err := m.DB.Query(
+		fmt.Sprintf(`
+			SELECT %s FROM likes
+			JOIN users ON likes.user_id = users.id
+			WHERE from_user_id = $1
+			ORDER BY create_time DESC OFFSET $2 LIMIT $3
+		`, fields,
+		),
+		userId,
+		offset,
+		limit,
+	)
+	if err != nil {
+		return nil, err
+	}
+	users := make([]User, 0)
+	var user User
+	for rows.Next() {
+		err := scanRow(rows, &user)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
+}
+
+func (m UserModel) GetLikesByFromUserId(
+	FromUserId int,
+	offset int,
+	limit int,
+) ([]User, error) {
+	rows, err := m.DB.Query(
+		fmt.Sprintf(`
+			SELECT %s FROM likes
+			JOIN users ON likes.user_id = users.id
+			WHERE from_user_id = $1
+			ORDER BY create_time DESC OFFSET $2 LIMIT $3
+		`, fields,
+		),
+		FromUserId,
+		offset,
+		limit,
+	)
+	if err != nil {
+		return nil, err
+	}
+	users := make([]User, 0)
+	var user User
+	for rows.Next() {
+		err := scanRow(rows, &user)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
+}

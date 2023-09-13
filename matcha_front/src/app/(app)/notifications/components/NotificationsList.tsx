@@ -24,7 +24,7 @@ const NotificationsList: FC<NotificationsListProps> = async ({
       </h1>
       {list.length > 0 ? (
         <>
-          <ul className="pb-3">
+          <ul className="min-h-[550px] pb-3">
             {list.map((n) => (
               <li
                 key={n.id}
@@ -46,7 +46,7 @@ const NotificationsList: FC<NotificationsListProps> = async ({
             ))}
           </ul>
           <nav>
-            <ul className="flex">
+            <ul className="flex justify-center">
               <li>
                 {page > 0 ? (
                   <Link

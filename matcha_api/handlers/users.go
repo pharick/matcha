@@ -8,6 +8,7 @@ import (
 	"matcha_api/models"
 	"matcha_api/schemas"
 	"net/http"
+	"strconv"
 
 	"goji.io/pat"
 )
@@ -122,4 +123,115 @@ func UpdatePosition(env *Env, w http.ResponseWriter, r *http.Request) (any, erro
 	user.LastPosition.Latitude = d.Latitude
 	user, err = env.Users.Update(user)
 	return nil, err
+}
+
+
+func GetLikesByUsers(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	currentUser := r.Context().Value(ContextKey("User")).(models.User)
+	offset, err := strconv.Atoi(r.URL.Query().Get("offset"))
+	if err != nil {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+	if err != nil {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	users, err := env.Users.GetLikesByUserId(currentUser.Id, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	count, err := env.Users.CountLikesByUserId(currentUser.Id)
+	if err != nil {
+		return nil, err
+	}
+	usersRet := make([]schemas.UserReturn, 0, len(users))
+	for _, user := range users {
+		avatar, err := env.Photos.GetFirstByUserId(user.Id)
+		if err != nil && err != sql.ErrNoRows {
+			return nil, err
+		}
+		var avatar_url string
+		if err != sql.ErrNoRows {
+			avatar_url = avatar.Url
+		}
+		tags, err := env.Tags.GetAllByUserId(user.Id)
+		if err != nil && err != sql.ErrNoRows {
+			return nil, err
+		}
+		usersRet = append(usersRet, schemas.UserReturn{
+			Id:                user.Id,
+			Username:          user.Username,
+			Email:             user.Email,
+			FirstName:         user.FirstName,
+			LastName:          user.LastName,
+			Gender:            user.Gender,
+			GenderPreferences: user.GenderPreferences,
+			Biography:         user.Biography,
+			BirthDate:         user.BirthDate,
+			Avatar:            avatar_url,
+			Rating:            lib.NormalizeRating(&env.Users, user.Rating),
+			Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
+			Tags:              tags,
+		})
+	}
+	ret := schemas.SearchReturn{
+		List:  usersRet,
+		Total: count,
+	}
+	return ret, nil
+}
+
+func GetLikesByMe(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	currentUser := r.Context().Value(ContextKey("User")).(models.User)
+	offset, err := strconv.Atoi(r.URL.Query().Get("offset"))
+	if err != nil {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+	if err != nil {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	users, err := env.Users.GetLikesByFromUserId(currentUser.Id, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	count, err := env.Users.CountLikesByFromUserId(currentUser.Id)
+	if err != nil {
+		return nil, err
+	}
+	usersRet := make([]schemas.UserReturn, 0, len(users))
+	for _, user := range users {
+		avatar, err := env.Photos.GetFirstByUserId(user.Id)
+		if err != nil && err != sql.ErrNoRows {
+			return nil, err
+		}
+		var avatar_url string
+		if err != sql.ErrNoRows {
+			avatar_url = avatar.Url
+		}
+		tags, err := env.Tags.GetAllByUserId(user.Id)
+		if err != nil && err != sql.ErrNoRows {
+			return nil, err
+		}
+		usersRet = append(usersRet, schemas.UserReturn{
+			Id:                user.Id,
+			Username:          user.Username,
+			Email:             user.Email,
+			FirstName:         user.FirstName,
+			LastName:          user.LastName,
+			Gender:            user.Gender,
+			GenderPreferences: user.GenderPreferences,
+			Biography:         user.Biography,
+			BirthDate:         user.BirthDate,
+			Avatar:            avatar_url,
+			Rating:            lib.NormalizeRating(&env.Users, user.Rating),
+			Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
+			Tags:              tags,
+		})
+	}
+	ret := schemas.SearchReturn{
+		List:  usersRet,
+		Total: count,
+	}
+	return ret, nil
 }
