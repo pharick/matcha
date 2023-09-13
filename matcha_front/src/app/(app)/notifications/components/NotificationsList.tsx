@@ -5,22 +5,22 @@ import { format } from 'date-fns';
 import { getNotificationMessage } from '@/helpers';
 
 interface NotificationsListProps {
-  notificationsPromise: Promise<MNotification[]>;
+  notificationsPromise: Promise<{ list: MNotification[]; total: number }>;
 }
 
 const NotificationsList: FC<NotificationsListProps> = async ({
   notificationsPromise,
 }) => {
-  const notifications = await notificationsPromise;
+  const { list, total } = await notificationsPromise;
 
   return (
     <div className="mx-auto my-2 max-w-[700px]">
       <h1 className="my-5 border-b-2 border-brown pb-1 text-center text-2xl text-brown">
         Notifications history
       </h1>
-      {notifications.length > 0 ? (
+      {list.length > 0 ? (
         <ul>
-          {notifications.map((n) => (
+          {list.map((n) => (
             <li
               key={n.id}
               className="border-b border-b-brown/50 p-2 last:border-0"

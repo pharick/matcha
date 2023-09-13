@@ -4,7 +4,6 @@ import { FC, ReactNode, useState } from 'react';
 import Link from 'next/link';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { AiOutlineClose } from 'react-icons/ai';
-// import { HiOutlineHome } from 'react-icons/hi';
 
 interface MainMenuItemProps {
   children: ReactNode;
@@ -63,8 +62,6 @@ const MainMenu: FC<MainMenuProps> = ({ currentUser }) => {
               className="flex items-center p-2 transition hover:bg-green-5/50"
               href={`/users/${currentUser.username}`}
             >
-              {/* Home */}
-              {/* <HiOutlineHome size={25} className="mr-2" /> */}
               My Profile
             </Link>
           </li>

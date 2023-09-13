@@ -7,3 +7,8 @@ type NotificationReturn struct {
 	CreateTime string `json:"create_time"`
 	Viewed     bool   `json:"viewed"`
 }
+
+type NotificationsReturn struct {
+	List  []NotificationReturn `json:"list"`
+	Total int                  `json:"total"`
+}

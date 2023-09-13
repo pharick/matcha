@@ -6,6 +6,7 @@ import (
 	"matcha_api/errors"
 	"matcha_api/lib/sockets"
 	"matcha_api/models"
+	"matcha_api/schemas"
 	"net/http"
 	"strconv"
 
@@ -45,8 +46,27 @@ func ViewNotification(env *Env, w http.ResponseWriter, r *http.Request) (any, er
 
 func GetAllNotifications(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	user := r.Context().Value(ContextKey("User")).(models.User)
-	notifications, err := env.Notifications.GetAllByUserId(user.Id)
-	return notifications, err
+	offset, err := strconv.Atoi(r.URL.Query().Get("offset"))
+	if err != nil {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+	if err != nil {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	total, err := env.Notifications.TotalByUserId(user.Id)
+	if err != nil {
+		return nil, err
+	}
+	notifications, err := env.Notifications.GetAllByUserId(user.Id, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	res := schemas.NotificationsReturn{
+		List:  notifications,
+		Total: total,
+	}
+	return res, nil
 }
 
 func GetUnreadNotifications(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {

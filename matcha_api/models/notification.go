@@ -87,14 +87,26 @@ func (m NotificationModel) GetUnreadByUserId(userId int) ([]schemas.Notification
 	return notifications, nil
 }
 
-func (m NotificationModel) GetAllByUserId(userId int) ([]schemas.NotificationReturn, error) {
-	notifications := make([]schemas.NotificationReturn, 0)
-	rows, err := m.DB.Query(
-		`SELECT notifications.id, type, users.username, create_time, viewed
-		FROM notifications JOIN users ON from_user_id = users.id
-		WHERE user_id = $1 ORDER BY create_time DESC`,
+func (m NotificationModel) TotalByUserId(userId int) (int, error) {
+	var count int
+	err := m.DB.QueryRow(
+		"SELECT COUNT(1) FROM notifications WHERE user_id = $1",
 		userId,
-	)
+	).Scan(&count)
+	return count, err
+}
+
+func (m NotificationModel) GetAllByUserId(
+	userId int,
+	offset int,
+	limit int,
+) ([]schemas.NotificationReturn, error) {
+	notifications := make([]schemas.NotificationReturn, 0)
+	rows, err := m.DB.Query(`
+		SELECT notifications.id, type, users.username, create_time, viewed
+		FROM notifications JOIN users ON from_user_id = users.id
+		WHERE user_id = $1 ORDER BY create_time DESC OFFSET $2 LIMIT $3
+	`, userId, offset, limit)
 	if err != nil {
 		return nil, err
 	}
