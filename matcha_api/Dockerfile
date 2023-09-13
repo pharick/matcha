@@ -1,12 +1,10 @@
-FROM golang:1.20
+FROM golang:1.21
 
 WORKDIR /usr/src/app
 
-RUN apt-get update && \
-        apt-get upgrade -y && \
-        apt-get install -y lsb-release && curl -L https://packagecloud.io/golang-migrate/migrate/gpgkey | apt-key add - && \
-        echo "deb https://packagecloud.io/golang-migrate/migrate/debian/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/migrate.list && \
+RUN curl -s https://packagecloud.io/install/repositories/golang-migrate/migrate/script.deb.sh | bash && \
         apt-get update && \
+        apt-get upgrade -y && \
         apt-get install -y migrate
 
 COPY go.mod go.sum ./

@@ -27,7 +27,11 @@ const nextConfig = {
         destination: '/profile/information',
         permanent: true,
       },
-
+      {
+        source: '/notifications',
+        destination: '/notifications/0',
+        permanent: true,
+      },
     ];
   },
     swcMinify: false,

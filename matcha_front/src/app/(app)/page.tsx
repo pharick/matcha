@@ -5,7 +5,6 @@ import {
   PiGenderFemaleBold,
   PiGenderIntersexBold,
   PiGenderMaleBold,
-//   PiStarFill,
 } from 'react-icons/pi';
 
 import { getCurrentUser } from '@/api/auth';

@@ -12,6 +12,7 @@ const NotificationsList: FC<NotificationsListProps> = async ({
   notificationsPromise,
 }) => {
   const { list, total } = await notificationsPromise;
+  console.log(total);
 
   return (
     <div className="mx-auto my-2 max-w-[700px]">
