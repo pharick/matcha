@@ -34,7 +34,7 @@ const MainPage: NextPage<MainPageProps> = async ({
       <MainCard list={likesMe.list} total={likesMe.total} />
       <MainCard list={visits.list} total={visits.total} />
       <MainCard list={visitsMe.list} total={visitsMe.total} />
-    </div >
+    </div>
   );
 };
 

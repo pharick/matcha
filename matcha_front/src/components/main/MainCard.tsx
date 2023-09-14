@@ -1,30 +1,31 @@
-import { FC } from "react"
-import ShortUserInfo from "../ShortUserInfo";
+import { FC } from 'react';
+import ShortUserInfo from '../ShortUserInfo';
 
 interface MainCardProps {
-    list: User[];
-    total: number;
+  list: User[];
+  total: number;
 }
 
 const MainCard: FC<MainCardProps> = ({ list, total }) => {
-    return (
-        <div className="min-h-[550px] rounded-lg bg-neutral/50 p-5">
-            <h2 className="rounded-lg bg-green-2 px-5 font-bold">
-                People who visited you
-            </h2>
-            {list.length > 0 ? (
-                <>
-                    <ul className="mx-3 mt-3 rounded-lg bg-green-5/50">
-                        {list.map((n) => (
-                            <li
-                                key={n.id}
-                                className="flex h-[80px] items-center border-b border-brown/50 px-5"
-                            >
-                                <ShortUserInfo user={n} />
-                            </li>
-                        ))}
-                    </ul>
-                    {/* <nav>
+  console.log(total);
+  return (
+    <div className="min-h-[550px] rounded-lg bg-neutral/50 p-5">
+      <h2 className="rounded-lg bg-green-2 px-5 font-bold">
+        People who visited you
+      </h2>
+      {list.length > 0 ? (
+        <>
+          <ul className="mx-3 mt-3 rounded-lg bg-green-5/50">
+            {list.map((n) => (
+              <li
+                key={n.id}
+                className="flex h-[80px] items-center border-b border-brown/50 px-5"
+              >
+                <ShortUserInfo user={n} />
+              </li>
+            ))}
+          </ul>
+          {/* <nav>
                         <ul className="flex justify-center">
                             <li>
                                 {page > 0 ? (
@@ -61,15 +62,12 @@ const MainCard: FC<MainCardProps> = ({ list, total }) => {
                             </li>
                         </ul>
                     </nav> */}
-                </>
-            ) : (
-                <p className="text-center">No notifications yet</p>
-            )}
-        </div>
-    )
-}
+        </>
+      ) : (
+        <p className="text-center">No notifications yet</p>
+      )}
+    </div>
+  );
+};
 
 export default MainCard;
-
-
-

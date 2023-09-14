@@ -52,15 +52,16 @@ const ShortUserInfo: FC<UserInfoProps> = ({ user }) => {
           <p className="mr-2 rounded-lg bg-neutral px-1">{user.username}</p>
           {user.last_online && (
             <p
-              className={`w-fit rounded-lg px-1  text-neutral ${user.online ? 'bg-green-500' : 'bg-red-500'
-                }`}
+              className={`w-fit rounded-lg px-1  text-neutral ${
+                user.online ? 'bg-green-500' : 'bg-red-500'
+              }`}
             >
               {user.online
                 ? 'Online'
                 : `${formatDistance(
-                  new Date(user.last_online),
-                  new Date()
-                )} ago`}
+                    new Date(user.last_online),
+                    new Date()
+                  )} ago`}
             </p>
           )}
         </div>
