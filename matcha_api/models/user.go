@@ -349,7 +349,7 @@ func (m UserModel) GetLikesByUserId(
 		fmt.Sprintf(`
 			SELECT %s FROM likes
 			JOIN users ON likes.user_id = users.id
-			WHERE from_user_id = $1
+			WHERE user_id = $1
 			ORDER BY create_time DESC OFFSET $2 LIMIT $3
 		`, fields,
 		),
