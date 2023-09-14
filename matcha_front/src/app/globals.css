@@ -16,6 +16,13 @@ body {
   background: url("../../public/leaf_main.svg") center/cover no-repeat fixed, linear-gradient(var(--bg-start), var(--bg-end)) fixed;
 }
 
+/* @media(min-width: 500px) {
+  .body {
+    margin-left: 60px;
+    margin-right: 60px;
+  }
+} */
+
 input::-webkit-credentials-auto-fill-button,
 input::-webkit-contacts-auto-fill-button {
   position: absolute;

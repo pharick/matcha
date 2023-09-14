@@ -328,6 +328,8 @@ func (m UserModel) Count() (int, error) {
 	return n, err
 }
 
+//likes
+
 func (m UserModel) CountLikesByUserId(userId int) (int, error) {
 	var n int
 	err := m.DB.QueryRow("SELECT COUNT(1) FROM likes WHERE user_id = $1", userId).Scan(&n)
@@ -348,7 +350,7 @@ func (m UserModel) GetLikesByUserId(
 	rows, err := m.DB.Query(
 		fmt.Sprintf(`
 			SELECT %s FROM likes
-			JOIN users ON likes.user_id = users.id
+			JOIN users ON likes.from_user_id = users.id
 			WHERE user_id = $1
 			ORDER BY create_time DESC OFFSET $2 LIMIT $3
 		`, fields,
@@ -381,6 +383,84 @@ func (m UserModel) GetLikesByFromUserId(
 		fmt.Sprintf(`
 			SELECT %s FROM likes
 			JOIN users ON likes.user_id = users.id
+			WHERE from_user_id = $1
+			ORDER BY create_time DESC OFFSET $2 LIMIT $3
+		`, fields,
+		),
+		FromUserId,
+		offset,
+		limit,
+	)
+	if err != nil {
+		return nil, err
+	}
+	users := make([]User, 0)
+	var user User
+	for rows.Next() {
+		err := scanRow(rows, &user)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
+}
+
+// visits
+
+func (m UserModel) CountVisitsByUserId(userId int) (int, error) {
+	var n int
+	err := m.DB.QueryRow("SELECT COUNT(1) FROM visits WHERE user_id = $1", userId).Scan(&n)
+	return n, err
+}
+
+func (m UserModel) CountVisitsByFromUserId(fromUserId int) (int, error) {
+	var n int
+	err := m.DB.QueryRow("SELECT COUNT(1) FROM visits WHERE from_user_id = $1", fromUserId).Scan(&n)
+	return n, err
+}
+
+func (m UserModel) GetVisitsByUserId(
+	userId int,
+	offset int,
+	limit int,
+) ([]User, error) {
+	rows, err := m.DB.Query(
+		fmt.Sprintf(`
+			SELECT %s FROM visits
+			JOIN users ON visits.from_user_id = users.id
+			WHERE user_id = $1
+			ORDER BY create_time DESC OFFSET $2 LIMIT $3
+		`, fields,
+		),
+		userId,
+		offset,
+		limit,
+	)
+	if err != nil {
+		return nil, err
+	}
+	users := make([]User, 0)
+	var user User
+	for rows.Next() {
+		err := scanRow(rows, &user)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
+}
+
+func (m UserModel) GetVisitsByFromUserId(
+	FromUserId int,
+	offset int,
+	limit int,
+) ([]User, error) {
+	rows, err := m.DB.Query(
+		fmt.Sprintf(`
+			SELECT %s FROM visits
+			JOIN users ON visits.user_id = users.id
 			WHERE from_user_id = $1
 			ORDER BY create_time DESC OFFSET $2 LIMIT $3
 		`, fields,

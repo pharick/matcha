@@ -58,6 +58,8 @@ func main() {
 	mux.Handle(pat.Post("/update_position/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UpdatePosition)})
 	mux.Handle(pat.Get("/likes/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.GetLikesByUsers)})
 	mux.Handle(pat.Get("/likes/me/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.GetLikesByMe)})
+	mux.Handle(pat.Get("/visits/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.GetVisitsByUsers)})
+	mux.Handle(pat.Get("/visits/me/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.GetVisitsByMe)})
 
 	// photos
 	mux.Handle(pat.Post("/users/:username/photos/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UploadPhoto)})

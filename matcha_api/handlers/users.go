@@ -125,6 +125,7 @@ func UpdatePosition(env *Env, w http.ResponseWriter, r *http.Request) (any, erro
 	return nil, err
 }
 
+//likes
 
 func GetLikesByUsers(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	currentUser := r.Context().Value(ContextKey("User")).(models.User)
@@ -196,6 +197,118 @@ func GetLikesByMe(env *Env, w http.ResponseWriter, r *http.Request) (any, error)
 		return nil, err
 	}
 	count, err := env.Users.CountLikesByFromUserId(currentUser.Id)
+	if err != nil {
+		return nil, err
+	}
+	usersRet := make([]schemas.UserReturn, 0, len(users))
+	for _, user := range users {
+		avatar, err := env.Photos.GetFirstByUserId(user.Id)
+		if err != nil && err != sql.ErrNoRows {
+			return nil, err
+		}
+		var avatar_url string
+		if err != sql.ErrNoRows {
+			avatar_url = avatar.Url
+		}
+		tags, err := env.Tags.GetAllByUserId(user.Id)
+		if err != nil && err != sql.ErrNoRows {
+			return nil, err
+		}
+		usersRet = append(usersRet, schemas.UserReturn{
+			Id:                user.Id,
+			Username:          user.Username,
+			Email:             user.Email,
+			FirstName:         user.FirstName,
+			LastName:          user.LastName,
+			Gender:            user.Gender,
+			GenderPreferences: user.GenderPreferences,
+			Biography:         user.Biography,
+			BirthDate:         user.BirthDate,
+			Avatar:            avatar_url,
+			Rating:            lib.NormalizeRating(&env.Users, user.Rating),
+			Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
+			Tags:              tags,
+		})
+	}
+	ret := schemas.SearchReturn{
+		List:  usersRet,
+		Total: count,
+	}
+	return ret, nil
+}
+
+// visits
+
+func GetVisitsByUsers(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	currentUser := r.Context().Value(ContextKey("User")).(models.User)
+	offset, err := strconv.Atoi(r.URL.Query().Get("offset"))
+	if err != nil {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+	if err != nil {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	users, err := env.Users.GetVisitsByUserId(currentUser.Id, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	count, err := env.Users.CountVisitsByUserId(currentUser.Id)
+	if err != nil {
+		return nil, err
+	}
+	usersRet := make([]schemas.UserReturn, 0, len(users))
+	for _, user := range users {
+		avatar, err := env.Photos.GetFirstByUserId(user.Id)
+		if err != nil && err != sql.ErrNoRows {
+			return nil, err
+		}
+		var avatar_url string
+		if err != sql.ErrNoRows {
+			avatar_url = avatar.Url
+		}
+		tags, err := env.Tags.GetAllByUserId(user.Id)
+		if err != nil && err != sql.ErrNoRows {
+			return nil, err
+		}
+		usersRet = append(usersRet, schemas.UserReturn{
+			Id:                user.Id,
+			Username:          user.Username,
+			Email:             user.Email,
+			FirstName:         user.FirstName,
+			LastName:          user.LastName,
+			Gender:            user.Gender,
+			GenderPreferences: user.GenderPreferences,
+			Biography:         user.Biography,
+			BirthDate:         user.BirthDate,
+			Avatar:            avatar_url,
+			Rating:            lib.NormalizeRating(&env.Users, user.Rating),
+			Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
+			Tags:              tags,
+		})
+	}
+	ret := schemas.SearchReturn{
+		List:  usersRet,
+		Total: count,
+	}
+	return ret, nil
+}
+
+func GetVisitsByMe(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	currentUser := r.Context().Value(ContextKey("User")).(models.User)
+	offset, err := strconv.Atoi(r.URL.Query().Get("offset"))
+	if err != nil {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+	if err != nil {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	users, err := env.Users.GetVisitsByFromUserId(currentUser.Id, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	count, err := env.Users.CountVisitsByFromUserId(currentUser.Id)
 	if err != nil {
 		return nil, err
 	}
