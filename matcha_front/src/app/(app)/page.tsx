@@ -30,10 +30,10 @@ const MainPage: NextPage<MainPageProps> = async ({
 
   return (
     <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-      <MainCard list={likes.list} total={likes.total} />
-      <MainCard list={likesMe.list} total={likesMe.total} />
-      <MainCard list={visits.list} total={visits.total} />
-      <MainCard list={visitsMe.list} total={visitsMe.total} />
+      <MainCard list={likes.list} total={likes.total} page={pageInt} page_size={PAGE_SIZE}>Users who liked you</MainCard>
+      <MainCard list={likesMe.list} total={likesMe.total} page={pageInt} page_size={PAGE_SIZE}>Users you liked</MainCard>
+      <MainCard list={visits.list} total={visits.total} page={pageInt} page_size={PAGE_SIZE}>People who visited your page</MainCard>
+      <MainCard list={visitsMe.list} total={visitsMe.total} page={pageInt} page_size={PAGE_SIZE}>Pages you have viewed</MainCard>
     </div>
   );
 };
