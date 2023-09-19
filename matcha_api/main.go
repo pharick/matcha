@@ -60,6 +60,7 @@ func main() {
 	mux.Handle(pat.Get("/likes/me/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.GetLikesByMe)})
 	mux.Handle(pat.Get("/visits/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.GetVisitsByUsers)})
 	mux.Handle(pat.Get("/visits/me/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.GetVisitsByMe)})
+	mux.Handle(pat.Get("/chat/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.GetChatMessageUsers)})
 
 	// photos
 	mux.Handle(pat.Post("/users/:username/photos/"), handlers.Handler{Env: env, Handle: handlers.AuthRequired(handlers.UploadPhoto)})

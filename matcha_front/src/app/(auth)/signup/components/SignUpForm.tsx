@@ -9,6 +9,7 @@ import Button from '@/components/Button';
 import Alert from '@/components/Alert';
 import { signUp } from '@/api/auth';
 import { differenceInYears } from 'date-fns';
+import Link from 'next/link';
 
 type SignUpFormValues = SignUpData & { conf_password: string };
 
@@ -165,6 +166,12 @@ const SignUpForm: FC = () => {
           >
             Confirm
           </Button>
+          <Link
+            className="mt-5 flex justify-center  font-bold underline hover:opacity-80"
+            href="/login"
+          >
+            Back to login page
+          </Link>
         </Form>
       )}
     </Formik>

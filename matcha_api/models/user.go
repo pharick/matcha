@@ -483,3 +483,32 @@ func (m UserModel) GetVisitsByFromUserId(
 	}
 	return users, nil
 }
+
+//chat
+
+func (m UserModel) GetAllMessageUsers(CurrentUser int) ([]User, error) {
+	rows, err := m.DB.Query(
+		fmt.Sprintf(`
+			SELECT %s, likes FROM chat_messages
+			WHERE likes = (SELECT * FROM users)
+			JOIN users ON chat_messages.from_user_id = users.id
+			WHERE to_user_id = $1 OR from_user_id = $1
+			ORDER BY created_at DESC
+		`, fields,
+		),
+		CurrentUser,
+	)
+	if err != nil {
+		return nil, err
+	}
+	users := make([]User, 0)
+	var user User
+	for rows.Next() {
+		err := scanRow(rows, &user)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
+}

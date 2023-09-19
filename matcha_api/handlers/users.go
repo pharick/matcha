@@ -348,3 +348,47 @@ func GetVisitsByMe(env *Env, w http.ResponseWriter, r *http.Request) (any, error
 	}
 	return ret, nil
 }
+
+//chat
+
+func GetChatMessageUsers(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	currentUser := r.Context().Value(ContextKey("User")).(models.User)
+	users, err := env.Users.GetAllMessageUsers(currentUser.Id)
+	if err != nil {
+		return nil, err
+	}
+	usersRet := make([]schemas.UserReturn, 0, len(users))
+	for _, user := range users {
+		avatar, err := env.Photos.GetFirstByUserId(user.Id)
+		if err != nil && err != sql.ErrNoRows {
+			return nil, err
+		}
+		var avatar_url string
+		if err != sql.ErrNoRows {
+			avatar_url = avatar.Url
+		}
+		tags, err := env.Tags.GetAllByUserId(user.Id)
+		if err != nil && err != sql.ErrNoRows {
+			return nil, err
+		}
+		usersRet = append(usersRet, schemas.UserReturn{
+			Id:                user.Id,
+			Username:          user.Username,
+			Email:             user.Email,
+			FirstName:         user.FirstName,
+			LastName:          user.LastName,
+			Gender:            user.Gender,
+			GenderPreferences: user.GenderPreferences,
+			Biography:         user.Biography,
+			BirthDate:         user.BirthDate,
+			Avatar:            avatar_url,
+			Rating:            lib.NormalizeRating(&env.Users, user.Rating),
+			Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
+			Tags:              tags,
+		})
+	}
+	ret := schemas.SearchReturn{
+		List:  usersRet,
+	}
+	return ret, nil
+}

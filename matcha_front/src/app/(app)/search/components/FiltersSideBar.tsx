@@ -183,7 +183,7 @@ const FiltersSideBar: FC<FiltersSideBarProps> = ({ searchParams }) => {
                 className="mb-4 flex h-[10px] w-full items-center"
                 renderTrack={Track}
                 renderThumb={getThumb(false)}
-                defaultValue={[values.maxDistance]}
+                value={[values.maxDistance]}
                 min={1}
                 max={10000}
                 ariaLabel={['Lower thumb', 'Upper thumb']}
