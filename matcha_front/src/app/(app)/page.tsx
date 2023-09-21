@@ -18,7 +18,7 @@ const MainPage: NextPage = async () => {
       <MainCard fetchFunction={getAllVisits}>
         People who visited your page
       </MainCard>
-      <MainCard fetchFunction={getAllVisitsMe}>Pages you have viewed</MainCard>
+      <MainCard fetchFunction={getAllVisitsMe}>People you have viewed</MainCard>
     </div>
   );
 };

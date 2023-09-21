@@ -489,11 +489,12 @@ func (m UserModel) GetVisitsByFromUserId(
 func (m UserModel) GetAllMessageUsers(CurrentUser int) ([]User, error) {
 	rows, err := m.DB.Query(
 		fmt.Sprintf(`
-			SELECT %s, likes FROM chat_messages
-			WHERE likes = (SELECT * FROM users)
-			JOIN users ON chat_messages.from_user_id = users.id
-			WHERE to_user_id = $1 OR from_user_id = $1
-			ORDER BY created_at DESC
+			SELECT %s FROM users
+			WHERE users.id IN 
+				(SELECT t1.from_user_id FROM likes t1
+				JOIN likes t2
+				ON t1.from_user_id = t2.user_id AND t1.user_id = t2.from_user_id
+				WHERE t1.user_id=$1)
 		`, fields,
 		),
 		CurrentUser,

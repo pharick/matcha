@@ -40,7 +40,7 @@ const MainCard: FC<MainCardProps> = ({ fetchFunction, children }) => {
         <div className="flex min-h-[500px] items-center justify-center">
           <div className="h-[40px] w-[40px] animate-spin rounded-full border-4 border-neutral border-r-brown"></div>
         </div>
-      ) : list && list.length > 0 ? (
+      ) : list ? (
         <>
           <ul className="mx-3 mt-3 min-h-[430px] rounded-lg">
             {list.map((n: User) => (
@@ -52,43 +52,45 @@ const MainCard: FC<MainCardProps> = ({ fetchFunction, children }) => {
               </li>
             ))}
           </ul>
-          <nav>
-            <ul className="flex justify-center">
-              <li>
-                {page > 0 ? (
-                  <button
-                    className="block rounded-l-lg border-2 border-r-0 border-brown bg-gradient-radial from-green-2/50 to-green-1/30 px-[20px] py-[5px] font-bold shadow-md transition hover:bg-gradient-radial hover:from-green-5/70 hover:to-brown/70"
-                    onClick={() => setPage(page - 1)}
-                  >
-                    Prev
-                  </button>
-                ) : (
-                  <span className="block rounded-l-lg border-2 border-r-0 border-gray-500 bg-gradient-radial from-green-2/50 to-green-1/30 px-[20px] py-[5px] font-bold text-gray-500 shadow-md">
-                    Prev
+          {total > page_size && (
+            <nav>
+              <ul className="flex justify-center">
+                <li>
+                  {page > 0 ? (
+                    <button
+                      className="block rounded-l-lg border-2 border-r-0 border-brown bg-gradient-radial from-green-2/50 to-green-1/30 px-[20px] py-[5px] font-bold shadow-md transition hover:bg-gradient-radial hover:from-green-5/70 hover:to-brown/70"
+                      onClick={() => setPage(page - 1)}
+                    >
+                      Prev
+                    </button>
+                  ) : (
+                    <span className="block rounded-l-lg border-2 border-r-0 border-gray-500 bg-gradient-radial from-green-2/50 to-green-1/30 px-[20px] py-[5px] font-bold text-gray-500 shadow-md">
+                      Prev
+                    </span>
+                  )}
+                </li>
+                <li>
+                  <span className="block border-2 border-brown px-3 py-[5px] font-bold">
+                    {page + 1}
                   </span>
-                )}
-              </li>
-              <li>
-                <span className="block border-2 border-brown px-3 py-[5px] font-bold">
-                  {page + 1}
-                </span>
-              </li>
-              <li>
-                {(page + 1) * page_size < total ? (
-                  <button
-                    className="block rounded-r-lg border-2 border-l-0 border-brown bg-gradient-radial from-green-2/50 to-green-1/30 px-[20px] py-[5px] font-bold shadow-md transition hover:bg-gradient-radial hover:from-green-5/70 hover:to-brown/70"
-                    onClick={() => setPage(page + 1)}
-                  >
-                    Next
-                  </button>
-                ) : (
-                  <span className="block rounded-r-lg border-2 border-l-0 border-gray-500 bg-gradient-radial from-green-2/50 to-green-1/30 px-[20px] py-[5px] font-bold text-gray-500 shadow-md">
-                    Next
-                  </span>
-                )}
-              </li>
-            </ul>
-          </nav>
+                </li>
+                <li>
+                  {(page + 1) * page_size < total ? (
+                    <button
+                      className="block rounded-r-lg border-2 border-l-0 border-brown bg-gradient-radial from-green-2/50 to-green-1/30 px-[20px] py-[5px] font-bold shadow-md transition hover:bg-gradient-radial hover:from-green-5/70 hover:to-brown/70"
+                      onClick={() => setPage(page + 1)}
+                    >
+                      Next
+                    </button>
+                  ) : (
+                    <span className="block rounded-r-lg border-2 border-l-0 border-gray-500 bg-gradient-radial from-green-2/50 to-green-1/30 px-[20px] py-[5px] font-bold text-gray-500 shadow-md">
+                      Next
+                    </span>
+                  )}
+                </li>
+              </ul>
+            </nav>
+          )}
         </>
       ) : (
         <p className="mt-10 text-center">No notifications yet</p>
