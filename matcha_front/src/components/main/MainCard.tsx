@@ -13,7 +13,7 @@ interface MainCardProps extends PropsWithChildren {
 }
 
 const MainCard: FC<MainCardProps> = ({ fetchFunction, children }) => {
-  const page_size = 5;
+  const PAGE_SIZE = 5;
   const [page, setPage] = useState<number>(0);
   const [list, setList] = useState<User[]>([]);
   const [total, setTotal] = useState<number>(0);
@@ -21,7 +21,7 @@ const MainCard: FC<MainCardProps> = ({ fetchFunction, children }) => {
 
   const getPage = useCallback(async () => {
     setLoading(true);
-    const res = await fetchFunction(page, page_size);
+    const res = await fetchFunction(page * PAGE_SIZE, PAGE_SIZE);
     setList(res.list);
     setTotal(res.total);
     setLoading(false);
@@ -41,7 +41,7 @@ const MainCard: FC<MainCardProps> = ({ fetchFunction, children }) => {
         {children}
       </h2>
       {loading ? (
-        <div className="flex min-h-[500px] items-center justify-center">
+        <div className="flex min-h-[484px] items-center justify-center">
           <div className="h-[40px] w-[40px] animate-spin rounded-full border-4 border-neutral border-r-brown"></div>
         </div>
       ) : list.length > 0 ? (
@@ -55,7 +55,7 @@ const MainCard: FC<MainCardProps> = ({ fetchFunction, children }) => {
               </li>
             ))}
           </ul>
-          {total > page_size && (
+          {total > PAGE_SIZE && (
             <nav>
               <ul className="flex justify-center">
                 <li>
@@ -78,7 +78,7 @@ const MainCard: FC<MainCardProps> = ({ fetchFunction, children }) => {
                   </span>
                 </li>
                 <li>
-                  {(page + 1) * page_size < total ? (
+                  {(page + 1) * PAGE_SIZE < total ? (
                     <button
                       className="block rounded-r-lg border-2 border-l-0 border-brown bg-gradient-radial from-green-2/50 to-green-1/30 px-[20px] py-[5px] font-bold shadow-md transition hover:bg-gradient-radial hover:from-green-5/70 hover:to-brown/70"
                       onClick={() => setPage(page + 1)}
