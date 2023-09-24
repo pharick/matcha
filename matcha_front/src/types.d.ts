@@ -28,6 +28,7 @@ type User = {
   distance: number;
   online: boolean;
   last_online: string;
+  blocked: boolean;
 };
 
 type CurrentUser = User & { active: boolean; avatar: string };

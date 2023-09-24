@@ -19,6 +19,7 @@ type UserReturn struct {
 	Distance          float64  `json:"distance"`
 	Online            bool     `json:"online"`
 	LastOnline        string   `json:"last_online"`
+	Blocked           bool     `json:"blocked"`
 }
 
 type SearchReturn struct {

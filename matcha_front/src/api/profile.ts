@@ -76,3 +76,29 @@ export async function unsetLike(username: string) {
   );
   revalidateTag('profile');
 }
+
+export async function blockUser(username: string) {
+  const token = cookies().get('token')?.value;
+  await fetch(
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/users/${username}/block/`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-cache',
+    }
+  );
+  revalidateTag('profile');
+}
+
+export async function unblockUser(username: string) {
+  const token = cookies().get('token')?.value;
+  await fetch(
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/users/${username}/unblock/`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-cache',
+    }
+  );
+  revalidateTag('profile');
+}

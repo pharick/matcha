@@ -3,6 +3,7 @@ import { FC } from 'react';
 import UserPhoto from './UserPhoto';
 import ProfileVisitor from './ProfileVisitor';
 import ProfileButtons from './ProfileButtons';
+import BlockReportButtons from './BlockReportButtons';
 
 interface UserProfileProps {
   user: User;
@@ -23,30 +24,7 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
       </div>
 
       <div className="flex flex-1 flex-col">
-        {/* <div className="mb-3 flex justify-center gap-1 lg:justify-start">
-          <form>
-            <button
-              type="submit"
-              className={`${
-                user.liked ? 'bg-green-5 active:bg-green-5' : 'bg-green-2'
-              } flex items-center rounded-lg border-2 border-brown px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`}
-            >
-              Block User
-            </button>
-          </form>
-          <form>
-            <button
-              type="submit"
-              className={`${
-                user.liked ? 'bg-green-5 active:bg-green-5' : 'bg-green-2'
-              } flex items-center rounded-lg border-2 border-brown px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`}
-            >
-              Report as fake
-            </button>
-          </form>
-        </div> */}
-
-        <div>
+        <div className="mb-8">
           <h2 className="mb-5 border-b-2 border-brown pb-1 text-xl text-brown">
             Biography
           </h2>
@@ -70,6 +48,8 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
             'No tags available'
           )}
         </div>
+
+        <BlockReportButtons user={user} />
       </div>
     </main>
   );

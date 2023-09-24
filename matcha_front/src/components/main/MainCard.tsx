@@ -97,7 +97,7 @@ const MainCard: FC<MainCardProps> = ({ fetchFunction, children }) => {
         </>
       ) : (
         <div className="flex h-5/6 flex-col justify-center">
-          <p className="text-center">Nothing to show here :(</p>
+          <p className="text-center font-bold">Nothing to show here :(</p>
           <Link
             className="block text-center underline hover:opacity-80"
             href="/search"

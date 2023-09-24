@@ -32,12 +32,24 @@ const MessagesSideBar: FC<MessagesSideBarProps> = ({ onClick }) => {
               className="flex h-[70px] items-center border-b border-brown/50 bg-green-5/50 px-5"
               onClick={onClick}
             >
-              <Link href={`/chat/${u.username}`}>
+              <Link className="block w-full" href={`/chat/${u.username}`}>
                 <UserSideBar user={u} />
               </Link>
             </li>
           ))}
         </ul>
+      ) : (
+        <div className="mt-10 flex flex-col justify-center">
+          <p className="text-center font-bold">
+            You don&apos;t have any users to chat with
+          </p>
+          <Link
+            className="block text-center underline hover:opacity-80"
+            href="/search"
+          >
+            Find your next match
+          </Link>
+        </div>
       )}
     </div>
   );

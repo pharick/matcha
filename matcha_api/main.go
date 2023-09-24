@@ -76,6 +76,8 @@ func main() {
 	mux.Handle(pat.Post("/users/:username/visit/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.VisitProfile)})
 	mux.Handle(pat.Post("/users/:username/like/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.SetLike)})
 	mux.Handle(pat.Post("/users/:username/unlike/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.UnsetLike)})
+	mux.Handle(pat.Post("/users/:username/block/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.BlockUser)})
+	mux.Handle(pat.Post("/users/:username/unblock/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.UnblockUser)})
 
 	// notifications
 	mux.Handle(pat.Get("/notifications/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.GetAllNotifications)})
