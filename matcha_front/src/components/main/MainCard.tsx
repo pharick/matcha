@@ -47,12 +47,11 @@ const MainCard: FC<MainCardProps> = ({ fetchFunction, children }) => {
       ) : list.length > 0 ? (
         <>
           <ul className="mx-3 mt-3 min-h-[430px] rounded-lg">
-            {list.map((n: User) => (
-              <li
-                key={n.id}
-                className="flex h-[80px] items-center border-b border-brown/50 bg-green-5/50 px-5"
-              >
-                <ShortUserInfo user={n} />
+            {list.map((user) => (
+              <li key={user.id}>
+                <Link href={`/users/${user.username}`}>
+                  <ShortUserInfo user={user} />
+                </Link>
               </li>
             ))}
           </ul>
