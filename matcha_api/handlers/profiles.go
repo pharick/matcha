@@ -186,3 +186,21 @@ func UnblockUser(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 	err = env.Blocks.Delete(fromUser.Id, user.Id)
 	return nil, err
 }
+
+func ReportUser(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	fromUser := r.Context().Value(ContextKey("User")).(models.User)
+	username := pat.Param(r, "username")
+	user, err := env.Users.GetOneByUsername(username)
+	if err == sql.ErrNoRows {
+		return nil, errors.HttpError{Status: 404, Body: nil}
+	}
+	if err != nil {
+		return nil, err
+	}
+	exists, _ := env.Reports.IsExists(fromUser.Id, user.Id)
+	if exists {
+		return nil, errors.HttpError{Status: 409, Body: nil}
+	}
+	_, err = env.Reports.Create(fromUser.Id, user.Id)
+	return nil, err
+}

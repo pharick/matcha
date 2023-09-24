@@ -78,6 +78,7 @@ func main() {
 	mux.Handle(pat.Post("/users/:username/unlike/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.UnsetLike)})
 	mux.Handle(pat.Post("/users/:username/block/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.BlockUser)})
 	mux.Handle(pat.Post("/users/:username/unblock/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.UnblockUser)})
+	mux.Handle(pat.Post("/users/:username/report/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.ReportUser)})
 
 	// notifications
 	mux.Handle(pat.Get("/notifications/"), handlers.Handler{Env: env, Handle: handlers.FullProfileRequired(handlers.GetAllNotifications)})

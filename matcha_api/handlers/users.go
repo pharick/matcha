@@ -43,6 +43,10 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 	if err != nil {
 		return nil, err
 	}
+	reported, err := env.Reports.IsExists(currentUser.Id, user.Id)
+	if err != nil {
+		return nil, err
+	}
 	avatar, err := env.Photos.GetFirstByUserId(user.Id)
 	if err != nil && err != sql.ErrNoRows {
 		return nil, err
@@ -72,6 +76,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		LastOnline:        user.LastOnline,
 		Blocked:           blocked,
 		MeBlocked:         meBlocked,
+		Reported:          reported,
 	}
 	return ret, nil
 }

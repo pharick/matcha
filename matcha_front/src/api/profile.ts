@@ -102,3 +102,16 @@ export async function unblockUser(username: string) {
   );
   revalidateTag('profile');
 }
+
+export async function reportUser(username: string) {
+  const token = cookies().get('token')?.value;
+  await fetch(
+    `${process.env.NEXT_PUBLIC_BACK_BASE_URL}/api/users/${username}/report/`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-cache',
+    }
+  );
+  revalidateTag('profile');
+}
