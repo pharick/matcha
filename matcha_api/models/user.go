@@ -46,7 +46,7 @@ var searchQuery = `
 	rating >= $7 * (SELECT MAX(rating) FROM users) / 5.0 AND
 	calc_distance(last_position, ('(' || $8 || ',' || $9 || ')')::point) <= $10 * 1000 AND
 	(SELECT COUNT(1) FROM likes WHERE from_user_id = $1 AND user_id = users.id) <= 0 AND
-	(SELECT COUNT(1) FROM blocks WHERE from_user_id = $1 AND user_id = users.id) <= 0
+	(SELECT COUNT(1) FROM blocks WHERE (from_user_id = $1 AND user_id = users.id) OR (from_user_id = user.id AND user_id = $1) <= 0
 `
 
 func scanRow(row interface{ Scan(...any) error }, user *User) error {

@@ -28,7 +28,11 @@ func ChatWs(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
-	if !isMatch {
+	isBlocked, err := env.Blocks.IsExists(user.Id, currentUser.Id)
+	if err != nil {
+		return nil, err
+	}
+	if !isMatch || isBlocked {
 		return nil, errors.HttpError{Status: 403, Body: nil}
 	}
 
