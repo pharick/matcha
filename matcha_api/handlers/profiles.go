@@ -23,6 +23,17 @@ func VisitProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error)
 	if visitor.Id == user.Id {
 		return nil, nil
 	}
+	isBlocked, err := env.Blocks.IsExists(visitor.Id, user.Id)
+	if err != nil {
+		return nil, err
+	}
+	isMeBlocked, err := env.Blocks.IsExists(user.Id, visitor.Id)
+	if err != nil {
+		return nil, err
+	}
+	if isBlocked || isMeBlocked {
+		return nil, errors.HttpError{Status: 403, Body: nil}
+	}
 	exists, _ := env.Visits.IsExists(user.Id, visitor.Id)
 	if exists {
 		return nil, errors.HttpError{Status: 409, Body: nil}
@@ -55,6 +66,17 @@ func SetLike(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	}
 	if fromUser.Id == user.Id {
 		return nil, nil
+	}
+	isBlocked, err := env.Blocks.IsExists(fromUser.Id, user.Id)
+	if err != nil {
+		return nil, err
+	}
+	isMeBlocked, err := env.Blocks.IsExists(user.Id, fromUser.Id)
+	if err != nil {
+		return nil, err
+	}
+	if isBlocked || isMeBlocked {
+		return nil, errors.HttpError{Status: 403, Body: nil}
 	}
 	exists, _ := env.Likes.IsExists(user.Id, fromUser.Id)
 	if exists {
@@ -140,6 +162,10 @@ func BlockUser(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		return nil, errors.HttpError{Status: 409, Body: nil}
 	}
 	_, err = env.Blocks.Create(fromUser.Id, user.Id)
+	if err != nil {
+		return nil, err
+	}
+	err = env.Likes.Delete(user.Id, fromUser.Id)
 	return nil, err
 }
 

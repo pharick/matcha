@@ -29,6 +29,7 @@ type User = {
   online: boolean;
   last_online: string;
   blocked: boolean;
+  me_blocked: boolean;
 };
 
 type CurrentUser = User & { active: boolean; avatar: string };

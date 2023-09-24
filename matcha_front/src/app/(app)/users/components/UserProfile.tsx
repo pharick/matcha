@@ -13,14 +13,22 @@ interface UserProfileProps {
 const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
   return (
     <main className="mx-auto mb-5 flex flex-col flex-wrap justify-center lg:flex-row">
-      <ProfileVisitor username={user.username} />
+      {!user.blocked && !user.me_blocked && (
+        <ProfileVisitor username={user.username} />
+      )}
 
       <div className="mx-auto mb-2 w-[500px] lg:m-0 lg:mr-5">
         <div className="mb-2 h-[500px]">
           <UserPhoto user={user} photos={photos} />
         </div>
 
-        <ProfileButtons user={user} />
+        {user.blocked ? (
+          <p className="text-center font-bold">You blocked this user</p>
+        ) : user.me_blocked ? (
+          <p className="text-center font-bold">This user blocked you</p>
+        ) : (
+          <ProfileButtons user={user} />
+        )}
       </div>
 
       <div className="flex flex-1 flex-col">
