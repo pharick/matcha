@@ -66,10 +66,10 @@ const Chat: FC<ChatProps> = ({ currentUser, user }) => {
 
   return (
     <>
-      <div className="invisible lg:visible">
+      <div className="hidden lg:block">
         <ChatUserInfo user={user} />
       </div>
-      <div className="absolute left-0 right-0 top-0 lg:hidden">
+      <div className="lg:hidden">
         <ResponsiveChatUserInfo user={user} />
       </div>
       {isLoading ? (

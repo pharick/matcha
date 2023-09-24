@@ -59,7 +59,7 @@ const UserPhoto: FC<UserProfileProps> = ({ user, photos }) => {
           src={Rosetka as StaticImageData}
           alt="match"
           width={100}
-          className="absolute right-1 top-1 z-50"
+          className="absolute right-1 top-1 z-40"
         />
       )}
 
