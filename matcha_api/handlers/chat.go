@@ -7,6 +7,7 @@ import (
 	"log"
 	"matcha_api/errors"
 	"matcha_api/lib/sockets"
+	"matcha_api/lib"
 	"matcha_api/models"
 	"matcha_api/schemas"
 	"net/http"
@@ -75,6 +76,18 @@ func ChatWs(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		client.Hub.Private <- sockets.PrivateMessage{
 			ClientId: fmt.Sprintf("%v.%v", currentUser.Id, user.Id),
 			Message:  ret,
+		}
+		err = lib.SendNotification(
+			models.NotificationMessage,
+			user.Id,
+			currentUser.Id,
+			currentUser.Username,
+			env.Notifications,
+			*env.NotificationsHub,
+		)
+		if err != nil {
+			log.Println(err)
+			return nil, err
 		}
 	}
 	log.Printf("%s stop waiting messages", currentUser.Username)

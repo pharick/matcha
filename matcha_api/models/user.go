@@ -494,7 +494,11 @@ func (m UserModel) GetAllMessageUsers(CurrentUser int) ([]User, error) {
 				(SELECT t1.from_user_id FROM likes t1
 				JOIN likes t2
 				ON t1.from_user_id = t2.user_id AND t1.user_id = t2.from_user_id
-				WHERE t1.user_id=$1)
+				WHERE t1.user_id=$1
+				UNION
+				SELECT DISTINCT from_user_id FROM chat_messages WHERE to_user_id = $1
+				UNION
+				SELECT DISTINCT to_user_id FROM chat_messages WHERE from_user_id = $1)
 		`, fields,
 		),
 		CurrentUser,
