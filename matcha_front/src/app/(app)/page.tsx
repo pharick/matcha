@@ -12,7 +12,7 @@ const MainPage: NextPage = async () => {
   if (!user.active) redirect('/profile');
 
   return (
-    <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+    <div className="mb-3 grid grid-cols-1 gap-3 lg:grid-cols-2">
       <MainCard fetchFunction={getAllLikes}>Users who liked you</MainCard>
       <MainCard fetchFunction={getAllLikesMe}>Users you liked</MainCard>
       <MainCard fetchFunction={getAllVisits}>

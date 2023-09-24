@@ -1,6 +1,8 @@
 'use client';
 
-import { FC, PropsWithChildren, useEffect, useState } from 'react';
+import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import Link from 'next/link';
+
 import ShortUserInfo from './ShortUserInfo';
 
 interface MainCardProps extends PropsWithChildren {
@@ -13,34 +15,36 @@ interface MainCardProps extends PropsWithChildren {
 const MainCard: FC<MainCardProps> = ({ fetchFunction, children }) => {
   const page_size = 5;
   const [page, setPage] = useState<number>(0);
-  const [list, setList] = useState<User[]>();
+  const [list, setList] = useState<User[]>([]);
   const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const getPage = async () => {
+  const getPage = useCallback(async () => {
     setLoading(true);
     const res = await fetchFunction(page, page_size);
     setList(res.list);
     setTotal(res.total);
     setLoading(false);
-  };
+  }, [fetchFunction, page]);
 
   useEffect(() => {
     void getPage();
-  }, []);
+  }, [getPage]);
 
   useEffect(() => {
     void getPage();
-  }, [page]);
+  }, [page, getPage]);
 
   return (
     <div className="min-h-[550px] rounded-lg bg-neutral/50 p-5">
-      <h2 className="rounded-lg bg-green-2 px-5 font-bold">{children}</h2>
+      <h2 className="rounded-lg bg-green-2/60 px-5 py-1 font-bold">
+        {children}
+      </h2>
       {loading ? (
         <div className="flex min-h-[500px] items-center justify-center">
           <div className="h-[40px] w-[40px] animate-spin rounded-full border-4 border-neutral border-r-brown"></div>
         </div>
-      ) : list ? (
+      ) : list.length > 0 ? (
         <>
           <ul className="mx-3 mt-3 min-h-[430px] rounded-lg">
             {list.map((n: User) => (
@@ -93,7 +97,15 @@ const MainCard: FC<MainCardProps> = ({ fetchFunction, children }) => {
           )}
         </>
       ) : (
-        <p className="mt-10 text-center">No notifications yet</p>
+        <div className="flex h-5/6 flex-col justify-center">
+          <p className="text-center">Nothing to show here :(</p>
+          <Link
+            className="block text-center underline hover:opacity-80"
+            href="/search"
+          >
+            Find your next match
+          </Link>
+        </div>
       )}
     </div>
   );
