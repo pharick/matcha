@@ -20,6 +20,7 @@ export function getNotificationMessage(n: MNotification) {
   if (n.type == 'visit') return 'visited your profile';
   if (n.type == 'like') return 'likes you';
   if (n.type == 'match') return 'is your new match!';
+  if (n.type == 'message') return 'sent you a message';
   return "don't like you anymore";
 }
 

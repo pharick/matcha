@@ -390,6 +390,8 @@ func GetChatMessageUsers(env *Env, w http.ResponseWriter, r *http.Request) (any,
 			Rating:            lib.NormalizeRating(&env.Users, user.Rating),
 			Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
 			Tags:              tags,
+			Online:            env.NotificationsHub.IsUserOnline(fmt.Sprintf("%v", user.Id)),
+			LastOnline:        user.LastOnline,
 		})
 	}
 	ret := schemas.SearchReturn{

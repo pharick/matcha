@@ -6,10 +6,11 @@ import (
 )
 
 const (
-	NotificationVisit  string = "visit"
-	NotificationLike   string = "like"
-	NotificationUnlike string = "unlike"
-	NotificationMatch  string = "match"
+	NotificationVisit  string  = "visit"
+	NotificationLike   string  = "like"
+	NotificationUnlike string  = "unlike"
+	NotificationMatch  string  = "match"
+	NotificationMessage string = "message"
 )
 
 type Notification struct {

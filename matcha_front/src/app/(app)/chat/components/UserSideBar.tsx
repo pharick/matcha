@@ -35,7 +35,7 @@ const UserSideBar: FC<UserSideBarProps> = ({ user }) => {
           {user.last_online && (
             <p
               className={`w-fit rounded-lg px-1  text-neutral ${
-                user.online ? 'bg-green-500' : 'bg-red-500'
+                user.online ? 'bg-green-500' : 'bg-red-500/50'
               }`}
             >
               {user.online

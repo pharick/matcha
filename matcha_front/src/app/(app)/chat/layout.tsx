@@ -24,13 +24,13 @@ export default function ChatLayout({
           {children}
         </div>
       </div>
-      <div className="absolute bottom-0 left-0 right-0 top-0 mb-4 flex flex-col rounded-lg border border-brown bg-green-5/50 lg:hidden">
+      <div className="absolute bottom-0 left-0 right-0 top-0 mb-4 flex flex-col overflow-hidden rounded-lg border border-brown bg-green-5/50 lg:hidden">
         {!isChatOpen ? (
           <MessagesSideBar onClick={changeState} />
         ) : (
           <div className="relative flex h-full flex-col">
             <button
-              className="absolute left-5 top-5 z-40"
+              className="absolute left-5 top-4 z-40"
               onClick={changeState}
             >
               <BiLeftArrowAlt size={30} />

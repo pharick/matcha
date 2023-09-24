@@ -10,18 +10,18 @@ interface ResponsiveChatUserInfo {
 const ResponsiveChatUserInfo: FC<ResponsiveChatUserInfo> = ({ user }) => {
   return (
     <div className="flex items-center justify-between border border-transparent border-b-brown bg-neutral/30 px-5 py-1">
-      <div></div>
+      <div className="w-[60px]"></div>
       <div className="ml-2">
         <div className="mb-1 flex justify-center">
           <p className="font-bold">
             {user.first_name} {user.last_name}
           </p>
         </div>
-        <div className="flex items-center text-sm">
+        <div className="flex justify-center text-sm">
           {user.last_online && (
             <p
               className={`w-fit rounded-lg px-1  text-neutral ${
-                user.online ? 'bg-green-500' : 'bg-red-500'
+                user.online ? 'bg-green-500' : 'bg-red-500/50'
               }`}
             >
               {user.online
