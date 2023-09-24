@@ -8,6 +8,7 @@ import { getAllChatMessages } from '@/api/chat';
 
 import Message from './Message';
 import ChatUserInfo from './ChatUserInfo';
+import ResponsiveChatUserInfo from './ResponsiveChatUserInfo';
 
 interface ChatProps {
   currentUser: User;
@@ -65,7 +66,12 @@ const Chat: FC<ChatProps> = ({ currentUser, user }) => {
 
   return (
     <>
-      <ChatUserInfo user={user} />
+      <div className="invisible lg:visible">
+        <ChatUserInfo user={user} />
+      </div>
+      <div className="absolute left-0 right-0 top-0 lg:hidden">
+        <ResponsiveChatUserInfo user={user} />
+      </div>
       {isLoading ? (
         <div className="flex flex-1 items-center">
           <div className="mx-auto h-[70px] w-[70px] animate-spin rounded-full border-8 border-neutral border-r-brown"></div>

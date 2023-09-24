@@ -1,11 +1,16 @@
 'use client';
 
 import { getAllChats } from '@/api/chat';
-import ShortUserInfo from '@/components/main/ShortUserInfo';
+import UserSideBar from './UserSideBar';
+
 import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 
-const MessagesSideBar: FC = () => {
+interface MessagesSideBarProps {
+  onClick?: () => void;
+}
+
+const MessagesSideBar: FC<MessagesSideBarProps> = ({ onClick }) => {
   const [chatUsers, setChatUsers] = useState<User[]>([]);
 
   const getChatUsers = async () => {
@@ -17,21 +22,18 @@ const MessagesSideBar: FC = () => {
     void getChatUsers();
   }, []);
 
-  useEffect(() => {
-    void getChatUsers();
-  }, [chatUsers]);
-
   return (
-    <div className="w-[400px] border border-transparent border-r-brown bg-neutral/30">
+    <div className="w-full border-transparent border-r-brown bg-neutral/30 lg:w-[400px] lg:border">
       {chatUsers && (
-        <ul className="min-h-[430px] rounded-lg">
+        <ul className="rounded-lg">
           {chatUsers.map((u: User) => (
             <li
               key={u.id}
               className="flex h-[70px] items-center border-b border-brown/50 bg-green-5/50 px-5"
+              onClick={onClick}
             >
-              <Link href={`/${u.username}`}>
-                <ShortUserInfo user={u} />
+              <Link href={`/chat/${u.username}`}>
+                <UserSideBar user={u} />
               </Link>
             </li>
           ))}
