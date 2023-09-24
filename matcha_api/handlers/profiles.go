@@ -110,7 +110,7 @@ func UnsetLike(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	}
 	err = env.Likes.Delete(user.Id, fromUser.Id)
 	if err != nil {
-		return nil, errors.HttpError{Status: 500, Body: nil}
+		return nil, err
 	}
 	go env.Users.UpdateFameRating(user.Id)
 	go env.Users.UpdateFameRating(fromUser.Id)
@@ -122,5 +122,41 @@ func UnsetLike(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		env.Notifications,
 		*env.NotificationsHub,
 	)
+	return nil, err
+}
+
+func BlockUser(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	fromUser := r.Context().Value(ContextKey("User")).(models.User)
+	username := pat.Param(r, "username")
+	user, err := env.Users.GetOneByUsername(username)
+	if err == sql.ErrNoRows {
+		return nil, errors.HttpError{Status: 404, Body: nil}
+	}
+	if err != nil {
+		return nil, err
+	}
+	exists, _ := env.Blocks.IsExists(fromUser.Id, user.Id)
+	if exists {
+		return nil, errors.HttpError{Status: 409, Body: nil}
+	}
+	_, err = env.Blocks.Create(fromUser.Id, user.Id)
+	return nil, err
+}
+
+func UnblockUser(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	fromUser := r.Context().Value(ContextKey("User")).(models.User)
+	username := pat.Param(r, "username")
+	user, err := env.Users.GetOneByUsername(username)
+	if err == sql.ErrNoRows {
+		return nil, errors.HttpError{Status: 404, Body: nil}
+	}
+	if err != nil {
+		return nil, err
+	}
+	exists, _ := env.Blocks.IsExists(fromUser.Id, user.Id)
+	if !exists {
+		return nil, errors.HttpError{Status: 400, Body: nil}
+	}
+	err = env.Blocks.Delete(fromUser.Id, user.Id)
 	return nil, err
 }

@@ -35,6 +35,10 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 	if err != nil {
 		return nil, err
 	}
+	blocked, err := env.Blocks.IsExists(currentUser.Id, user.Id)
+	if err != nil {
+		return nil, err
+	}
 	avatar, err := env.Photos.GetFirstByUserId(user.Id)
 	if err != nil && err != sql.ErrNoRows {
 		return nil, err
@@ -62,6 +66,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
 		Online:            env.NotificationsHub.IsUserOnline(fmt.Sprintf("%v", user.Id)),
 		LastOnline:        user.LastOnline,
+		Blocked:           blocked,
 	}
 	return ret, nil
 }
@@ -388,7 +393,7 @@ func GetChatMessageUsers(env *Env, w http.ResponseWriter, r *http.Request) (any,
 		})
 	}
 	ret := schemas.SearchReturn{
-		List:  usersRet,
+		List: usersRet,
 	}
 	return ret, nil
 }
