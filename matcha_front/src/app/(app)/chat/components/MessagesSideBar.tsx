@@ -24,7 +24,7 @@ const MessagesSideBar: FC<MessagesSideBarProps> = ({ onClick }) => {
 
   return (
     <div className="h-full w-full border-transparent border-r-brown bg-neutral/30 lg:w-[450px] lg:border">
-      {chatUsers && (
+      {chatUsers.length > 0 ? (
         <ul className="rounded-lg">
           {chatUsers.map((u: User) => (
             <li
