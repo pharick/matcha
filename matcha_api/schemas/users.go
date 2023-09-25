@@ -20,6 +20,8 @@ type UserReturn struct {
 	Online            bool     `json:"online"`
 	LastOnline        string   `json:"last_online"`
 	Blocked           bool     `json:"blocked"`
+	MeBlocked         bool     `json:"me_blocked"`
+	Reported          bool     `json:"reported"`
 }
 
 type SearchReturn struct {

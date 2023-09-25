@@ -15,6 +15,7 @@ type Env struct {
 	Visits           models.VisitModel
 	Likes            models.LikeModel
 	Blocks           models.BlockModel
+	Reports          models.ReportModel
 	ChatMessages     models.ChatMessageModel
 	Settings         settings.Settings
 	NotificationsHub *sockets.Hub
@@ -36,6 +37,7 @@ func CreateEnv(dbConn *sql.DB, settings settings.Settings) *Env {
 		Visits:           models.VisitModel{DB: dbConn},
 		Likes:            models.LikeModel{DB: dbConn},
 		Blocks:           models.BlockModel{DB: dbConn},
+		Reports:          models.ReportModel{DB: dbConn},
 		ChatMessages:     models.ChatMessageModel{DB: dbConn},
 		Settings:         settings,
 		NotificationsHub: notificationsHub,

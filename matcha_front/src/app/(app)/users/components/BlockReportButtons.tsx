@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { BiBlock } from 'react-icons/bi';
 import { MdReportGmailerrorred } from 'react-icons/md';
 
-import { blockUser, unblockUser } from '@/api/profile';
+import { blockUser, unblockUser, reportUser } from '@/api/profile';
 
 interface BlockReportButtonsProps {
   user: User;
@@ -34,9 +34,17 @@ const BlockReportButtons: FC<BlockReportButtonsProps> = ({ user }) => {
           </>
         )}
       </button>
-      <button className="flex items-center rounded-lg border-2 border-brown bg-neutral/50 px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none">
+      <button
+        onClick={() => void reportUser(user.username)}
+        disabled={user.reported}
+        className={`${
+          user.reported
+            ? 'bg-gray-400 text-red-900'
+            : 'bg-green-2 hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none'
+        } flex items-center rounded-lg border-2 border-brown  px-3 py-2 text-lg shadow-md`}
+      >
         <MdReportGmailerrorred className="mr-1" />
-        Report as fake
+        {!user.reported ? 'Report as fake' : 'You reported user as fake'}
       </button>
     </div>
   );
