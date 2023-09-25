@@ -60,7 +60,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
   return (
     <>
       <div className="hidden flex-1 xl:block">
-        <div className="m-auto overflow-y-hidden xl:w-[500px] 2xl:w-[700px]">
+        <div className="m-auto overflow-y-hidden xl:max-w-[500px] 2xl:max-w-[700px]">
           {notifications.some((n) => n.type == 'match' && !n.viewed) && (
             <Marquee speed={50} pauseOnHover={true}>
               <div className="flex items-center">

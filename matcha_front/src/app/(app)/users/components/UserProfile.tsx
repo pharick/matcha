@@ -23,12 +23,12 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
         <ProfileButtons user={user} />
       </div>
 
-      <div className="flex flex-1 flex-col">
-        <div className="mb-8">
+      <div className="flex max-w-full flex-1 flex-col overflow-hidden">
+        <div className="mb-8 md:flex-1">
           <h2 className="mb-5 border-b-2 border-brown pb-1 text-xl text-brown">
             Biography
           </h2>
-          <div className="mb-5 rounded-lg bg-neutral/50 p-3">
+          <div className="mb-5 break-words rounded-lg bg-neutral/50 p-3">
             {user?.biography || 'No bio available'}
           </div>
           <h2 className="mb-5 border-b-2 border-brown pb-1 text-xl text-brown">

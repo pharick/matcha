@@ -17,10 +17,10 @@ const BlockReportButtons: FC<BlockReportButtonsProps> = ({ user }) => {
   };
 
   return (
-    <div className="mb-3 flex justify-center gap-1 lg:justify-end">
+    <div className="flex justify-center gap-1 lg:justify-end">
       <button
         onClick={() => void handleBlock()}
-        className="flex items-center rounded-lg border-2 border-brown bg-green-2 px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+        className="flex items-center rounded-lg border-2 border-brown bg-red-500/50 px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
       >
         {!user.blocked ? (
           <>
@@ -34,7 +34,7 @@ const BlockReportButtons: FC<BlockReportButtonsProps> = ({ user }) => {
           </>
         )}
       </button>
-      <button className="flex items-center rounded-lg border-2 border-brown bg-green-2 px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none">
+      <button className="flex items-center rounded-lg border-2 border-brown bg-neutral/50 px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none">
         <MdReportGmailerrorred className="mr-1" />
         Report as fake
       </button>

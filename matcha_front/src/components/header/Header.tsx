@@ -17,7 +17,7 @@ const Header: FC<HeaderProps> = ({ currentUser }) => {
   return (
     <header>
       <div className="w-max-screen mb-5 mt-3 flex items-center justify-between">
-        <div className="mr-3 md:hidden">
+        <div className="mr-3 lg:hidden">
           <MainMenu currentUser={currentUser} />
         </div>
 
@@ -27,7 +27,7 @@ const Header: FC<HeaderProps> = ({ currentUser }) => {
             <Image src={Cup} width={80} alt="cup" className="mr-2" />
           </Link>
 
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <MainMenu currentUser={currentUser} />
           </div>
         </div>

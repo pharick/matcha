@@ -10,7 +10,7 @@ interface UserSideBarProps {
 
 const UserSideBar: FC<UserSideBarProps> = ({ user }) => {
   return (
-    <div className="flex items-center border border-transparent px-5 py-1">
+    <div className="flex items-center border border-transparent px-1 py-1">
       <figure className="relative h-[60px] w-[60px] overflow-hidden rounded-full border-2 border-brown hover:border-brown/70">
         <Image
           src={

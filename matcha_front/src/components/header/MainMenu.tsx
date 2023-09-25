@@ -46,7 +46,7 @@ const MainMenu: FC<MainMenuProps> = ({ currentUser }) => {
 
   return (
     <>
-      <nav className="hidden md:block">
+      <nav className="hidden lg:block">
         <ul className="flex">
           <MainMenuItem isBurger={false} href="/">
             Home
@@ -67,7 +67,7 @@ const MainMenu: FC<MainMenuProps> = ({ currentUser }) => {
           </li>
         </ul>
       </nav>
-      <nav className="md:hidden">
+      <nav className="lg:hidden">
         {openMenu ? (
           <AiOutlineClose size={30} onClick={() => handleOpenMenu()} />
         ) : (
