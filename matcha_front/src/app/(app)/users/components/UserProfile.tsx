@@ -47,7 +47,7 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
               <ul className="flex flex-wrap gap-2">
                 {user?.tags.map((tag, i) => (
                   <li key={i} className="rounded-lg bg-green-2 px-2 text-white">
-                    {tag}
+                    #{tag}
                   </li>
                 ))}
               </ul>
@@ -57,7 +57,7 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
           )}
         </div>
 
-        <BlockReportButtons user={user} />
+        {!user.me && <BlockReportButtons user={user} />}
       </div>
     </main>
   );

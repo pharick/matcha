@@ -17,7 +17,7 @@ const BlockReportButtons: FC<BlockReportButtonsProps> = ({ user }) => {
   };
 
   return (
-    <div className="flex justify-center gap-1 lg:justify-end">
+    <div className="flex justify-center gap-1 border-t-2 border-brown pt-2 lg:justify-end">
       <button
         onClick={() => void handleBlock()}
         className="flex items-center rounded-lg border-2 border-brown bg-red-500/50 px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"

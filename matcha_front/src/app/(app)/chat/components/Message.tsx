@@ -15,7 +15,7 @@ const Message: FC<MessageProps> = ({
   isCurrentUser,
 }) => {
   return (
-    <div className="mb-5 max-w-[600px] ">
+    <div className="mb-5 max-w-[400px] ">
       <div className="mx-2 my-1 rounded-lg bg-neutral/50 p-3">
         <p className="break-words text-left">{children}</p>
       </div>

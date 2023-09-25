@@ -37,7 +37,7 @@ const UserCard: FC<UserCardProps> = ({ user, searchTags }) => {
             <ul className="mb-1 flex flex-wrap justify-end gap-1 opacity-0 transition group-hover:opacity-100">
               {mutualTags.map((tag, i) => (
                 <li key={i} className="rounded-lg bg-green-2 px-2 text-white">
-                  {tag}
+                  #{tag}
                 </li>
               ))}
             </ul>

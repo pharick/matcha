@@ -26,7 +26,7 @@ const LoginForm: FC = () => {
 
   const handleLogin = async ({ username, password }: LoginFormValues) => {
     setIsValid(true);
-    const user = await login(username, password);
+    const user = await login(username.toLowerCase(), password);
     if (!user) setIsValid(false);
   };
 

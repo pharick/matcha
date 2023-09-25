@@ -12,6 +12,7 @@ export default function ProfileLayout({
           { title: 'Profile Information', url: '/profile/information' },
           { title: 'Manage Photos', url: '/profile/photos' },
           { title: 'Email and password', url: '/profile/email_password' },
+          { title: 'Location', url: '/profile/location' },
         ]}
       />
 

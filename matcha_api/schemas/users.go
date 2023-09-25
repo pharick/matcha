@@ -17,6 +17,7 @@ type UserReturn struct {
 	Avatar            string   `json:"avatar"`
 	Rating            float64  `json:"rating"`
 	Distance          float64  `json:"distance"`
+	CustomDistance	  float64  `json:"custom_distance"`
 	Online            bool     `json:"online"`
 	LastOnline        string   `json:"last_online"`
 	Blocked           bool     `json:"blocked"`
@@ -46,6 +47,7 @@ type ChangeEmailData struct {
 type UpdatePositionData struct {
 	Longitude float64 `json:"longitude" validate:"required"`
 	Latitude  float64 `json:"latitude" validate:"required"`
+	Custom    bool    `json:"custom"`
 }
 
 type SearchData struct {

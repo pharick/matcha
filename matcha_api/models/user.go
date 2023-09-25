@@ -27,6 +27,7 @@ type User struct {
 	Biography         string
 	Rating            int
 	LastPosition      Position
+	CustomPosition	  Position
 	LastOnline        string
 }
 
@@ -36,7 +37,7 @@ type UserModel struct {
 
 var fields = `
 	users.id, username, email, active, password_hash, first_name, last_name, birth_date,
-	gender, gender_preferences::text[], biography, rating, last_position[0], last_position[1], last_online
+	gender, gender_preferences::text[], biography, rating, last_position[0], last_position[1], custom_position[0], custom_position[1], last_online
 `
 
 var searchQuery = `
@@ -68,6 +69,8 @@ func scanRow(row interface{ Scan(...any) error }, user *User) error {
 		&rating,
 		&user.LastPosition.Longitude,
 		&user.LastPosition.Latitude,
+		&user.CustomPosition.Longitude,
+		&user.CustomPosition.Latitude,
 		&user.LastOnline,
 	)
 	if err != nil {
@@ -124,7 +127,8 @@ func (m UserModel) Update(
 		UPDATE users
 		SET username = $2, email = $3, active = $4, password_hash = $5,
 		first_name = $6, last_name = $7, gender = $8, gender_preferences = $9,
-		biography = $10, last_position = ('(' || $11 || ',' || $12 || ')')::point
+		biography = $10, last_position = ('(' || $11 || ',' || $12 || ')')::point,
+		custom_position = ('(' || $13 || ',' || $14 || ')')::point
 		WHERE id = $1
 		RETURNING %s
 	`, fields)
@@ -136,6 +140,7 @@ func (m UserModel) Update(
 			d.Id, d.Username, d.Email, d.Active, d.PasswordHash, d.FirstName, d.LastName,
 			d.Gender, pq.Array(d.GenderPreferences), d.Biography,
 			d.LastPosition.Longitude, d.LastPosition.Latitude,
+			d.CustomPosition.Longitude, d.CustomPosition.Latitude,
 		)
 	} else {
 		row = m.DB.QueryRow(

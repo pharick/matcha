@@ -24,7 +24,10 @@ const SignUpForm: FC = () => {
       .required("What's your username?")
       .min(2, 'Username must be between 2 and 16 characters')
       .max(16, 'Username must be between 2 and 16 characters')
-      .matches(/^[aA-zZ]*$/, 'Numbers and special characters are not allowed'),
+      .matches(
+        /^[a-z]*$/,
+        'Numbers, uppercase and special characters are not allowed'
+      ),
     first_name: Yup.string()
       .required("What's your first name?")
       .min(1, 'First name must be between 2 and 16 characters')

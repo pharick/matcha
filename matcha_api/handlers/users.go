@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"matcha_api/errors"
 	"matcha_api/lib"
 	"matcha_api/models"
@@ -71,7 +72,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Match:             match,
 		Avatar:            avatar_url,
 		Rating:            lib.NormalizeRating(&env.Users, user.Rating),
-		Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
+		Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),    
 		Online:            env.NotificationsHub.IsUserOnline(fmt.Sprintf("%v", user.Id)),
 		LastOnline:        user.LastOnline,
 		Blocked:           blocked,
@@ -134,8 +135,14 @@ func UpdatePosition(env *Env, w http.ResponseWriter, r *http.Request) (any, erro
 		return nil, err
 	}
 	user := r.Context().Value(ContextKey("User")).(models.User)
-	user.LastPosition.Longitude = d.Longitude
-	user.LastPosition.Latitude = d.Latitude
+	if d.Custom {
+		log.Println(d.Custom)
+		user.CustomPosition.Longitude = d.Longitude
+		user.CustomPosition.Latitude = d.Latitude
+	} else {
+		user.LastPosition.Longitude = d.Longitude
+		user.LastPosition.Latitude = d.Latitude
+	}
 	user, err = env.Users.Update(user)
 	return nil, err
 }

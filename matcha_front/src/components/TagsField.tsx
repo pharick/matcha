@@ -95,7 +95,7 @@ const TagsField: FC<TagsFieldProps> = ({
               key={i}
               className="flex items-center rounded bg-brown px-1 py-0.5 text-white"
             >
-              {val}
+              #{val}
               <button
                 type="button"
                 className="hover:text-gray-400"

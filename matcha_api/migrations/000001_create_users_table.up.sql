@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
         gender GENDER,
         gender_preferences GENDER[] NOT NULL DEFAULT '{"male", "female", "other"}',
         last_position POINT NOT NULL DEFAULT '(0,0)',
+        custom_position POINT NOT NULL DEFAULT '(0,0)',
         biography TEXT,
         rating INTEGER NOT NULL DEFAULT 0,
         last_online TIMESTAMP NOT NULL DEFAULT now(),
