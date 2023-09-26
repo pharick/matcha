@@ -25,7 +25,9 @@ const Chat: FC<ChatProps> = ({ currentUser, user }) => {
   const messageList = useRef<HTMLUListElement>(null);
 
   const { lastJsonMessage, sendJsonMessage, readyState } = useWebSocket(
-    `${process.env.NEXT_PUBLIC_WS_BASE_URL}/api/ws/chat/${user.username}/`
+    `${process.env.NEXT_PUBLIC_WS_BASE_URL}/api/ws/chat/${user.username}/`,
+    undefined,
+    user.match
   );
 
   useEffect(() => {
@@ -125,7 +127,8 @@ const Chat: FC<ChatProps> = ({ currentUser, user }) => {
                 placeholder={
                   readyState == ReadyState.CONNECTING
                     ? 'Connecting...'
-                    : readyState == ReadyState.CLOSED
+                    : readyState == ReadyState.CLOSED ||
+                      readyState == ReadyState.UNINSTANTIATED
                     ? 'You can not send messages to this user'
                     : 'Write a message...'
                 }

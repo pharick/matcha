@@ -3,7 +3,6 @@ package handlers
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"matcha_api/errors"
 	"matcha_api/lib"
 	"matcha_api/models"
@@ -136,7 +135,6 @@ func UpdatePosition(env *Env, w http.ResponseWriter, r *http.Request) (any, erro
 	}
 	user := r.Context().Value(ContextKey("User")).(models.User)
 	if d.Custom {
-		log.Println(d.Custom)
 		user.CustomPosition.Longitude = d.Longitude
 		user.CustomPosition.Latitude = d.Latitude
 	} else {

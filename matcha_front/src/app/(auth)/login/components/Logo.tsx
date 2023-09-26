@@ -9,7 +9,6 @@ const Logo = () => {
       <Image
         className="mt-[-110px] scale-150"
         src={Matcha}
-        priority
         width={600}
         alt="logo"
       />

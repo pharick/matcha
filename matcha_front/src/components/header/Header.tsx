@@ -23,7 +23,7 @@ const Header: FC<HeaderProps> = ({ currentUser }) => {
 
         <div className="flex shrink-0 cursor-pointer items-center">
           <Link href="/" className="flex items-center">
-            <Image src={Matcha} width={100} priority alt="logo" />
+            <Image src={Matcha} width={100} alt="logo" />
             <Image src={Cup} width={80} alt="cup" className="mr-2" />
           </Link>
 
@@ -33,7 +33,7 @@ const Header: FC<HeaderProps> = ({ currentUser }) => {
         </div>
 
         <div className="flex flex-1 items-center justify-end">
-          <Notifications className="mr-3" />
+          <Notifications user={currentUser} className="mr-3" />
           <UserWidget currentUser={currentUser} />
         </div>
       </div>

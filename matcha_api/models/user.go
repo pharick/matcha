@@ -27,7 +27,7 @@ type User struct {
 	Biography         string
 	Rating            int
 	LastPosition      Position
-	CustomPosition	  Position
+	CustomPosition    Position
 	LastOnline        string
 }
 
@@ -148,6 +148,7 @@ func (m UserModel) Update(
 			d.Id, d.Username, d.Email, d.Active, d.PasswordHash, d.FirstName, d.LastName,
 			nil, pq.Array(d.GenderPreferences), d.Biography,
 			d.LastPosition.Longitude, d.LastPosition.Latitude,
+			d.CustomPosition.Longitude, d.CustomPosition.Latitude,
 		)
 	}
 	err := scanRow(row, &user)

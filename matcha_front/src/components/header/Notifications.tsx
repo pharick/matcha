@@ -14,13 +14,16 @@ import Match from '@/images/Match.svg';
 
 interface NotificationsProps {
   className?: string;
+  user: CurrentUser;
 }
 
-const Notifications: FC<NotificationsProps> = ({ className }) => {
+const Notifications: FC<NotificationsProps> = ({ className, user }) => {
   const [notifications, setNotifications] = useState<MNotification[]>([]);
 
   const { lastJsonMessage } = useWebSocket(
-    `${process.env.NEXT_PUBLIC_WS_BASE_URL}/api/ws/notifications/`
+    `${process.env.NEXT_PUBLIC_WS_BASE_URL}/api/ws/notifications/`,
+    undefined,
+    user.active && user.gender !== '' && user.avatar !== ''
   );
 
   const notify = async (n: MNotification) => {
@@ -37,6 +40,7 @@ const Notifications: FC<NotificationsProps> = ({ className }) => {
       const notifications = await getUnreadNotifications();
       setNotifications(notifications);
     };
+    if (!user.active || user.gender === '' || user.avatar === '') return;
     void getUnread();
   }, []);
 

@@ -12,8 +12,6 @@ interface ChatPageProps {
 export async function generateMetadata({
   params: { username },
 }: ChatPageProps): Promise<Metadata> {
-  const currentUser = await getCurrentUser();
-  if (!currentUser) return {};
   const user = await getUserProfile(username);
   return {
     title: user
