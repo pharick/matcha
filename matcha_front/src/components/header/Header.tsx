@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 
-import Cup from '@/images/cup.png';
-import Matcha from '@/images/Matcha.png';
+import Cup from '@/images/cup.svg';
+import Matcha from '@/images/Matcha.svg';
 import PositionUpdater from '../PositionUpdater';
 import UserWidget from './UserWidget';
 import MainMenu from './MainMenu';
@@ -23,8 +23,13 @@ const Header: FC<HeaderProps> = ({ currentUser }) => {
 
         <div className="flex shrink-0 cursor-pointer items-center">
           <Link href="/" className="flex items-center">
-            <Image src={Matcha} width={100} alt="logo" />
-            <Image src={Cup} width={80} alt="cup" className="mr-2" />
+            <Image src={Matcha as StaticImageData} width={100} alt="logo" />
+            <Image
+              src={Cup as StaticImageData}
+              width={80}
+              alt="cup"
+              className="mr-2"
+            />
           </Link>
 
           <div className="hidden lg:block">

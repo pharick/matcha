@@ -2,6 +2,7 @@ import { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import formatDistance from 'date-fns/formatDistance';
+import { AiOutlineArrowLeft } from 'react-icons/ai';
 
 interface ResponsiveChatUserInfo {
   user: User;
@@ -10,7 +11,9 @@ interface ResponsiveChatUserInfo {
 const ResponsiveChatUserInfo: FC<ResponsiveChatUserInfo> = ({ user }) => {
   return (
     <div className="flex items-center justify-between border border-transparent border-b-brown bg-neutral/30 px-5 py-1">
-      <div className="w-[60px]"></div>
+      <Link href="/chat">
+        <AiOutlineArrowLeft size={30} />
+      </Link>
       <div className="ml-2">
         <div className="mb-1 flex justify-center">
           <p className="font-bold">
