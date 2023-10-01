@@ -145,6 +145,13 @@ func UpdatePosition(env *Env, w http.ResponseWriter, r *http.Request) (any, erro
 	return nil, err
 }
 
+func DeleteCustomPosition(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	user := r.Context().Value(ContextKey("User")).(models.User)
+	user.CustomPosition = models.Position{Latitude: 0, Longitude: 0}
+	user, err := env.Users.Update(user)
+	return nil, err
+}
+
 //likes
 
 func GetLikesByUsers(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {

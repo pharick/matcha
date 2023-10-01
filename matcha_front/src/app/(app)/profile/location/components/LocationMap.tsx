@@ -2,44 +2,31 @@
 
 import { FC, useEffect, useRef, useState } from 'react';
 import { Feature, Map, MapBrowserEvent, View } from 'ol';
-
 import OSM from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import { fromLonLat, transform } from 'ol/proj';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-
-import 'ol/ol.css';
 import { Coordinate } from 'ol/coordinate';
 import { Point } from 'ol/geom';
+import 'ol/ol.css';
+
+import { deleteCustomPosition, updatePosition } from '@/api/position';
 
 interface LocationMapProps {
   user: CurrentUser;
 }
 
-// eslint-disable-next-line react-hooks/rules-of-hooks
-
-// const mapStyle = new Style({
-//   image: new CircleStyle({
-//     radius: 8,
-//     fill: new Fill({ color: '#403539' }),
-//   }),
-//   text: new Text({
-//     font: 'bold 12px sans-serif',
-//     fill: new Fill({
-//       color: '#403539',
-//     }),
-//     offsetY: 15,
-//   }),
-// });
-
 const LocationMap: FC<LocationMapProps> = ({ user }) => {
   const mapElement = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
-  const [coords, setCoords] = useState<Coordinate>([
-    user.last_position.longitude,
-    user.last_position.latitude,
-  ]);
+
+  const initCoords =
+    user.custom_position.latitude != 0 && user.custom_position.longitude != 0
+      ? [user.custom_position.longitude, user.custom_position.latitude]
+      : [user.last_position.longitude, user.last_position.latitude];
+
+  const [coords, setCoords] = useState<Coordinate>(initCoords);
   const [featuresLayer, setFeaturesLayer] =
     useState<VectorLayer<VectorSource>>();
 
@@ -73,19 +60,60 @@ const LocationMap: FC<LocationMapProps> = ({ user }) => {
     mapRef.current = new Map({
       layers: [new TileLayer({ source: new OSM() }), featuresLayer],
       view: new View({
-        center: fromLonLat([
-          user.last_position.longitude,
-          user.last_position.latitude,
-        ]),
-        zoom: 16,
+        center: fromLonLat(coords),
+        zoom: 10,
       }),
       target: mapElement.current,
     });
 
     mapRef.current.on('click', handleMapClick);
-  }, [mapElement, mapRef, user]);
+  }, [mapElement, mapRef, user, coords]);
 
-  return <div ref={mapElement} className="h-[600px] w-full" />;
+  const handleSavePosition = async () => {
+    await updatePosition({ longitude: coords[0], latitude: coords[1] }, true);
+    mapRef.current?.setView(
+      new View({
+        center: fromLonLat(coords),
+        zoom: 10,
+      })
+    );
+  };
+
+  const handleDeletePosition = async () => {
+    await deleteCustomPosition();
+    setCoords([user.last_position.longitude, user.last_position.latitude]);
+    mapRef.current?.setView(
+      new View({
+        center: fromLonLat([
+          user.last_position.longitude,
+          user.last_position.latitude,
+        ]),
+        zoom: 10,
+      })
+    );
+  };
+
+  return (
+    <>
+      <div ref={mapElement} className="mb-3 h-[600px] w-full" />
+
+      <div className="flex w-full justify-center gap-2">
+        <button
+          onClick={() => void handleSavePosition()}
+          className="flex items-center rounded-lg border-2 border-brown px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+        >
+          Save custom position
+        </button>
+
+        <button
+          onClick={() => void handleDeletePosition()}
+          className="flex items-center rounded-lg border-2 border-brown px-3 py-2 text-lg shadow-md hover:bg-green-5/50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+        >
+          Delete custom position
+        </button>
+      </div>
+    </>
+  );
 };
 
 export default LocationMap;
