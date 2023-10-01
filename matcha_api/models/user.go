@@ -173,8 +173,8 @@ func (m UserModel) SearchTotal(
 		ageFrom,
 		ageTo,
 		minRating,
-		currentUser.LastPosition.Longitude,
 		currentUser.LastPosition.Latitude,
+		currentUser.LastPosition.Longitude,
 		maxDistance,
 	).Scan(&count)
 	return count, err

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"database/sql"
+	"log"
 	"matcha_api/lib"
 	"matcha_api/models"
 	"matcha_api/schemas"
@@ -15,6 +16,7 @@ func Search(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
+	log.Printf("search: %v", d)
 	count, err := env.Users.SearchTotal(
 		currentUser,
 		d.AgeFrom,
