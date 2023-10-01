@@ -291,7 +291,7 @@ func WhoAmI(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		Biography:         user.Biography,
 		Tags:              tags,
 		Avatar:            avatar_url,
-		Longitude:         user.LastPosition.Longitude,
+		Position.Longitude:         user.LastPosition.Longitude,
 		Latitude:          user.LastPosition.Latitude,
 		CustomLongitude:   user.CustomPosition.Longitude,
 		CustomLatitude:    user.CustomPosition.Latitude,

@@ -17,10 +17,8 @@ type CurrenUserReturn struct {
 	Biography         string   `json:"biography"`
 	Tags              []string `json:"tags"`
 	Avatar            string   `json:"avatar"`
-	Longitude         float64  `json:"longitude"`
-	Latitude		  float64  `json:"latitude"`
-	CustomLongitude   float64  `json:"custom_longitude"`
-	CustomLatitude    float64  `json:"custom_latitude"`
+	Position 		  PositionReturn `json:"position"`
+	CustomPosition	  PositionReturn `json:"custom_position"`
 }
 
 type RegistrationData struct {
