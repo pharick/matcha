@@ -17,7 +17,6 @@ const PositionUpdater: FC = () => {
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        console.log('cool', pos);
         void updatePosition(
           {
             latitude: pos.coords.latitude,
@@ -29,7 +28,6 @@ const PositionUpdater: FC = () => {
       () => {
         const updateByIp = async () => {
           const pos = await getPositionByIP();
-          console.log('not cool', pos);
           await updatePosition(pos, false);
         };
         void updateByIp();
