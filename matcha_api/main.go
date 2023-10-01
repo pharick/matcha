@@ -29,7 +29,7 @@ func main() {
 
 	// Mock
 	usersCount, _ := env.Users.Count()
-	go lib.GenerateUsers(&env.Users, &env.Photos, &env.Tags, 200-usersCount)
+	go lib.GenerateUsers(&env.Users, &env.Photos, &env.Tags, 500-usersCount)
 
 	mux := goji.NewMux()
 	mux.Use(cors.New(cors.Options{
