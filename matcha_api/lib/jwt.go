@@ -13,7 +13,7 @@ func GenerateAuthJWT(username string, secret string) (s string, err error) {
 		jwt.SigningMethodHS256,
 		jwt.MapClaims{
 			"sub":    username,
-			"exp":    now.Add(time.Hour).Unix(),
+			"exp":    now.Add(time.Hour * 5).Unix(),
 			"target": "auth",
 		},
 	)
@@ -27,7 +27,7 @@ func GenerateActivationJWT(email string, secret string) (s string, err error) {
 		jwt.SigningMethodHS256,
 		jwt.MapClaims{
 			"sub":    email,
-			"exp":    now.Add(time.Hour).Unix(),
+			"exp":    now.Add(time.Hour * 5).Unix(),
 			"target": "activation",
 		},
 	)
@@ -41,7 +41,7 @@ func GeneratePasswordResetJWT(username string, secret string) (s string, err err
 		jwt.SigningMethodHS256,
 		jwt.MapClaims{
 			"sub":    username,
-			"exp":    now.Add(time.Hour).Unix(),
+			"exp":    now.Add(time.Hour * 5).Unix(),
 			"target": "reset",
 		},
 	)
