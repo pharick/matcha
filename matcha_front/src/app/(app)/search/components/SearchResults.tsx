@@ -19,7 +19,6 @@ interface SearchResultsProps {
 }
 
 const BATCH_SIZE = 2;
-const startTime = new Date();
 
 const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
   const [loading, setLoading] = useState(false);
@@ -28,9 +27,10 @@ const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
 
   const batchN = useRef(0);
   const total = useRef(1);
+  const startTime = useRef(new Date());
 
   useEffect(() => {
-    console.log(searchParams);
+    startTime.current = new Date();
     batchN.current = 0;
     total.current = 1;
     setUsers([]);
@@ -43,7 +43,7 @@ const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
         searchParams,
         batchN.current * BATCH_SIZE,
         BATCH_SIZE,
-        startTime.toISOString()
+        startTime.current.toISOString()
       );
       setUsers((users) => [...users, ...res.list]);
       batchN.current += 1;
