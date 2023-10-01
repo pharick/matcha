@@ -27,7 +27,7 @@ const Chat: FC<ChatProps> = ({ currentUser, user }) => {
   const { lastJsonMessage, sendJsonMessage, readyState } = useWebSocket(
     `${process.env.NEXT_PUBLIC_WS_BASE_URL}/api/ws/chat/${user.username}/`,
     undefined,
-    user.match && messages.length > 0
+    user.match
   );
 
   useEffect(() => {

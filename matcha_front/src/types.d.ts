@@ -31,6 +31,10 @@ type User = {
   blocked: boolean;
   me_blocked: boolean;
   reported: boolean;
+  longitude: number;
+  latitude: number;
+  custom_longitude: number;
+  custom_latitude: number;
 };
 
 type CurrentUser = User & { active: boolean; avatar: string };

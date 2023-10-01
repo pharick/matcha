@@ -20,13 +20,16 @@ const ProfilePhotosPage: NextPage = async () => {
   return (
     <>
       {!user.active && <EmailValidationAlert />}
-      {(!user.avatar ||
-        !user.gender ||
-        user.gender_preferences.length <= 0) && (
+      {!user.avatar || !user.gender || user.gender_preferences.length <= 0 ? (
         <Alert type="warning" className="mb-3">
           Please, complete your profile. You shoud fill at least your gender,
           gender&nbsp;preferences and add at least one photo.
         </Alert>
+      ) : (
+        <p className="mb-2 text-center font-bold">
+          Drag and drop prefered photo to beginning to set it as your profile
+          avatar
+        </p>
       )}
       <PhotoUpload user={user} photos={userPhotos} />
     </>

@@ -1,5 +1,10 @@
 package schemas
 
+type PositionReturn struct {
+	Longitude float64 `json:"longitude" validate:"required"`
+	Latitude  float64 `json:"latitude" validate:"required"`
+}
+
 type CurrenUserReturn struct {
 	Id                int      `json:"id"`
 	Username          string   `json:"username"`
@@ -12,6 +17,10 @@ type CurrenUserReturn struct {
 	Biography         string   `json:"biography"`
 	Tags              []string `json:"tags"`
 	Avatar            string   `json:"avatar"`
+	Longitude         float64  `json:"longitude"`
+	Latitude		  float64  `json:"latitude"`
+	CustomLongitude   float64  `json:"custom_longitude"`
+	CustomLatitude    float64  `json:"custom_latitude"`
 }
 
 type RegistrationData struct {

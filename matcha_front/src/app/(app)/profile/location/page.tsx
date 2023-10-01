@@ -1,4 +1,5 @@
 import { getCurrentUser } from '@/api/auth';
+import LocationMap from './components/LocationMap';
 
 import { redirect } from 'next/navigation';
 import { NextPage, Metadata } from 'next';
@@ -13,8 +14,7 @@ const UserLocation: NextPage = async () => {
 
   return (
     <div className="flex w-full flex-col items-center">
-      <p>Longitude</p>
-      <p>Attitude</p>
+      <LocationMap user={user} />
     </div>
   );
 };
