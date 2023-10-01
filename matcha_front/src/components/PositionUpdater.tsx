@@ -18,8 +18,8 @@ const PositionUpdater: FC = () => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         void updatePosition({
-          longitude: pos.coords.longitude,
           latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
         });
       },
       () => {

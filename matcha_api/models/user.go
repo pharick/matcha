@@ -9,8 +9,8 @@ import (
 )
 
 type Position struct {
-	Longitude float64
 	Latitude  float64
+	Longitude float64
 }
 
 type User struct {
@@ -67,10 +67,10 @@ func scanRow(row interface{ Scan(...any) error }, user *User) error {
 		(*pq.StringArray)(&user.GenderPreferences),
 		&biography,
 		&rating,
-		&user.LastPosition.Longitude,
 		&user.LastPosition.Latitude,
-		&user.CustomPosition.Longitude,
+		&user.LastPosition.Longitude,
 		&user.CustomPosition.Latitude,
+		&user.CustomPosition.Longitude,
 		&user.LastOnline,
 	)
 	if err != nil {
@@ -139,16 +139,16 @@ func (m UserModel) Update(
 			query,
 			d.Id, d.Username, d.Email, d.Active, d.PasswordHash, d.FirstName, d.LastName,
 			d.Gender, pq.Array(d.GenderPreferences), d.Biography,
-			d.LastPosition.Longitude, d.LastPosition.Latitude,
-			d.CustomPosition.Longitude, d.CustomPosition.Latitude,
+			d.LastPosition.Latitude, d.LastPosition.Longitude,
+			d.CustomPosition.Latitude, d.CustomPosition.Longitude,
 		)
 	} else {
 		row = m.DB.QueryRow(
 			query,
 			d.Id, d.Username, d.Email, d.Active, d.PasswordHash, d.FirstName, d.LastName,
 			nil, pq.Array(d.GenderPreferences), d.Biography,
-			d.LastPosition.Longitude, d.LastPosition.Latitude,
-			d.CustomPosition.Longitude, d.CustomPosition.Latitude,
+			d.LastPosition.Latitude, d.LastPosition.Longitude,
+			d.CustomPosition.Latitude, d.CustomPosition.Longitude,
 		)
 	}
 	err := scanRow(row, &user)
@@ -222,8 +222,8 @@ func (m UserModel) Search(
 			ageFrom,
 			ageTo,
 			minRating,
-			currentUser.LastPosition.Longitude,
 			currentUser.LastPosition.Latitude,
+			currentUser.LastPosition.Longitude,
 			maxDistance,
 			offset,
 			limit,
@@ -243,8 +243,8 @@ func (m UserModel) Search(
 			ageFrom,
 			ageTo,
 			minRating,
-			currentUser.LastPosition.Longitude,
 			currentUser.LastPosition.Latitude,
+			currentUser.LastPosition.Longitude,
 			maxDistance,
 			offset,
 			limit,

@@ -1,8 +1,8 @@
 package schemas
 
 type PositionReturn struct {
-	Longitude float64 `json:"longitude" validate:"required"`
 	Latitude  float64 `json:"latitude" validate:"required"`
+	Longitude float64 `json:"longitude" validate:"required"`
 }
 
 type CurrenUserReturn struct {

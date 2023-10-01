@@ -71,7 +71,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Match:             match,
 		Avatar:            avatar_url,
 		Rating:            lib.NormalizeRating(&env.Users, user.Rating),
-		Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),    
+		Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
 		Online:            env.NotificationsHub.IsUserOnline(fmt.Sprintf("%v", user.Id)),
 		LastOnline:        user.LastOnline,
 		Blocked:           blocked,
@@ -135,11 +135,11 @@ func UpdatePosition(env *Env, w http.ResponseWriter, r *http.Request) (any, erro
 	}
 	user := r.Context().Value(ContextKey("User")).(models.User)
 	if d.Custom {
-		user.CustomPosition.Longitude = d.Longitude
 		user.CustomPosition.Latitude = d.Latitude
+		user.CustomPosition.Longitude = d.Longitude
 	} else {
-		user.LastPosition.Longitude = d.Longitude
 		user.LastPosition.Latitude = d.Latitude
+		user.LastPosition.Longitude = d.Longitude
 	}
 	user, err = env.Users.Update(user)
 	return nil, err
