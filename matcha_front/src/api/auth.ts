@@ -105,7 +105,7 @@ export async function changeEmail(password: string, email: string) {
       cache: 'no-cache',
     }
   );
-  if (res.status == 403) return false;
+  if (res.status == 403 || res.status == 409 || res.status == 401) return false;
   if (!res.ok) throw Error('Something went wrong');
   revalidateTag('current-user');
   return true;

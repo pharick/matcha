@@ -202,6 +202,10 @@ func EmailChange(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 	if !lib.CheckPasswordHash(d.Password, user.PasswordHash) {
 		return nil, errors.HttpError{Status: 403, Body: nil}
 	}
+	errs := env.Users.CheckConflicts(user.Username, d.Email)
+	if errs != nil {
+		return nil, errors.HttpValidationError{Status: 409, Errors: errs}
+	}
 	user.Email = d.Email
 	user.Active = false
 	user, err = env.Users.Update(user)

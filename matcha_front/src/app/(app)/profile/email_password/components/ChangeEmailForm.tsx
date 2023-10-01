@@ -56,7 +56,7 @@ const ChangeEmailForm: FC<ChangeEmailFormProps> = ({ user }) => {
       )}
       {!isValid && result && (
         <Alert type="error" className="mb-3">
-          Invalid password
+          Invalid password or email is already in use
         </Alert>
       )}
       <Formik
