@@ -30,6 +30,7 @@ const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
   const total = useRef(1);
 
   useEffect(() => {
+    console.log(searchParams);
     batchN.current = 0;
     total.current = 1;
     setUsers([]);
@@ -37,6 +38,7 @@ const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
 
   useEffect(() => {
     const loadMore = async () => {
+      console.log('loading');
       setLoading(true);
       const res = await search(
         searchParams,
@@ -44,6 +46,7 @@ const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
         BATCH_SIZE,
         startTime.toISOString()
       );
+      console.log(res);
       setUsers((users) => [...users, ...res.list]);
       batchN.current += 1;
       total.current = res.total;

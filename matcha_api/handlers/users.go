@@ -55,6 +55,20 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 	if err != sql.ErrNoRows {
 		avatar_url = avatar.Url
 	}
+
+	var currentUserPos models.Position
+	if currentUser.CustomPosition.Latitude != 0 && currentUser.CustomPosition.Longitude != 0 {
+		currentUserPos = currentUser.CustomPosition
+	} else {
+		currentUserPos = currentUser.LastPosition
+	}
+	var userPos models.Position
+	if user.CustomPosition.Latitude != 0 && user.CustomPosition.Longitude != 0 {
+		userPos = user.CustomPosition
+	} else {
+		userPos = user.LastPosition
+	}
+
 	ret := schemas.UserReturn{
 		Id:                user.Id,
 		Username:          user.Username,
@@ -71,7 +85,7 @@ func UserProfile(env *Env, w http.ResponseWriter, r *http.Request) (any, error) 
 		Match:             match,
 		Avatar:            avatar_url,
 		Rating:            lib.NormalizeRating(&env.Users, user.Rating),
-		Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
+		Distance:          lib.CalcDistance(currentUserPos, userPos),
 		Online:            env.NotificationsHub.IsUserOnline(fmt.Sprintf("%v", user.Id)),
 		LastOnline:        user.LastOnline,
 		Blocked:           blocked,
@@ -142,6 +156,13 @@ func UpdatePosition(env *Env, w http.ResponseWriter, r *http.Request) (any, erro
 		user.LastPosition.Longitude = d.Longitude
 	}
 	user, err = env.Users.Update(user)
+	return nil, err
+}
+
+func DeleteCustomPosition(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
+	user := r.Context().Value(ContextKey("User")).(models.User)
+	user.CustomPosition = models.Position{Latitude: 0, Longitude: 0}
+	user, err := env.Users.Update(user)
 	return nil, err
 }
 
