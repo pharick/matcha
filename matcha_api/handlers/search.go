@@ -44,6 +44,14 @@ func Search(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	var currentUserPos models.Position
+	if currentUser.CustomPosition.Latitude != 0 && currentUser.CustomPosition.Longitude != 0 {
+		currentUserPos = currentUser.CustomPosition
+	} else {
+		currentUserPos = currentUser.LastPosition
+	}
+
 	usersRet := make([]schemas.UserReturn, 0, len(users))
 	for _, user := range users {
 		avatar, err := env.Photos.GetFirstByUserId(user.Id)
@@ -58,6 +66,14 @@ func Search(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 		if err != nil && err != sql.ErrNoRows {
 			return nil, err
 		}
+
+		var userPos models.Position
+		if user.CustomPosition.Latitude != 0 && user.CustomPosition.Longitude != 0 {
+			userPos = user.CustomPosition
+		} else {
+			userPos = user.LastPosition
+		}
+
 		usersRet = append(usersRet, schemas.UserReturn{
 			Id:                user.Id,
 			Username:          user.Username,
@@ -70,7 +86,7 @@ func Search(env *Env, w http.ResponseWriter, r *http.Request) (any, error) {
 			BirthDate:         user.BirthDate,
 			Avatar:            avatar_url,
 			Rating:            lib.NormalizeRating(&env.Users, user.Rating),
-			Distance:          lib.CalcDistance(currentUser.LastPosition, user.LastPosition),
+			Distance:          lib.CalcDistance(currentUserPos, userPos),
 			Tags:              tags,
 		})
 	}

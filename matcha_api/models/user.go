@@ -45,7 +45,7 @@ var searchQuery = `
 	$3 = ANY(gender_preferences) AND gender = ANY($4) AND
 	date_part('year', age(birth_date)) >= $5 AND date_part('year', age(birth_date)) <= $6 AND
 	rating >= $7 * (SELECT MAX(rating) FROM users) / 5.0 AND
-	calc_distance(last_position, ('(' || $8 || ',' || $9 || ')')::point) <= $10 * 1000 AND
+	calc_distance((CASE WHEN custom_position[0] <> 0 AND custom_position[1] <> 0 THEN custom_position ELSE last_position END), ('(' || $8 || ',' || $9 || ')')::point) <= $10 * 1000 AND
 	(SELECT COUNT(1) FROM likes WHERE from_user_id = $1 AND user_id = users.id) <= 0 AND
 	(SELECT COUNT(1) FROM blocks WHERE (from_user_id = $1 AND user_id = users.id) OR (from_user_id = users.id AND user_id = $1)) <= 0
 `
@@ -163,6 +163,13 @@ func (m UserModel) SearchTotal(
 	maxDistance int,
 	startTime string,
 ) (int, error) {
+	var userPos Position
+	if currentUser.CustomPosition.Latitude != 0 && currentUser.CustomPosition.Longitude != 0 {
+		userPos = currentUser.CustomPosition
+	} else {
+		userPos = currentUser.LastPosition
+	}
+
 	var count int
 	err := m.DB.QueryRow(
 		fmt.Sprintf("SELECT COUNT(1) FROM users WHERE %s", searchQuery),
@@ -173,8 +180,8 @@ func (m UserModel) SearchTotal(
 		ageFrom,
 		ageTo,
 		minRating,
-		currentUser.LastPosition.Latitude,
-		currentUser.LastPosition.Longitude,
+		userPos.Latitude,
+		userPos.Longitude,
 		maxDistance,
 	).Scan(&count)
 	return count, err
@@ -203,11 +210,19 @@ func (m UserModel) Search(
 	} else if sortField == "specific_interests" {
 		sortQuery = fmt.Sprintf("coalesce(array_length(array_intersect($13, ARRAY(SELECT tags.name FROM users_tags JOIN tags ON users_tags.tag_id = tags.id WHERE users_tags.user_id = users.id)), 1), 0) %s", sortType)
 	} else {
-		sortQuery = fmt.Sprintf("calc_distance(last_position, ('(' || $8 || ',' || $9 || ')')::point) %s", sortType)
+		sortQuery = fmt.Sprintf("calc_distance((CASE WHEN custom_position[0] <> 0 AND custom_position[1] <> 0 THEN custom_position ELSE last_position END), ('(' || $8 || ',' || $9 || ')')::point) %s", sortType)
 	}
 	var user User
 	var rows *sql.Rows
 	var err error
+
+	var userPos Position
+	if currentUser.CustomPosition.Latitude != 0 && currentUser.CustomPosition.Longitude != 0 {
+		userPos = currentUser.CustomPosition
+	} else {
+		userPos = currentUser.LastPosition
+	}
+
 	if sortField == "specific_interests" {
 		rows, err = m.DB.Query(
 			fmt.Sprintf(`
@@ -222,8 +237,8 @@ func (m UserModel) Search(
 			ageFrom,
 			ageTo,
 			minRating,
-			currentUser.LastPosition.Latitude,
-			currentUser.LastPosition.Longitude,
+			userPos.Latitude,
+			userPos.Longitude,
 			maxDistance,
 			offset,
 			limit,
@@ -243,8 +258,8 @@ func (m UserModel) Search(
 			ageFrom,
 			ageTo,
 			minRating,
-			currentUser.LastPosition.Latitude,
-			currentUser.LastPosition.Longitude,
+			userPos.Latitude,
+			userPos.Longitude,
 			maxDistance,
 			offset,
 			limit,
