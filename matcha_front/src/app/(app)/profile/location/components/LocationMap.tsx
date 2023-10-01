@@ -81,7 +81,7 @@ const LocationMap: FC<LocationMapProps> = ({ user }) => {
     mapRef.current.on('click', handleMapClick);
 
     featuresLayer.setStyle(mapStyle);
-  }, [mapElement, mapRef, user]);
+  }, [mapElement, mapRef, user, coords]);
 
   const handleSavePosition = async () => {
     await updatePosition({ longitude: coords[0], latitude: coords[1] }, true);
