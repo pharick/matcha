@@ -76,8 +76,8 @@ type UserPhotos = {
 };
 
 type Position = {
-  longitude: number;
   latitude: number;
+  longitude: number;
 };
 
 type MNotification = {
