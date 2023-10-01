@@ -6,19 +6,19 @@ type PositionReturn struct {
 }
 
 type CurrenUserReturn struct {
-	Id                int      `json:"id"`
-	Username          string   `json:"username"`
-	Active            bool     `json:"active"`
-	Email             string   `json:"email"`
-	FirstName         string   `json:"first_name"`
-	LastName          string   `json:"last_name"`
-	Gender            string   `json:"gender"`
-	GenderPreferences []string `json:"gender_preferences"`
-	Biography         string   `json:"biography"`
-	Tags              []string `json:"tags"`
-	Avatar            string   `json:"avatar"`
-	Position 		  PositionReturn `json:"position"`
-	CustomPosition	  PositionReturn `json:"custom_position"`
+	Id                int            `json:"id"`
+	Username          string         `json:"username"`
+	Active            bool           `json:"active"`
+	Email             string         `json:"email"`
+	FirstName         string         `json:"first_name"`
+	LastName          string         `json:"last_name"`
+	Gender            string         `json:"gender"`
+	GenderPreferences []string       `json:"gender_preferences"`
+	Biography         string         `json:"biography"`
+	Tags              []string       `json:"tags"`
+	Avatar            string         `json:"avatar"`
+	LastPosition      PositionReturn `json:"last_position"`
+	CustomPosition    PositionReturn `json:"custom_position"`
 }
 
 type RegistrationData struct {

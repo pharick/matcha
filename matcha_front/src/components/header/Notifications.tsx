@@ -42,7 +42,7 @@ const Notifications: FC<NotificationsProps> = ({ className, user }) => {
     };
     if (!user.active || user.gender === '' || user.avatar === '') return;
     void getUnread();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (lastJsonMessage == null) return;
