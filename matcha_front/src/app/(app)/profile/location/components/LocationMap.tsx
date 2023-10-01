@@ -12,26 +12,22 @@ import VectorSource from 'ol/source/Vector';
 import 'ol/ol.css';
 import { Coordinate } from 'ol/coordinate';
 import { Point } from 'ol/geom';
+import Style from 'ol/style/Style';
+import Fill from 'ol/style/Fill';
+import Stroke from 'ol/style/Stroke';
+import CircleStyle from 'ol/style/Circle.js';
 
 interface LocationMapProps {
   user: CurrentUser;
 }
 
-// eslint-disable-next-line react-hooks/rules-of-hooks
-
-// const mapStyle = new Style({
-//   image: new CircleStyle({
-//     radius: 8,
-//     fill: new Fill({ color: '#403539' }),
-//   }),
-//   text: new Text({
-//     font: 'bold 12px sans-serif',
-//     fill: new Fill({
-//       color: '#403539',
-//     }),
-//     offsetY: 15,
-//   }),
-// });
+const mapStyle = new Style({
+  image: new CircleStyle({
+    radius: 10,
+    fill: new Fill({ color: '#F39BB3' }),
+    stroke: new Stroke({ color: '#403539', width: 3 }),
+  }),
+});
 
 const LocationMap: FC<LocationMapProps> = ({ user }) => {
   const mapElement = useRef<HTMLDivElement>(null);
@@ -83,6 +79,8 @@ const LocationMap: FC<LocationMapProps> = ({ user }) => {
     });
 
     mapRef.current.on('click', handleMapClick);
+
+    featuresLayer.setStyle(mapStyle);
   }, [mapElement, mapRef, user]);
 
   return <div ref={mapElement} className="h-[600px] w-full" />;
