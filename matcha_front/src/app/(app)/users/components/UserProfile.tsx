@@ -17,7 +17,7 @@ const UserProfile: FC<UserProfileProps> = ({ user, photos }) => {
         <ProfileVisitor username={user.username} />
       )}
 
-      <div className="mx-auto mb-2 w-[500px] lg:m-0 lg:mr-5">
+      <div className="mx-auto mb-2 w-[300px] sm:w-[500px] lg:m-0 lg:mr-5">
         <div className="mb-2 h-[500px]">
           <UserPhoto user={user} photos={photos} />
         </div>
