@@ -89,9 +89,9 @@ const SearchResults: FC<SearchResultsProps> = ({ searchParams }) => {
         </>
       ) : (
         <>
-          <ul className="mb-3 grid grid-cols-[repeat(auto-fill,_450px)] justify-center gap-2">
+          <ul className="mb-3 md:grid md:grid-cols-[repeat(auto-fill,_450px)] md:justify-center md:gap-2">
             {users.map((user, index) => (
-              <li className="h-[450px]" key={index}>
+              <li className="mb-2 h-[350px] md:mb-0 md:h-[450px]" key={index}>
                 <UserCard user={user} searchTags={searchParams.tags} />
               </li>
             ))}

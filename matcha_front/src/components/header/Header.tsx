@@ -22,13 +22,13 @@ const Header: FC<HeaderProps> = ({ currentUser }) => {
         </div>
 
         <div className="flex shrink-0 cursor-pointer items-center">
-          <Link href="/" className="hidden items-center md:flex">
+          <Link href="/" className="flex">
             <Image src={Matcha as StaticImageData} width={100} alt="logo" />
             <Image
               src={Cup as StaticImageData}
               width={80}
               alt="cup"
-              className="mr-2"
+              className="mr-2 hidden items-center sm:block"
             />
           </Link>
 

@@ -18,7 +18,7 @@ const LoginPage: NextPage = async () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <div className="mx-auto my-[100px] w-[200px] sm:w-[350px]">
+      <div className="mx-auto my-[100px] max-w-[200px] sm:max-w-[350px]">
         <Logo />
         <LoginForm />
         <Link

@@ -8,6 +8,7 @@ export const metadata: Metadata = {
     template: '%s | Matcha',
     default: 'Matcha',
   },
+  viewport: 'width=device-width, initial-scale=1',
 };
 
 const montserrat = Montserrat({
@@ -24,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={montserrat.className}>
-      <body className="mx-10 min-h-screen">{children}</body>
+      <body className="min-h-screen sm:mx-10">{children}</body>
     </html>
   );
 }

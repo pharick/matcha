@@ -94,14 +94,14 @@ const Notifications: FC<NotificationsProps> = ({ className, user }) => {
       </div>
 
       <div className={`group relative ml-3 flex items-center ${className}`}>
-        <button className="relative">
+        <Link href="/notifications">
           <FaBell size={24} />
           {notifications.some((n) => !n.viewed) && (
             <div className="absolute right-0 top-0 h-[10px] w-[10px] rounded-full bg-red-300"></div>
           )}
-        </button>
+        </Link>
 
-        <div className="absolute right-0 top-full z-50 hidden min-w-[290px] overflow-hidden rounded-xl bg-green-5/90 shadow group-hover:block">
+        <div className="absolute right-0 top-full z-50 hidden min-w-[290px] overflow-hidden rounded-xl bg-green-5/90 shadow sm:group-hover:block">
           {notifications.length > 0 ? (
             <ul className="max-h-[256px] overflow-y-auto">
               {notifications.map((n) => (
@@ -135,7 +135,7 @@ const Notifications: FC<NotificationsProps> = ({ className, user }) => {
           )}
           <Link
             href="/notifications"
-            className="block border-t border-b-brown/50 py-2 text-center underline hover:text-brown/80"
+            className="block border-t border-t-brown/50 py-2 text-center underline hover:text-brown/80"
           >
             All notifications
           </Link>

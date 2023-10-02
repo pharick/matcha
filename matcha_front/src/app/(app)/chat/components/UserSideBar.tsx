@@ -10,8 +10,8 @@ interface UserSideBarProps {
 
 const UserSideBar: FC<UserSideBarProps> = ({ user }) => {
   return (
-    <div className="flex items-center border border-transparent sm:px-1 sm:py-1">
-      <figure className="relative h-[30px] w-[30px] overflow-hidden rounded-full border-2 border-brown sm:h-[60px] sm:w-[60px]">
+    <div className="my-1 flex flex-wrap items-center border border-transparent sm:px-1 sm:py-1">
+      <figure className="relative hidden h-[60px] w-[60px] overflow-hidden rounded-full border-2 border-brown sm:block">
         <Image
           src={
             user.avatar.startsWith('http')
@@ -25,13 +25,13 @@ const UserSideBar: FC<UserSideBarProps> = ({ user }) => {
         />
       </figure>
       <div className="ml-2">
-        <div className="mb-1 flex">
+        <div className="mb-1 flex flex-wrap">
           <p className="rounded-lg pr-2 font-bold">
             {user.first_name} {user.last_name}
           </p>
         </div>
-        <div className="flex items-center text-sm">
-          <p className="mr-2 rounded-lg bg-neutral px-1">{user.username}</p>
+        <div className="flex flex-wrap items-center gap-1 text-sm">
+          <p className="rounded-lg bg-neutral px-1">{user.username}</p>
           {user.last_online && (
             <p
               className={`w-fit rounded-lg px-1  text-neutral ${

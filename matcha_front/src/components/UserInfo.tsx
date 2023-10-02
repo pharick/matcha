@@ -31,7 +31,7 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
           </p>
         )}
         <div className="ml-2 flex items-baseline">
-          <h1 className="mr-2 text-right text-2xl font-bold">
+          <h1 className="mr-2 text-right text-xl font-bold md:text-2xl">
             {user.first_name} {user.last_name}
           </h1>
           <div className="flex items-center text-xl">

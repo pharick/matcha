@@ -12,7 +12,7 @@ const SecondaryMenu: FC<SecondaryMenuProps> = ({ items }) => {
   const pathname = usePathname();
 
   return (
-    <ul className="mb-4 flex border-b border-brown font-bold">
+    <ul className="mb-4 flex overflow-x-auto border-b border-brown font-bold">
       {items.map(({ title, url }, i) => (
         <li key={i} className="flex-1 border-r border-brown/30 last:border-r-0">
           <Link

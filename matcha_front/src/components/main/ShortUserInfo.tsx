@@ -15,8 +15,8 @@ interface UserInfoProps {
 
 const ShortUserInfo: FC<UserInfoProps> = ({ user }) => {
   return (
-    <div className="group flex h-[80px] items-center border-b border-brown/50 bg-green-5/50 px-5 py-1 hover:bg-green-5/40">
-      <figure className="relative h-[60px] w-[60px] overflow-hidden rounded-full border-2 border-brown group-hover:border-brown/70">
+    <div className="group flex flex-wrap items-center border-b border-brown/50 bg-green-5/50 px-5 py-1 hover:bg-green-5/40">
+      <figure className="relative hidden h-[60px] w-[60px] overflow-hidden rounded-full border-2 border-brown group-hover:border-brown/70 sm:block">
         <Image
           src={
             user.avatar.startsWith('http')
@@ -31,7 +31,7 @@ const ShortUserInfo: FC<UserInfoProps> = ({ user }) => {
       </figure>
       <div className="ml-2">
         <div className="mb-1 flex">
-          <p className="rounded-lg pr-2 font-bold">
+          <p className="rounded-lg pr-2 text-sm font-bold sm:text-lg">
             {user.first_name} {user.last_name}
           </p>
           <div className="flex items-center">

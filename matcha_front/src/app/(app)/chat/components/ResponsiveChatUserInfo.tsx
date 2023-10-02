@@ -10,17 +10,19 @@ interface ResponsiveChatUserInfo {
 
 const ResponsiveChatUserInfo: FC<ResponsiveChatUserInfo> = ({ user }) => {
   return (
-    <div className="flex items-center justify-between border border-transparent border-b-brown bg-neutral/30 px-5 py-1">
+    <div className="flex items-center justify-between gap-1 border border-transparent border-b-brown bg-neutral/30 px-5 py-1">
       <Link href="/chat">
         <AiOutlineArrowLeft size={30} />
       </Link>
       <div className="ml-2">
         <div className="mb-1 flex justify-center">
-          <p className="font-bold text-xs sm:text-lg">
-            {user.first_name} {user.last_name}
+          <p className="text-sm font-bold sm:text-lg">
+            <Link href={`/users/${user.username}`}>
+              {user.first_name} {user.last_name}
+            </Link>
           </p>
         </div>
-        <div className="flex justify-center text-sm">
+        <div className="flex justify-center text-xs">
           {user.last_online && (
             <p
               className={`w-fit rounded-lg px-1  text-neutral ${
@@ -37,7 +39,7 @@ const ResponsiveChatUserInfo: FC<ResponsiveChatUserInfo> = ({ user }) => {
           )}
         </div>
       </div>
-      <Link href={`/users/${user.username}`}>
+      <Link href={`/users/${user.username}`} className="hidden sm:block">
         <figure className="relative h-[60px] w-[60px] overflow-hidden rounded-full border-2 border-brown hover:border-brown/70">
           <Image
             src={

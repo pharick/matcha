@@ -20,7 +20,7 @@ const MessagesSideBar: FC<MessagesSideBarProps> = ({ className, chats }) => {
           {chats.map((u: User) => (
             <li
               key={u.id}
-              className="flex h-[70px] items-center border-b border-brown/50 bg-green-5/50 px-5"
+              className="flex items-center border-b border-brown/50 bg-green-5/50 px-5 sm:h-[70px]"
             >
               <Link className="block w-full" href={`/chat/${u.username}`}>
                 <UserSideBar user={u} />

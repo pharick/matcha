@@ -4,11 +4,12 @@ import { FC, ReactNode, useState } from 'react';
 import Link from 'next/link';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { AiOutlineClose } from 'react-icons/ai';
+import { logout } from '@/api/auth';
 
 interface MainMenuItemProps {
   children: ReactNode;
   isBurger: boolean;
-  href: string;
+  href?: string;
   onClick?: () => void;
 }
 
@@ -24,7 +25,7 @@ const MainMenuItem: FC<MainMenuItemProps> = ({
         className={`block ${
           isBurger ? 'border-b' : 'border-r'
         } border-brown/30 p-2 transition hover:bg-green-5/50`}
-        href={href}
+        href={href || '#'}
         onClick={onClick}
       >
         {children}
@@ -67,7 +68,7 @@ const MainMenu: FC<MainMenuProps> = ({ currentUser }) => {
           </li>
         </ul>
       </nav>
-      <nav className="lg:hidden">
+      <nav className="flex items-center lg:hidden">
         {openMenu ? (
           <button onClick={() => handleOpenMenu()}>
             <AiOutlineClose size={30} />
@@ -112,6 +113,9 @@ const MainMenu: FC<MainMenuProps> = ({ currentUser }) => {
             onClick={() => handleOpenMenu()}
           >
             My profile
+          </MainMenuItem>
+          <MainMenuItem isBurger={true} onClick={() => void logout()}>
+            Logout
           </MainMenuItem>
         </ul>
       </nav>

@@ -36,17 +36,17 @@ const MainCard: FC<MainCardProps> = ({ fetchFunction, children }) => {
   }, [page, getPage]);
 
   return (
-    <div className="min-h-[550px] rounded-lg bg-neutral/50 p-5">
+    <div className="rounded-lg bg-neutral/50 p-5 lg:min-h-[550px]">
       <h2 className="rounded-lg bg-green-2/60 px-5 py-1 font-bold">
         {children}
       </h2>
       {loading ? (
-        <div className="flex min-h-[484px] items-center justify-center">
+        <div className="flex items-center justify-center lg:min-h-[484px]">
           <div className="h-[40px] w-[40px] animate-spin rounded-full border-4 border-neutral border-r-brown"></div>
         </div>
       ) : list.length > 0 ? (
         <>
-          <ul className="mx-3 mt-3 min-h-[430px] rounded-lg">
+          <ul className="mx-3 mb-3 mt-3 rounded-lg lg:mb-0 lg:min-h-[430px]">
             {list.map((user) => (
               <li key={user.id}>
                 <Link href={`/users/${user.username}`}>

@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     template: '%s | Matcha',
     default: 'Matcha',
   },
+  viewport: 'width=device-width, initial-scale=1',
 };
 
 const montserrat = Montserrat({
