@@ -12,7 +12,7 @@ interface UserWidgetProps {
 const UserWidget: FC<UserWidgetProps> = ({ currentUser }) => {
   return (
     <div className="group relative flex cursor-pointer items-center">
-      <p className="mr-1 text-lg">{currentUser.username}</p>
+      <p className="mr-1 text-sm sm:text-lg">{currentUser.username}</p>
       <figure className="relative h-[60px] w-[60px] overflow-hidden rounded-full border-2 border-brown">
         <Image
           src={

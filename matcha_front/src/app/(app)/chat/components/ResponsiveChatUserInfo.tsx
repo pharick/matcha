@@ -16,7 +16,7 @@ const ResponsiveChatUserInfo: FC<ResponsiveChatUserInfo> = ({ user }) => {
       </Link>
       <div className="ml-2">
         <div className="mb-1 flex justify-center">
-          <p className="font-bold">
+          <p className="font-bold text-xs sm:text-lg">
             {user.first_name} {user.last_name}
           </p>
         </div>

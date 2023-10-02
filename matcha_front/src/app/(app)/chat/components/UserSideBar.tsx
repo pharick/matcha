@@ -10,8 +10,8 @@ interface UserSideBarProps {
 
 const UserSideBar: FC<UserSideBarProps> = ({ user }) => {
   return (
-    <div className="flex items-center border border-transparent px-1 py-1">
-      <figure className="relative h-[60px] w-[60px] overflow-hidden rounded-full border-2 border-brown">
+    <div className="flex items-center border border-transparent sm:px-1 sm:py-1">
+      <figure className="relative h-[30px] w-[30px] overflow-hidden rounded-full border-2 border-brown sm:h-[60px] sm:w-[60px]">
         <Image
           src={
             user.avatar.startsWith('http')

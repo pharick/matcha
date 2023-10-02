@@ -69,9 +69,13 @@ const MainMenu: FC<MainMenuProps> = ({ currentUser }) => {
       </nav>
       <nav className="lg:hidden">
         {openMenu ? (
-          <AiOutlineClose size={30} onClick={() => handleOpenMenu()} />
+          <button onClick={() => handleOpenMenu()}>
+            <AiOutlineClose size={30} />
+          </button>
         ) : (
-          <RxHamburgerMenu size={30} onClick={() => handleOpenMenu()} />
+          <button onClick={() => handleOpenMenu()}>
+            <RxHamburgerMenu size={30} />
+          </button>
         )}
         <ul
           className={`absolute left-0 top-[86px] z-50 h-screen w-[250px] rounded-r-lg bg-green-5/90 text-center font-bold ${
